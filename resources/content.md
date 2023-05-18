@@ -906,8 +906,9 @@ Enums:<br>
  * cb.keyup
  * cb.keydown
  * cb.issueorder
+ * cb.issue_order
  * cb.castspell
- * cb.sprite
+ * cb.cast_spell
  * cb.pre_tick
  * cb.delete_minion
  * cb.create_minion
@@ -915,9 +916,9 @@ Enums:<br>
  * cb.create_particle
  * cb.delete_missile
  * cb.create_missile
- * cb.loseaggro
  * cb.path
  * cb.draw2
+ * cb.sprite
  * cb.error
  
 ####cb.add(t, f)
@@ -935,6 +936,7 @@ end
 
 cb.add(cb.tick, on_tick)
 ```
+
 ####cb.remove(f)
 Parameters<br>
 `function` f<br>
@@ -952,6 +954,7 @@ end
 
 cb.add(cb.tick, on_tick)
 ```
+
 ###chat
 ####chat.isOpened
 Return Value<br>
@@ -1622,6 +1625,9 @@ objManager.loop(foo)
 
 ###core
 ####core.block_input()
+
+Only works in `cb.issueorder` and `cb.castspell`, will block current operation.
+
 Return Value<br>
 `void`<br>
 ``` lua
@@ -1638,6 +1644,7 @@ cb.add(cb.issueorder, on_issue_order)
 ####core.reload()
 Return Value<br>
 `void`<br>
+
 ###memory
 Valid types:<br>
 
@@ -2695,8 +2702,8 @@ Properties:<br>
  * `boolean` particle.isOnScreen
  * `number` particle.selectionHeight
  * `number` particle.selectionRadius
- * `object` particle.attachmentObject
- * `object` particle.targetAttachmentObject
+ * `obj` particle.attachmentObject
+ * `obj` particle.targetAttachmentObject
 
 
 ###spell.obj
@@ -4017,6 +4024,7 @@ The following callbacks have no arguments:<br>
  * cb.sprite
  
 cb.draw2 is triggered before cb.sprite, while cb.draw is triggered after cb.sprite.
+
 ####cb.keydown and cb.keyup
 Both have a single arg, key_code:<br>
 ``` lua
@@ -4035,6 +4043,7 @@ end
 cb.add(cb.keydown, on_key_down)
 cb.add(cb.keyup, on_key_up)
 ```
+
 ####cb.spell
 Has a single arg, spell.obj:<br>
 ``` lua
@@ -4044,8 +4053,12 @@ end
 
 cb.add(cb.spell, on_process_spell)
 ```
+
 ####cb.issueorder
 Has three args: order_type, pos, obj:<br>
+
+Note that `cb.issueorder` will only work for hanbot internal request, user's manual movement/attack will not trigger this event.
+
 ``` lua
 local function on_issue_order(order, pos, obj)
 	if order==2 then
@@ -4058,21 +4071,54 @@ end
 
 cb.add(cb.issueorder, on_issue_order)
 ```
-####cb.loseaggro
-Has three args: spell.obj, reset_aa_timer:<br>
+
+####cb.issue_order
+just a better version of `cb.issueorder`<br>
+args: `IssueOrderArgs`:<br>
+
+ * `boolean` args.process
+ * `number` args.order
+ * `vec3` args.pos
+ * `obj` args.target
+ * `boolean` args.isShiftPressed
+ * `boolean` args.isAltPressed
+ * `boolean` args.shouldPlayOrderAcknowledgementSound
+
+Note that `cb.issue_order` will only work for hanbot internal request, user's manual movement/attack will not trigger this event.
+
+Warning: If you want to change the target or pos of `issue_order`, please use `orb.combat.register_f_pre_tick` and `TS.filter`, use `cb.issue_order` is not recommended, it will cause lots logic problems.
+
 ``` lua
-local function on_lose_aggro(spell, reset_aa_timer)
-  if spell.owner == player then
-    if spell.isBasicAttack and reset_timer then
-      --attack timer has been reset
-    end
-  end
+local function on_issue_order(args)
+	if args.order==2 then
+		print(('move order issued at %.2f - %.2f'):format(args.pos.x, args.pos.z))
+		return
+	end
+	
+	if args.order==3 then
+		print(('attack order issued to %u'):format(args.target.ptr))
+		return
+	end
+	
+	if SOME_CONDITION_1 then
+		args.pos = cursorPos -- you can change any parameters
+		return
+	end
+	
+	if SOME_CONDITION_2 then
+		args.process = false -- block this issue_order 
+		return
+	end
 end
 
-cb.add(cb.loseaggro, on_lose_aggro)
+cb.add(cb.issue_order, on_issue_order)
 ```
+
 ####cb.castspell
 Has four args: slot, startpos, endpos, nid:<br>
+
+Note that `cb.cast_spell` will only work for hanbot internal request, user's manual cast will not trigger this event.
+
 ``` lua
 local function on_cast_spell(slot, startpos, endpos, nid)
 	print(('%u, %.2f-%.2f, %.2f-%.2f, %u'):format(slot, startpos.x, startpos.z, endpos.x, endpos.z, nid))
@@ -4080,6 +4126,32 @@ end
 
 cb.add(cb.castspell, on_cast_spell)
 ```
+
+####cb.cast_spell
+just a better version of `cb.castspell` <br>
+args: `CastSpellArgs`:<br>
+
+ * `boolean` args.process
+ * `number` args.spellSlot
+ * `vec3` args.targetPosition
+ * `vec3` args.targetEndPosition
+ * `obj` args.target
+
+Note that `cb.cast_spell` will only work for hanbot internal request, user's manual cast will not trigger this event.
+
+``` lua
+local function on_cast_spell(args)
+	print(('spellSlot: %u, target: %u'):format(args.spellSlot, args.target and args.target.ptr or 0))
+
+	if SOME_CONDITION_2 then
+		args.process = false -- block this cast_spell 
+		return
+	end
+end
+
+cb.add(cb.cast_spell, on_cast_spell)
+```
+
 ####cb.create_minion and cb.delete_minion
 Both have a single arg, minion.obj<br>
 ``` lua
@@ -4095,6 +4167,7 @@ end
 cb.add(cb.create_minion, on_create_minion)
 cb.add(cb.delete_minion, on_delete_minion)
 ```
+
 ####cb.create_missile and cb.delete_missile
 Both have a single arg, missile.obj<br>
 ``` lua
@@ -4110,6 +4183,7 @@ end
 cb.add(cb.create_missile, on_create_missile)
 cb.add(cb.delete_missile, on_delete_missile)
 ```
+
 ####cb.create_particle and cb.delete_particle
 Both have a single arg, base.obj<br>
 ``` lua
@@ -4125,6 +4199,7 @@ end
 cb.add(cb.create_particle, on_create_particle)
 cb.add(cb.delete_particle, on_delete_particle)
 ```
+
 ###Creating Shards
 Introducing shards, a new way of binding and encrypting your folder into a single file.<br><br>
 To build shards, you have to add a shard table to your header.lua, which contains all the names of your files you would use in module.load(id, name).<br>
