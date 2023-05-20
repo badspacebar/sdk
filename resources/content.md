@@ -1075,6 +1075,7 @@ Parameters<br>
 `game.obj` obj<br>
 Return Value<br>
 `void` <br>
+
 ###navmesh
 ####navmesh.getTerrainHeight(x, z)
 Parameters<br>
@@ -1082,21 +1083,37 @@ Parameters<br>
 `number` z coordinate<br>
 Return Value<br>
 `number` returns terrain height at x,z<br>
+
 ####navmesh.isGrass(v1)
 Parameters<br>
-`vec2\vec3` v1<br>
+`vec2/vec3` v1<br>
 Return Value<br>
 `boolean` returns true if v1 is in grass<br>
+
 ####navmesh.isWall(v1)
 Parameters<br>
-`vec2\vec3` v1<br>
+`vec2/vec3` v1<br>
 Return Value<br>
 `boolean` returns true if v1 is a wall<br>
+
 ####navmesh.isStructure(v1)
 Parameters<br>
-`vec2\vec3` v1<br>
+`vec2/vec3` v1<br>
 Return Value<br>
 `boolean` returns true if v1 is a structure<br>
+
+####navmesh.isInFoW(v1)
+Parameters<br>
+`vec2/vec3` v1<br>
+Return Value<br>
+`boolean` returns true if v1 is in fog of war<br>
+
+####navmesh.getNearstPassable(v1)
+Parameters<br>
+`vec2/vec3` v1<br>
+Return Value<br>
+`vec2` returns the nearst passable position to v1<br>
+
 ###game
 ####game.mousePos
 Return Value<br>
