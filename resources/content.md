@@ -1086,31 +1086,31 @@ Return Value<br>
 
 ####navmesh.isGrass(v1)
 Parameters<br>
-`vec2/vec3` v1<br>
+`vec2\vec3` v1<br>
 Return Value<br>
 `boolean` returns true if v1 is in grass<br>
 
 ####navmesh.isWall(v1)
 Parameters<br>
-`vec2/vec3` v1<br>
+`vec2\vec3` v1<br>
 Return Value<br>
 `boolean` returns true if v1 is a wall<br>
 
 ####navmesh.isStructure(v1)
 Parameters<br>
-`vec2/vec3` v1<br>
+`vec2\vec3` v1<br>
 Return Value<br>
 `boolean` returns true if v1 is a structure<br>
 
 ####navmesh.isInFoW(v1)
 Parameters<br>
-`vec2/vec3` v1<br>
+`vec2\vec3` v1<br>
 Return Value<br>
 `boolean` returns true if v1 is in fog of war<br>
 
 ####navmesh.getNearstPassable(v1)
 Parameters<br>
-`vec2/vec3` v1<br>
+`vec2\vec3` v1<br>
 Return Value<br>
 `vec2` returns the nearst passable position to v1<br>
 
@@ -2450,6 +2450,150 @@ Parameters<br>
 `number` slot<br>
 Return Value<br>
 `number` returns item ID for item slot i<br>
+
+###hero:baseHealthForLevel(level)
+Parameters<br>
+`number` level<br>
+Return Value<br>
+`number` returns base health for level i<br>
+
+###hero:statForLevel(type, level)
+Parameters<br>
+`number` type<br>
+`number` level<br>
+Return Value<br>
+`number` returns stat of type for level i<br>
+
+###hero:getStat(name)
+Parameters<br>
+`string` name<br>
+Return Value<br>
+`number` returns stat value<br>
+
+The available stats (Some of them are deprecated by riot and always zero):
+
+ * EXP	
+ * GOLD_SPENT	
+ * GOLD_EARNED	
+ * MINIONS_KILLED	
+ * NEUTRAL_MINIONS_KILLED	
+ * NEUTRAL_MINIONS_KILLED_YOUR_JUNGLE	
+ * NEUTRAL_MINIONS_KILLED_ENEMY_JUNGLE	
+ * PLAYER_SCORE_0	
+ * PLAYER_SCORE_1	
+ * PLAYER_SCORE_2	
+ * PLAYER_SCORE_3	
+ * PLAYER_SCORE_4	
+ * PLAYER_SCORE_5	
+ * PLAYER_SCORE_6	
+ * PLAYER_SCORE_7	
+ * PLAYER_SCORE_8	
+ * PLAYER_SCORE_9	
+ * PLAYER_SCORE_10	
+ * PLAYER_SCORE_11	
+ * VICTORY_POINT_TOTAL	
+ * TOTAL_DAMAGE_DEALT	
+ * PHYSICAL_DAMAGE_DEALT_PLAYER	
+ * MAGIC_DAMAGE_DEALT_PLAYER	
+ * TRUE_DAMAGE_DEALT_PLAYER	
+ * TOTAL_DAMAGE_DEALT_TO_CHAMPIONS	
+ * PHYSICAL_DAMAGE_DEALT_TO_CHAMPIONS	
+ * MAGIC_DAMAGE_DEALT_TO_CHAMPIONS	
+ * TRUE_DAMAGE_DEALT_TO_CHAMPIONS	
+ * TOTAL_DAMAGE_TAKEN	
+ * PHYSICAL_DAMAGE_TAKEN	
+ * MAGIC_DAMAGE_TAKEN	
+ * TRUE_DAMAGE_TAKEN	
+ * TOTAL_DAMAGE_SELF_MITIGATED	
+ * TOTAL_DAMAGE_SHIELDED_ON_TEAMMATES	
+ * TOTAL_DAMAGE_DEALT_TO_BUILDINGS	
+ * TOTAL_DAMAGE_DEALT_TO_TURRETS	
+ * TOTAL_DAMAGE_DEALT_TO_OBJECTIVES	
+ * LARGEST_ATTACK_DAMAGE	
+ * LARGEST_ABILITY_DAMAGE	
+ * LARGEST_CRITICAL_STRIKE	
+ * TOTAL_TIME_CROWD_CONTROL_DEALT	
+ * TOTAL_TIME_CROWD_CONTROL_DEALT_TO_CHAMPIONS	
+ * TOTAL_HEAL_ON_TEAMMATES	
+ * TIME_PLAYED	
+ * LONGEST_TIME_SPENT_LIVING	
+ * TOTAL_TIME_SPENT_DEAD	
+ * TIME_OF_FROM_LAST_DISCONNECT	
+ * TIME_SPENT_DISCONNECTED	
+ * TIME_CCING_OTHERS	
+ * TEAM	
+ * LEVEL	
+ * CHAMPIONS_KILLED	
+ * NUM_DEATHS	
+ * ASSISTS	
+ * LARGEST_KILLING_SPREE	
+ * KILLING_SPREES	
+ * LARGEST_MULTI_KILL	
+ * BOUNTY_LEVEL	
+ * DOUBLE_KILLS	
+ * TRIPLE_KILLS	
+ * QUADRA_KILLS	
+ * PENTA_KILLS	
+ * UNREAL_KILLS	
+ * BARRACKS_KILLED	
+ * BARRACKS_TAKEDOWNS	
+ * TURRETS_KILLED	
+ * TURRET_TAKEDOWNS	
+ * HQ_KILLED	
+ * HQ_TAKEDOWNS	
+ * OBJECTIVES_STOLEN	
+ * OBJECTIVES_STOLEN_ASSISTS	
+ * FRIENDLY_DAMPEN_LOST	
+ * FRIENDLY_TURRET_LOST	
+ * FRIENDLY_HQ_LOST	
+ * BARON_KILLS	
+ * DRAGON_KILLS	
+ * RIFT_HERALD_KILLS	
+ * NODE_CAPTURE	
+ * NODE_CAPTURE_ASSIST	
+ * NODE_NEUTRALIZE	
+ * NODE_NEUTRALIZE_ASSIST	
+ * TEAM_OBJECTIVE	
+ * ITEMS_PURCHASED	
+ * CONSUMABLES_PURCHASED	
+ * ITEM0	
+ * ITEM1	
+ * ITEM2	
+ * ITEM3	
+ * ITEM4	
+ * ITEM5	
+ * ITEM6	
+ * PERK_PRIMARY_STYLE	
+ * PERK_SUB_STYLE	
+ * STAT_PERK_0	
+ * STAT_PERK_1	
+ * STAT_PERK_2	
+ * SIGHT_WARDS_BOUGHT_IN_GAME	
+ * VISION_WARDS_BOUGHT_IN_GAME	
+ * WARD_PLACED	
+ * WARD_KILLED	
+ * WARD_PLACED_DETECTOR	
+ * VISION_SCORE	
+ * SPELL1_CAST	
+ * SPELL2_CAST	
+ * SPELL3_CAST	
+ * SPELL4_CAST	
+ * SUMMON_SPELL1_CAST	
+ * SUMMON_SPELL2_CAST	
+ * KEYSTONE_ID	
+ * TOTAL_HEAL	
+ * TOTAL_UNITS_HEALED	
+ * WAS_AFK	
+ * WAS_AFK_AFTER_FAILED_SURRENDER	
+ * WAS_EARLY_SURRENDER_ACCOMPLICE	
+ * TEAM_EARLY_SURRENDERED	
+ * GAME_ENDED_IN_EARLY_SURRENDER	
+ * GAME_ENDED_IN_SURRENDER	
+ * WAS_SURRENDER_DUE_TO_AFK	
+ * WAS_LEAVER	
+ * PLAYERS_I_MUTED	
+
+
 ###minion.obj
 Properties:<br>
 
