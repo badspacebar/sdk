@@ -2451,20 +2451,20 @@ Parameters<br>
 Return Value<br>
 `number` returns item ID for item slot i<br>
 
-###hero:baseHealthForLevel(level)
+####hero:baseHealthForLevel(level)
 Parameters<br>
 `number` level<br>
 Return Value<br>
 `number` returns base health for level i<br>
 
-###hero:statForLevel(type, level)
+####hero:statForLevel(type, level)
 Parameters<br>
 `number` type<br>
 `number` level<br>
 Return Value<br>
 `number` returns stat of type for level i<br>
 
-###hero:getStat(name)
+####hero:getStat(name)
 Parameters<br>
 `string` name<br>
 Return Value<br>
