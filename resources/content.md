@@ -2219,6 +2219,8 @@ Properties:<br>
  * `boolean` base.isOnScreen
  * `number` base.selectionHeight
  * `number` base.selectionRadius
+ * `vec3` base.minBoundingBox
+ * `vec3` base.maxBoundingBox
 
 ###hero.obj
 
@@ -2257,6 +2259,8 @@ Properties:<br>
  * `number` hero.boundingRadius
  * `number` hero.overrideCollisionRadius
  * `number` hero.pathfindingCollisionRadius
+ * `vec3` hero.minBoundingBox
+ * `vec3` hero.maxBoundingBox
  * `number` hero.deathTime
  * `number` hero.health
  * `number` hero.maxHealth
@@ -2623,6 +2627,8 @@ Properties:<br>
  * `number` minion.boundingRadius
  * `number` minion.overrideCollisionRadius
  * `number` minion.pathfindingCollisionRadius
+ * `vec3` minion.minBoundingBox
+ * `vec3` minion.maxBoundingBox
  * `number` minion.deathTime
  * `number` minion.health
  * `number` minion.maxHealth
@@ -2708,6 +2714,8 @@ Properties:<br>
  * `number` turret.boundingRadius
  * `number` turret.overrideCollisionRadius
  * `number` turret.pathfindingCollisionRadius
+ * `vec3` turret.minBoundingBox
+ * `vec3` turret.maxBoundingBox
  * `number` turret.deathTime
  * `number` turret.health
  * `number` turret.maxHealth
@@ -2785,6 +2793,8 @@ Properties:<br>
  * `number` inhib.boundingRadius
  * `number` inhib.overrideCollisionRadius
  * `number` inhib.pathfindingCollisionRadius
+ * `vec3` inhib.minBoundingBox
+ * `vec3` inhib.maxBoundingBox
  * `boolean` inhib.isDead
  * `boolean` inhib.isVisible
  * `number` inhib.deathTime
@@ -2827,12 +2837,14 @@ Properties:<br>
  * `boolean` missile.isOnScreen
  * `number` missile.selectionHeight
  * `number` missile.selectionRadius
+ * `vec3` missile.minBoundingBox
+ * `vec3` missile.maxBoundingBox
  * `number` missile.x
  * `number` missile.y
  * `number` missile.z
  * `vec3` missile.pos
  * `vec2` missile.pos2D
-> The `x`/`y`/`z`/`pos`/`pos2D` now means `BoundingBox` of `GameObject`
+> The `x`/`y`/`z`/`pos`/`pos2D` now means `minBoundingBox` of `GameObject`
  * `spell.obj` missile.spell
  * `number` missile.width
  * `number` missile.velocity
@@ -2863,6 +2875,8 @@ Properties:<br>
  * `boolean` particle.isOnScreen
  * `number` particle.selectionHeight
  * `number` particle.selectionRadius
+ * `vec3` particle.minBoundingBox
+ * `vec3` particle.maxBoundingBox
  * `obj` particle.attachmentObject
  * `obj` particle.targetAttachmentObject
 
@@ -3046,7 +3060,8 @@ Properties:<br>
  * `boolean` camp.isOnScreen
  * `number` camp.selectionHeight
  * `number` camp.selectionRadius
- 
+ * `vec3` camp.minBoundingBox
+ * `vec3` camp.maxBoundingBox
  * `boolean` camp.active
  * `number` camp.spawnTime
  * `number` camp.count
