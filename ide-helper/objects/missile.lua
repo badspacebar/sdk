@@ -1,0 +1,31 @@
+--- Missile object properties.
+---@class missile.obj
+---@field public type number
+---@field public index number
+---@field public index32 number
+---@field public team number
+---@field public name string
+---@field public networkID number
+---@field public networkID32 number
+---@field public isOnScreen boolean
+---@field public selectionHeight number
+---@field public selectionRadius number
+---@field public minBoundingBox vec3
+---@field public maxBoundingBox vec3
+---@field public x number
+---@field public y number
+---@field public z number
+---@field public pos vec3
+---@field public pos2D vec2
+---@field public spell spell.obj
+---@field public width number
+---@field public velocity number
+---@field public missile_info missile_info.obj
+---@field public startPos vec3
+---@field public startPos2D vec2
+---@field public endPos vec3
+---@field public endPos2D vec2
+---@field public speed number
+
+---@type missile.obj
+_G.missile = {}

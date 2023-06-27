@@ -1,0 +1,27 @@
+---@class graphics
+---@field public width fun(): number @ Returns the screen width.
+---@field public height fun(): number @ Returns the screen height.
+---@field public res fun(): vec2 @ Returns the screen resolution.
+---@field public draw_text_2D fun(str: string, size: number, x: number, y: number, color: number): void @ Draws 2D text on the screen.
+---@field public text_area fun(str: string, size: number, n: number): number, number @ Returns the width and height of the text area.
+---@field public get_font fun(): string @ Returns the current font name.
+---@field public argb fun(a: number, r: number, g: number, b: number): number @ Returns the color value.
+---@field public world_to_screen fun(v1: vec3): vec2 @ Converts world position to screen position.
+---@field public world_to_screen_xyz fun(x: number, y: number, z: number): vec2 @ Converts world position to screen position.
+---@field public draw_line_2D fun(x1: number, y1: number, x2: number, y2: number, width: number, color: number): void @ Draws a 2D line on the screen.
+---@field public draw_line fun(v1: vec3, v2: vec3, width: number, color: number): void @ Draws a 3D line in the game world.
+---@field public draw_triangle_2D fun(p1: vec2, p2: vec2, p3: vec2, width: number, color: number, is_filled?: boolean): void @ Draws a 2D triangle on the screen.
+---@field public draw_rectangle_2D fun(x: number, y: number, dx: number, dy: number, width: number, color: number, is_filled?: boolean): void @ Draws a 2D rectangle on the screen.
+---@field public draw_line_strip fun(pts: vec3[], width: number, color: number, pts_n: number): void @ Draws a strip of connected lines in the game world.
+---@field public draw_line_strip_2D fun(pts: vec2[], width: number, color: number, pts_n: number): void @ Draws a strip of connected lines on the screen.
+---@field public draw_circle fun(v1: vec3, radius: number, width: number, color: number, pts_n: number): void @ Draws a circle in the game world.
+---@field public draw_circle_2D fun(x: number, y: number, radius: number, width: number, color: number, pts_n: number): void @ Draws a circle on the screen.
+---@field public draw_circle_xyz fun(x: number, y: number, z: number, radius: number, width: number, color: number, pts_n: number): void @ Draws a circle in the game world using world coordinates.
+---@field public draw_sprite fun(name: string, v1: vec3, scale: number, color: number): void @ Draws a sprite in the game world.
+---@field public spawn_fake_click fun(color: string, v1: vec3): void @ Simulates a fake click at a specified position.
+---@field public set_draw fun(enabled: boolean): void @ Enables or disables drawing on the screen.
+---@field public get_draw fun(): boolean @ Returns the current state of drawing on the screen.
+---@field public set_draw_menu fun(enabled: boolean): void @ Enables or disables drawing on the menu.
+
+---@type graphics
+_G.graphics = {}

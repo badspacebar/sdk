@@ -1,0 +1,21 @@
+--- Nexus object properties.
+---@class nexus.obj
+---@field public name string
+---@field public isOnScreen boolean
+---@field public isDead boolean
+---@field public isVisible boolean
+---@field public isTargetable boolean
+---@field public pos vec3
+---@field public pos2D vec2
+---@field public team number
+---@field public type number
+---@field public x number
+---@field public y number
+---@field public z number
+---@field public health number
+---@field public maxHealth number
+---@field public allShield number
+---@field public isTargetableToTeamFlags number
+
+---@type nexus.obj
+_G.nexus = {}

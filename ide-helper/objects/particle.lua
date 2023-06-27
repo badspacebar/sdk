@@ -1,0 +1,24 @@
+--- Particle object properties.
+---@class particle.obj
+---@field public type number
+---@field public index number
+---@field public index32 number
+---@field public team number
+---@field public name string
+---@field public networkID number
+---@field public networkID32 number
+---@field public x number
+---@field public y number
+---@field public z number
+---@field public pos vec3
+---@field public pos2D vec2
+---@field public isOnScreen boolean
+---@field public selectionHeight number
+---@field public selectionRadius number
+---@field public minBoundingBox vec3
+---@field public maxBoundingBox vec3
+---@field public attachmentObject obj
+---@field public targetAttachmentObject obj
+
+---@type particle.obj
+_G.particle = {}

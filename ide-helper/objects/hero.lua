@@ -1,0 +1,147 @@
+---@class hero.obj : base.obj
+---@field public name string
+---@field public charName string
+---@field public recallName string
+---@field public isOnScreen boolean
+---@field public inShopRange boolean
+---@field public isDead boolean
+---@field public isVisible boolean
+---@field public isRecalling boolean
+---@field public isTargetable boolean
+---@field public parEnabled boolean
+---@field public sarEnabled boolean
+---@field public pos vec3
+---@field public direction vec3
+---@field public pos2D vec2
+---@field public direction2D vec2
+---@field public barPos vec2
+---@field public path path.obj
+---@field public activeSpell spell.obj
+---@field public buff table
+---@field public rune runemanager.obj
+---@field public type number
+---@field public index number
+---@field public networkID number
+---@field public networkID32 number
+---@field public team number
+---@field public x number
+---@field public y number
+---@field public z number
+---@field public selectionHeight number
+---@field public selectionRadius number
+---@field public boundingRadius number
+---@field public overrideCollisionRadius number
+---@field public pathfindingCollisionRadius number
+---@field public minBoundingBox vec3
+---@field public maxBoundingBox vec3
+---@field public deathTime number
+---@field public health number
+---@field public maxHealth number
+---@field public maxHealthPenalty number
+---@field public allShield number
+---@field public physicalShield number
+---@field public magicalShield number
+---@field public champSpecificHealth number
+---@field public stopShieldFade number
+---@field public isTargetableToTeamFlags number
+---@field public mana number
+---@field public maxMana number
+---@field public baseAttackDamage number
+---@field public baseAd number
+---@field public bonusAd number
+---@field public totalAd number
+---@field public totalAp number
+---@field public armor number
+---@field public spellBlock number
+---@field public attackSpeedMod number
+---@field public flatPhysicalDamageMod number
+---@field public percentPhysicalDamageMod number
+---@field public flatMagicDamageMod number
+---@field public percentMagicDamageMod number
+---@field public healthRegenRate number
+---@field public bonusArmor number
+---@field public bonusSpellBlock number
+---@field public flatBubbleRadiusMod number
+---@field public percentBubbleRadiusMod number
+---@field public moveSpeed number
+---@field public scaleSkinCoef number
+---@field public gold number
+---@field public goldTotal number
+---@field public minimumGold number
+---@field public evolvePoints number
+---@field public evolveFlag number
+---@field public inputLocks number
+---@field public skillUpLevelDeltaReplicate number
+---@field public manaCost0 number
+---@field public manaCost1 number
+---@field public manaCost2 number
+---@field public manaCost3 number
+---@field public baseAbilityDamage number
+---@field public dodge number
+---@field public crit number
+---@field public parRegenRate number
+---@field public attackRange number
+---@field public flatMagicReduction number
+---@field public percentMagicReduction number
+---@field public flatCastRangeMod number
+---@field public percentCooldownMod number
+---@field public passiveCooldownEndTime number
+---@field public passiveCooldownTotalTime number
+---@field public flatArmorPenetration number
+---@field public percentArmorPenetration number
+---@field public flatMagicPenetration number
+---@field public percentMagicPenetration number
+---@field public percentLifeStealMod number
+---@field public percentSpellVampMod number
+---@field public percentBonusArmorPenetration number
+---@field public percentCritBonusArmorPenetration number
+---@field public percentCritTotalArmorPenetration number
+---@field public percentBonusMagicPenetration number
+---@field public physicalLethality number
+---@field public magicLethality number
+---@field public baseHealthRegenRate number
+---@field public primaryARBaseRegenRateRep number
+---@field public secondaryARRegenRateRep number
+---@field public secondaryARBaseRegenRateRep number
+---@field public percentCooldownCapMod number
+---@field public percentEXPBonus number
+---@field public flatBaseAttackDamageMod number
+---@field public percentBaseAttackDamageMod number
+---@field public baseAttackDamageSansPercentScale number
+---@field public exp number
+---@field public par number
+---@field public maxPar number
+---@field public sar number
+---@field public maxSar number
+---@field public pathfindingRadiusMod number
+---@field public levelRef number
+---@field public numNeutralMinionsKilled number
+---@field public primaryArRegenRateRep number
+---@field public physicalDamagePercentageModifier number
+---@field public magicalDamagePercentageModifier number
+---@field public baseHealth number
+---@field public baseMana number
+---@field public baseManaPerLevel number
+---@field public combatType number
+---@field public critDamageMultiplier number
+---@field public baseMoveSpeed number
+---@field public move fun(v1: vec3): void
+---@field public attackmove fun(v1: vec3): void
+---@field public altmove fun(v1: vec3): void
+---@field public attack fun(obj: obj): void
+---@field public stop fun(): void
+---@field public select fun(index: number): void
+---@field public castSpell fun(type: string, slot: number, arg1: any, arg2: any, no_limit: boolean): void
+---@field public levelSpell fun(slot: number): void
+---@field public interact fun(obj: obj): void
+---@field public buyItem fun(itemID: number): void
+---@field public spellSlot fun(slot: number): spell_slot.obj
+---@field public basicAttack fun(slot: number): spell.obj
+---@field public itemID fun(slot: number): number
+---@field public baseHealthForLevel fun(level: number): number
+---@field public statForLevel fun(type: number, level: number): number
+---@field public getStat fun(name: "EXP" | "GOLD_SPENT" | "GOLD_EARNED" | "MINIONS_KILLED" | "NEUTRAL_MINIONS_KILLED" | "NEUTRAL_MINIONS_KILLED_YOUR_JUNGLE" | "NEUTRAL_MINIONS_KILLED_ENEMY_JUNGLE" | "PLAYER_SCORE_0" | "PLAYER_SCORE_1" | "PLAYER_SCORE_2" | "PLAYER_SCORE_3" | "PLAYER_SCORE_4" | "PLAYER_SCORE_5" | "PLAYER_SCORE_6" | "PLAYER_SCORE_7" | "PLAYER_SCORE_8" | "PLAYER_SCORE_9" | "PLAYER_SCORE_10" | "PLAYER_SCORE_11" | "VICTORY_POINT_TOTAL" | "TOTAL_DAMAGE_DEALT" | "PHYSICAL_DAMAGE_DEALT_PLAYER" | "MAGIC_DAMAGE_DEALT_PLAYER" | "TRUE_DAMAGE_DEALT_PLAYER" | "TOTAL_DAMAGE_DEALT_TO_CHAMPIONS" | "PHYSICAL_DAMAGE_DEALT_TO_CHAMPIONS" | "MAGIC_DAMAGE_DEALT_TO_CHAMPIONS" | "TRUE_DAMAGE_DEALT_TO_CHAMPIONS" | "TOTAL_DAMAGE_TAKEN" | "PHYSICAL_DAMAGE_TAKEN" | "MAGIC_DAMAGE_TAKEN" | "TRUE_DAMAGE_TAKEN" | "TOTAL_DAMAGE_SELF_MITIGATED" | "TOTAL_DAMAGE_SHIELDED_ON_TEAMMATES" | "TOTAL_DAMAGE_DEALT_TO_BUILDINGS" | "TOTAL_DAMAGE_DEALT_TO_TURRETS" | "TOTAL_DAMAGE_DEALT_TO_OBJECTIVES" | "LARGEST_ATTACK_DAMAGE" | "LARGEST_ABILITY_DAMAGE" | "LARGEST_CRITICAL_STRIKE" | "TOTAL_TIME_CROWD_CONTROL_DEALT" | "TOTAL_TIME_CROWD_CONTROL_DEALT_TO_CHAMPIONS" | "TOTAL_HEAL_ON_TEAMMATES" | "TIME_PLAYED" | "LONGEST_TIME_SPENT_LIVING" | "TOTAL_TIME_SPENT_DEAD" | "TIME_OF_FROM_LAST_DISCONNECT" | "TIME_SPENT_DISCONNECTED" | "TIME_CCING_OTHERS" | "TEAM" | "LEVEL" | "CHAMPIONS_KILLED" | "NUM_DEATHS" | "ASSISTS" | "LARGEST_KILLING_SPREE" | "KILLING_SPREES" | "LARGEST_MULTI_KILL" | "BOUNTY_LEVEL" | "DOUBLE_KILLS" | "TRIPLE_KILLS" | "QUADRA_KILLS" | "PENTA_KILLS" | "UNREAL_KILLS" | "BARRACKS_KILLED" | "BARRACKS_TAKEDOWNS" | "TURRETS_KILLED" | "TURRET_TAKEDOWNS" | "HQ_KILLED" | "HQ_TAKEDOWNS" | "OBJECTIVES_STOLEN" | "OBJECTIVES_STOLEN_ASSISTS" | "FRIENDLY_DAMPEN_LOST" | "FRIENDLY_TURRET_LOST" | "FRIENDLY_HQ_LOST" | "BARON_KILLS" | "DRAGON_KILLS" | "RIFT_HERALD_KILLS" | "NODE_CAPTURE" | "NODE_CAPTURE_ASSIST" | "NODE_NEUTRALIZE" | "NODE_NEUTRALIZE_ASSIST" | "TEAM_OBJECTIVE" | "ITEMS_PURCHASED" | "CONSUMABLES_PURCHASED" | "ITEM0" | "ITEM1" | "ITEM2" | "ITEM3" | "ITEM4" | "ITEM5" | "ITEM6" | "PERK_PRIMARY_STYLE" | "PERK_SUB_STYLE" | "STAT_PERK_0" | "STAT_PERK_1" | "STAT_PERK_2" | "SIGHT_WARDS_BOUGHT_IN_GAME" | "VISION_WARDS_BOUGHT_IN_GAME" | "WARD_PLACED" | "WARD_KILLED" | "WARD_PLACED_DETECTOR" | "VISION_SCORE" | "SPELL1_CAST" | "SPELL2_CAST" | "SPELL3_CAST" | "SPELL4_CAST" | "SUMMON_SPELL1_CAST" | "SUMMON_SPELL2_CAST" | "KEYSTONE_ID" | "TOTAL_HEAL" | "TOTAL_UNITS_HEALED" | "WAS_AFK" | "WAS_AFK_AFTER_FAILED_SURRENDER" | "WAS_EARLY_SURRENDER_ACCOMPLICE" | "TEAM_EARLY_SURRENDERED" | "GAME_ENDED_IN_EARLY_SURRENDER" | "GAME_ENDED_IN_SURRENDER" | "WAS_SURRENDER_DUE_TO_AFK" | "WAS_LEAVER" | "PLAYERS_I_MUTED"): number
+
+
+---@type hero.obj
+_G.hero = {}

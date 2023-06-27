@@ -1,0 +1,24 @@
+--- Path object properties.
+---@class path.obj
+---@field public owner obj
+---@field public isActive boolean
+---@field public active boolean
+---@field public isDashing boolean
+---@field public dashSpeed number
+---@field public unstoppable boolean
+---@field public endPos vec3
+---@field public endPos2D vec2
+---@field public serverPos vec3
+---@field public serverPos2D vec2
+---@field public serverVelocity vec3
+---@field public serverVelocity2D vec2
+---@field public point vec3[]
+---@field public point2D vec2[]
+---@field public index number
+---@field public count number
+---@field public update number
+---@field public calcPos fun(v1: vec3): vec3, number
+---@field public isDirectPath fun(v1: vec3, v2: vec3): boolean, number[]
+
+---@type path.obj
+_G.path = {}

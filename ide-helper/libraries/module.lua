@@ -1,0 +1,31 @@
+---@class module
+---@field public seek fun(mod: string): module @ Returns the specified module if it is loaded.
+---@field public load fun(id: string, mod: string): module @ Returns the specified module and loads it if needed.
+---@field public internal fun(mod: string): module @ Returns the specified internal module and loads it if needed.
+---@field public lib fun(id: string): library @ Returns the specified library and loads it if needed.
+---@field public path fun(id: string): string @ Returns the path of the specified module.
+---@field public is_shard fun(id: string): boolean @ Returns true if the specified shard ID exists.
+---@field public is_libshard fun(id: string): boolean @ Returns true if the specified libshard ID exists.
+---@field public is_anyshard fun(id: string): boolean @ Returns true if either the shard ID or libshard ID exists.
+---@field public file_exists fun(path: string): boolean @ Returns true if the file exists.
+---@field public directory_exists fun(path: string): boolean @ Returns true if the directory exists.
+---@field public create_directory fun(id: string, path: string): boolean @ Creates a directory at the specified path and returns true on success.
+---@field public create_script_directory fun(path: string): boolean @ Creates a script directory at the specified path and returns true on success.
+---@field public create_lib_directory fun(path: string): boolean @ Creates a library directory at the specified path and returns true on success.
+---@field public create_shard_directory fun(path: string): boolean @ Creates a shard directory at the specified path and returns true on success.
+---@field public open_file fun(id: string, path: string, mode: string): file @ Opens the file at the specified path with the specified mode and returns a file handle on success.
+---@field public open_script_file fun(path: string, mode: string): file @ Opens the script file at the specified path with the specified mode and returns a file handle on success.
+---@field public open_lib_file fun(path: string, mode: string): file @ Opens the library file at the specified path with the specified mode and returns a file handle on success.
+---@field public open_shard_file fun(path: string, mode: string): file @ Opens the shard file at the specified path with the specified mode and returns a file handle on success.
+---@field public delete_file fun(id: string, path: string): boolean @ Deletes the file at the specified path and returns true on success.
+---@field public delete_script_file fun(path: string): boolean @ Deletes the script file at the specified path and returns true on success.
+---@field public delete_lib_file fun(path: string): boolean @ Deletes the library file at the specified path and returns true on success.
+---@field public delete_shard_file fun(path: string): boolean @ Deletes the shard file at the specified path and returns true on success.
+---@field public rename_file fun(id: string, old: string, new: string): boolean @ Renames the file from the old path to the new path and returns true on success.
+---@field public rename_script_file fun(old: string, new: string): boolean @ Renames the script file from the old path to the new path and returns true on success.
+---@field public rename_lib_file fun(old: string, new: string): boolean @ Renames the library file from the old path to the new path and returns true on success.
+---@field public rename_shard_file fun(old: string, new: string): boolean @ Renames the shard file from the old path to the new path and returns true on success.
+---@field public generate_tree fun(id: string, hash: string, anyfile: boolean): table @ Generates a file tree for the specified module ID and hash, including any file if specified.
+
+---@type module
+_G.module = {}
