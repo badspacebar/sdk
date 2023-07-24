@@ -2381,6 +2381,12 @@ Parameters<br>
 `obj` obj<br>
 Return Value<br>
 `void`<br>
+####player:altattack(obj)
+Parameters<br>
+`hero.obj` player<br>
+`obj` obj<br>
+Return Value<br>
+`void`<br>
 ####player:stop()
 Parameters<br>
 `hero.obj` player<br>
@@ -2931,6 +2937,7 @@ Properties:<br>
  * `number` spell_slot.level
  * `number` spell_slot.cooldown
  * `number` spell_slot.totalCooldown
+ * `number` spell_slot.startTimeForCurrentCast
  * `number` spell_slot.stacks
 > `CurrentAmmo`
  * `number` spell_slot.stacksCooldown
@@ -4309,6 +4316,7 @@ args: `CastSpellArgs`:<br>
 
  * `boolean` args.process
  * `number` args.spellSlot
+ * `vec3` args.casterPosition
  * `vec3` args.targetPosition
  * `vec3` args.targetEndPosition
  * `obj` args.target
