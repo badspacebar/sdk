@@ -1159,6 +1159,37 @@ Return Value<br>
 ####game.isWindowFocused
 Return Value<br>
 `boolean` returns true if LoL is focused<br>
+####game.getHoveredTarget(int, int)
+Parameters<br>
+`int` mouse X<br>
+`int` mouse Y<br>
+Return Value<br>
+`obj` returns the current hovered game object by position<br><br>
+####game.sendRadialEmote(int)
+Parameters<br>
+`int` emoteId <br>
+```
+    EMOTE_DANCE = 0x0,
+    EMOTE_TAUNT = 0x1,
+    EMOTE_LAUGH = 0x2,
+    EMOTE_JOKE = 0x3,
+    EMOTE_TOGGLE = 0x4,
+    EMOTE_NUMBER_OF_EMOTES = 0x5,
+```
+Return Value<br>
+`void` <br>
+####game.fnvhash(str)
+Parameters<br>
+`string` input string<br>
+Return Value<br>
+`unsigned int` returns the fnvhash of input string<br>
+
+####game.spellhash(str)
+Parameters<br>
+`string` input string<br>
+Return Value<br>
+`unsigned int` returns the spell hash of input string<br>
+
 ###graphics
 ####graphics.width
 Return Value<br>
@@ -2448,6 +2479,12 @@ Parameters<br>
 `number` slot<br>
 Return Value<br>
 `spell_slot.obj`<br>
+####hero:findSpellSlot(spellName)
+Parameters<br>
+`hero.obj` hero<br>
+`string` spell name<br>
+Return Value<br>
+`spell_slot.obj`<br>
 ####hero:basicAttack(slot)
 Parameters<br>
 `hero.obj` hero<br>
@@ -2949,6 +2986,39 @@ Properties:<br>
 > Whether current `spell_slot` has a active `spell_info` 
  * `spell_info.obj` spell_slot.spell_info
  * `spell_static.obj` spell_slot.static
+ 
+####spell_slot::calculate(spellNameHash, calculationHash)
+Parameters<br>
+`spell_slot.obj` current spell<br>
+`unsigned int` spell name hash, could be 0 if using default spell name<br>
+`unsigned int` calculation type hash<br>
+Return Value<br>
+`void`<br>
+
+```
+-- Jhin Example: 
+-- https://raw.communitydragon.org/13.15/game/data/characters/jhin/jhin.bin.json
+-- JhinW: ["Characters/Jhin/Spells/JhinRAbility/JhinW"].mSpell.mSpellCalculations
+-- JhinR: ["Characters/Jhin/Spells/JhinRAbility/JhinR"].mSpell.mSpellCalculations
+
+local calcHashW = game.fnvhash('TotalDamage')
+local rawDamageW = player:spellSlot(0):calculate(0, calcHashW)
+
+local calcHashR = game.fnvhash('DamageCalc')
+local rawDamageR = player:spellSlot(3):calculate(0, calcHashR)
+
+
+-- AatroxQ Example:
+-- The `spellSlot(0).name` could be "AatroxQ"/"AatroxQ2"/"AatroxQ3"
+-- We need use "AatroxQ" to calculate the damage.
+
+local QDamage = game.fnvhash('QDamage')
+local AatroxQ = game.spellhash('AatroxQ')
+local rawDamageQ1 = player:spellSlot(0):calculate(AatroxQ, QDamage)
+local rawDamageQ2 = player:spellSlot(0):calculate(AatroxQ, QDamage) * 1.25
+local rawDamageQ3 = player:spellSlot(0):calculate(AatroxQ, QDamage) * 1.25 * 1.25
+
+```
 
 
 ###spell_info.obj
@@ -3526,6 +3596,11 @@ end
 
 cb.add(cb.tick, on_tick)
 ```
+
+####orb.core.is_spell_locked()
+Return Value<br>
+`void` returns true if spells are paused <br>
+
 ####orb.core.set_pause(t)
 Parameters<br>
 `number` t<br>
@@ -3582,6 +3657,15 @@ cb.add(cb.tick, on_tick)
 ####orb.core.set_server_pause_attack()
 Return Value<br>
 `void`<br>
+
+####orb.core.set_pause_spell_lock()
+Return Value<br>
+`void`<br>
+
+####orb.core.set_server_pause_spell_lock()
+Return Value<br>
+`void`<br>
+
 ####orb.combat.is_active()
 Return Value<br>
 `boolean` returns true if combat mode is active<br>
@@ -3843,7 +3927,7 @@ Return Value<br>
 `seg` returns a line segment<br>
 `minion.obj` returns the minion object<br>
 ``` lua
---based on pantheon q
+--based on pantheon q (****2019 version****)
 local orb = module.internal('orb')
 local input = {
 	delay = 0.25,
@@ -3923,11 +4007,6 @@ Parameters<br>
 `obj` target<br>
 Return Value<br>
 `number` returns time in seconds for an attack from source to hit target<br>
-####orb.utility.is_high_value(obj)
-Parameters<br>
-`minion.obj` obj<br>
-Return Value<br>
-`boolean` returns true if obj is of high value (cannon minions ex)<br>
 ####orb.utility.get_bar_width(obj)
 Parameters<br>
 `minion.obj` obj<br>
@@ -3949,14 +4028,19 @@ Return Value<br>
 Return Value<br>
 `boolean` returns true if hybrid mode is active<br>
 ###evade
+use os.clock()<br>
 ####evade.core.set_server_pause()
 Return Value<br>
 `void`<br>
+
+this is deprecated, use `evade.core.set_pause` instead
+
 ####evade.core.set_pause(t)
 Parameters<br>
 `number` t<br>
 Return Value<br>
-`void`<br>
+`void`<br><br>
+pauses evade from issuing movement orders (will still update orbs path)<br>
 ``` lua
 local evade = module.internal('evade')
 evade.core.set_pause(3) --pauses the evade from taking action for 3 seconds
@@ -3966,7 +4050,8 @@ Return Value<br>
 `boolean` returns true if evade is currently paused<br>
 ####evade.core.is_active()
 Return Value<br>
-`boolean` returns true if evade is currently evading a spell<br>
+`boolean` returns true if evade is currently evading a spell<br><br>
+should be checked before casting any movement impairing spells<br>
 ####evade.core.is_action_safe(v1, speed, delay)
 Parameters<br>
 `vec2\vec3` v1<br>
@@ -3989,6 +4074,66 @@ end
 
 cb.add(cb.tick, on_tick)	
 ```
+
+####evade.core.get_anchor()
+Return Value<br>
+`void` returns the anchor for current evading direction<br>
+
+####evade.core.get_pos()
+Return Value<br>
+`void` returns the target position of current evading<br>
+
+####evade.damage
+<br>
+``` lua
+local ad_damage, ap_damage, true_damage, buff_list = evade.damage.count(player)
+--these are reduced/modified by armor/buffs
+--buff_list contains an array of all incoming buff types
+```
+
+####evade.core.skillshots
+<br>
+``` lua
+for i=evade.core.skillshots.n, 1, -1 do
+  local spell = evade.core.skillshots[i]
+  --spell.name
+  --spell.start_time
+  --spell.end_time
+  --spell.owner
+  --spell.danger_level
+  --spell.start_pos
+  --spell.end_pos
+  --spell.data -- assorted static data
+  
+  if spell:contains(game.mousePos2D) then
+    --mouse is inside of 'spell'
+  end
+  
+  if spell:contains(player) then
+    --player is inside of 'spell', this accounts for obj boundingRadius
+  end
+  
+  if spell:intersection(player.pos2D, game.mousePos2D) then
+    --line seg player->mousePos intersects 'spell'
+  end
+end
+```
+
+####evade.core.targeted
+<br>
+``` lua
+for i=evade.core.targeted.n, 1, -1 do
+  local spell = evade.core.targeted[i]
+  --spell.name
+  --spell.start_time
+  --spell.end_time
+  --spell.owner
+  --spell.target
+  --spell.missile
+  --spell.data -- assorted static data
+end
+```
+
 ###TS
 ####TS.get_result(func, filter, ign_sel, hard)
 Parameters<br>
