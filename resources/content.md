@@ -902,6 +902,7 @@ Enums:<br>
 
  * cb.draw
  * cb.tick
+ * cb.pre_tick
  * cb.spell
  * cb.keyup
  * cb.keydown
@@ -909,7 +910,9 @@ Enums:<br>
  * cb.issue_order
  * cb.castspell
  * cb.cast_spell
- * cb.pre_tick
+ * cb.attack_cancel
+ * cb.cast_finish
+ * cb.play_animation
  * cb.delete_minion
  * cb.create_minion
  * cb.delete_particle
@@ -1441,7 +1444,7 @@ cb.add(cb.draw, on_draw)
 ####graphics.draw_sprite(name, v1, scale, color)
 Parameters<br>
 `string` name<br>
-`vec3` v1<br>
+`vec2` the screen position<br>
 `number` scale<br>
 `number` color<br>
 Return Value<br>
@@ -1449,7 +1452,7 @@ Return Value<br>
 ``` lua
 local function on_draw_sprite()
 	--sprite files must be placed in your shard directory
-	graphics.draw_sprite("sprite_name.png", vec3(p.x, p.y, 0), 1.5, 0x66FFFFFF)
+	graphics.draw_sprite("sprite_name.png", vec2(p.x, p.y), 1.5, 0x66FFFFFF)
 end
 
 cb.add(cb.sprite, on_draw_sprite)
@@ -2199,7 +2202,8 @@ The following properties can be set on their respective instances:
 	'key'
 	'min'
 	'max'
-	'step'
+	'step',
+	'icon',
 ]]
 
 local myMenu = menu('example_menu', 'Example Menu')
@@ -2209,6 +2213,10 @@ myMenu.example_slider:set('tooltip', 'This text will appear when the mouse is ho
 myMenu.example_slider:set('callback', function(old, new)
 	print(('example_slider changed from %u to %u'):format(old, new))
 end)
+
+local myIcon = graphics.sprite('XXX/menu_icon.png')
+myMenu.example_slider:set('icon', myIcon)
+
 ```
 ###md5
 ####md5.file(path)
@@ -2232,6 +2240,7 @@ Return Values<br>
 ###base.obj
 Properties:<br>
 
+ * `boolean` base.valid
  * `number` base.type
  * `number` base.index
 > The index of object
@@ -2386,6 +2395,10 @@ Properties:<br>
  * `number` hero.combatType
  * `number` hero.critDamageMultiplier
  * `number` hero.baseMoveSpeed
+ * `bool` hero.isMelee
+ * `bool` hero.isRanged
+ * `bool` hero.isBot
+ 
  
 __The following functions are limited to player only:__<br>
 ####player:move(v1)
@@ -2447,7 +2460,7 @@ player:castSpell('obj', 0, game.selectedTarget)
 --type 'self', teemo w
 player:castSpell('self', 1)
 --type 'line', rumble r
-player:castSpell('self', 3, player.pos, mousePos)
+player:castSpell('line', 3, player.pos, mousePos)
 --type 'release', varus q
 player:castSpell('release', 0, player.pos, mousePos)
 --type 'move', aurelion sol q
@@ -2485,6 +2498,12 @@ Parameters<br>
 `string` spell name<br>
 Return Value<br>
 `spell_slot.obj`<br>
+####hero:inventorySlot(slot)
+Parameters<br>
+`hero.obj` hero<br>
+`number` slot<br>
+Return Value<br>
+`inventory_slot.obj`<br>
 ####hero:basicAttack(slot)
 Parameters<br>
 `hero.obj` hero<br>
@@ -2497,6 +2516,26 @@ Parameters<br>
 `number` slot<br>
 Return Value<br>
 `number` returns item ID for item slot i<br>
+
+####hero:isPlayingAnimation(animationNameHash)
+Parameters<br>
+`hero.obj` hero<br>
+`number` animationNameHash<br>
+Return Value<br>
+`boolean`<br>
+
+####hero:attackDelay()
+Parameters<br>
+`hero.obj` hero<br>
+Return Value<br>
+`number`<br>
+
+####hero:attackCastDelay(slot)
+Parameters<br>
+`hero.obj` hero<br>
+`number` spellSlot<br>
+Return Value<br>
+`number`<br>
 
 ####hero:baseHealthForLevel(level)
 Parameters<br>
@@ -2722,6 +2761,13 @@ Properties:<br>
  * `number` minion.parEnabled
  * `number` minion.percentDamageToBarracksMinionMod
  * `number` minion.flatDamageReductionFromBarracksMinionMod
+ * `bool` minion.isMelee
+ * `bool` minion.isRanged
+ * `bool` minion.isClone
+ * `bool` minion.isLaneMinion
+ * `bool` minion.isEliteMinion
+ * `bool` minion.isEpicMinion
+ * `bool` minion.isJungleMonster
  
 ####m:basicAttack(i)
 Parameters<br>
@@ -2729,6 +2775,27 @@ Parameters<br>
 `number` i<br>
 Return Value<br>
 `spell.obj` returns the minions basic attack<br>
+
+####m:isPlayingAnimation(animationNameHash)
+Parameters<br>
+`minion.obj` m<br>
+`number` animationNameHash<br>
+Return Value<br>
+`boolean`<br>
+
+####m:attackDelay()
+Parameters<br>
+`minion.obj` m<br>
+Return Value<br>
+`number`<br>
+
+####m:attackCastDelay(slot)
+Parameters<br>
+`minion.obj` m<br>
+`number` spellSlot<br>
+Return Value<br>
+`number`<br>
+
 ###turret.obj
 Properties:<br>
 
@@ -2808,6 +2875,12 @@ Properties:<br>
  * `number` turret.parEnabled
  * `number` turret.physicalDamagePercentageModifier
  * `number` turret.magicalDamagePercentageModifier
+ * `bool` turret.isMelee
+ * `bool` turret.isRanged
+ * `number` turret.tier
+> Base=1, Inner=2, Outer=3, NexusRight=4, NexusLeft=5
+ * `number` turret.lane
+> Bottom=0, Mid=1, Top=2
  
 ####t:basicAttack(i)
 Parameters<br>
@@ -2815,6 +2888,26 @@ Parameters<br>
 `number` i<br>
 Return Value<br>
 `spell.obj` returns the turrets basic attack<br>
+
+####t:isPlayingAnimation(animationNameHash)
+Parameters<br>
+`turret.obj` t<br>
+`number` animationNameHash<br>
+Return Value<br>
+`boolean`<br>
+
+####t:attackDelay()
+Parameters<br>
+`turret.obj` t<br>
+Return Value<br>
+`number`<br>
+
+####t:attackCastDelay(slot)
+Parameters<br>
+`turret.obj` t<br>
+`number` spellSlot<br>
+Return Value<br>
+`number`<br>
 
 ###inhib.obj
 Properties:<br>
@@ -2987,7 +3080,32 @@ Properties:<br>
  * `spell_info.obj` spell_slot.spell_info
  * `spell_static.obj` spell_slot.static
  
-####spell_slot::calculate(spellNameHash, calculationHash)
+
+####spell_slot:getTooltip(type)
+Parameters<br>
+`spell_slot.obj`<br>
+`int` tooltip type: 0<br>
+Return Value<br>
+`string`<br>
+
+####spell_slot:getTooltipVar(index)
+Return the numerical variable when mouseover the skill icons<br>
+Parameters<br>
+`spell_slot.obj`<br>
+`int` tooltip var index: [0,15]<br>
+Return Value<br>
+`number`<br>
+
+####spell_slot:getEffectAmount(index, level)
+Return the fixed class value of the target skill<br>
+Parameters<br>
+`spell_slot.obj`<br>
+`int` index <br>
+`int` level: [0,6]<br>
+Return Value<br>
+`number`<br>
+
+####spell_slot:calculate(spellNameHash, calculationHash)
 Parameters<br>
 `spell_slot.obj` current spell<br>
 `unsigned int` spell name hash, could be 0 if using default spell name<br>
@@ -3029,7 +3147,6 @@ Properties:<br>
  * `string` spell_info.name
  * `spell_static.obj` spell_info.static
 
-
 ###spell_static.obj
 > known as `SpellDataResource`
 
@@ -3043,13 +3160,54 @@ Properties:<br>
  * `number` spell_static.missileSpeed
  * `number` spell_static.lineWidth
  * `number` spell_static.castFrame
- 
+
+###inventory_slot.obj
+Properties:<br>
+
+ * `number` inventory_slot.stacks
+ * `number` inventory_slot.purchaseTime
+ * `boolean` inventory_slot.hasItem
+ * `item_data.obj` inventory_slot.item
+ * `texture.obj` inventory_slot.icon
+ * `number` inventory_slot.spellStacks
+ * `number` inventory_slot.id
+ * `number` inventory_slot.maxStacks
+ * `number` inventory_slot.cost
+ * `string` inventory_slot.name
+ * `string` inventory_slot.iconName
+ * `texture.obj` inventory_slot.icon
+
+####inventory_slot:getTooltip(type)
+Parameters<br>
+`inventory_slot.obj` current inventory<br>
+`int` tooltip type: 0<br>
+Return Value<br>
+`string`<br>
+
+####inventory_slot:calculate(calculationHash)
+Parameters<br>
+`inventory_slot.obj` current inventory<br>
+`unsigned int` calculation type hash<br>
+Return Value<br>
+`void`<br>
+
+###item_data.obj
+Properties:<br>
+
+ * `number` item_data.id
+ * `number` item_data.maxStacks
+ * `number` item_data.cost
+ * `string` item_data.name
+ * `string` item_data.iconName
+ * `texture.obj` item_data.icon
+
 ###path.obj
 Properties:<br>
 
  * `obj` path.owner
  * `boolean` path.isActive
  * `boolean` path.active
+> same as isActive
  * `boolean` path.isDashing
  * `number` path.dashSpeed
  * `boolean` path.unstoppable
@@ -3115,9 +3273,33 @@ Properties:<br>
  * `number` buff.startTime
  * `number` buff.endTime
  * `number` buff.stacks
-> `Stacks.size`
+> Number of buff layers
  * `number` buff.stacks2
-> `Counter`
+> The buff `Counter`
+ * `number` buff.count
+> same to stacks2
+
+###runemanager.obj
+Properties:<br>
+
+ * `number` runemanager.size
+
+####runemanager:get(index)
+Parameters<br>
+`runemanager.obj` camp<br>
+`number` index: the index to get<br>
+Return Value<br>
+`rune.obj` returns the rune of current index<br>
+
+
+
+###rune.obj
+Properties:<br>
+
+ * `number` rune.id
+ * `string` rune.name
+ * `texture.obj` rune.icon
+
  
 ###camp.obj
 Properties:<br>
@@ -4134,6 +4316,81 @@ for i=evade.core.targeted.n, 1, -1 do
 end
 ```
 
+###damagelib
+
+####damagelib.handlers
+Insert your own handlers if internal damagelib is not ok.
+
+``` lua
+local damagelib = module.internal('damagelib')
+local handlers = damagelib.handlers
+
+local FlashFrost = game.spellhash('FlashFrost')
+local TotalPassthroughDamage = game.fnvhash('TotalPassthroughDamage')
+local TotalExplosionDamage = game.fnvhash('TotalExplosionDamage')
+
+handlers[FlashFrost] = function (source, target, is_raw_damage, stage)
+	local spell_slot = source:spellSlot(0)
+	if not spell_slot then
+		return 0
+	end
+	local raw_damage = spell_slot:calculate(0, TotalPassthroughDamage) + spell_slot:calculate(0, TotalExplosionDamage)
+	if is_raw_damage or not target or not target.valid then
+		return raw_damage
+	end
+	return damagelib.calc_magical_damage(source, target, raw_damage)
+end
+
+
+-- print damage
+print(damagelib.get_spell_damage('FlashFrost', 0, player, g_target, true, 0))
+
+```
+
+####damagelib.get_spell_damage(spellName, spellSlot, source, target, isRawDamage, stage)
+Parameters<br>
+`string` spellName<br>
+`number` spellSlot<br>
+`obj` source<br>
+`obj` target<br>
+`boolean` isRawDamage<br>
+`number` stage<br>
+Return Value<br>
+`number`<br>
+
+``` lua
+local damagelib = module.internal('damagelib')
+print('Q1', damagelib.get_spell_damage('AatroxQ', 0, player, g_target, true, 1))
+print('Q2', damagelib.get_spell_damage('AatroxQ', 0, player, g_target, true, 2))
+```
+
+####damagelib.calc_aa_damage(source, target)
+Calc the real damage after shields, etc.
+Parameters<br>
+`obj` source<br>
+`obj` target<br>
+Return Value<br>
+`number`<br>
+
+####damagelib.calc_physical_damage(source, target, rawDamage)
+Calc the real damage after shields, etc.
+Parameters<br>
+`obj` source<br>
+`obj` target<br>
+`number` rawDamage<br>
+Return Value<br>
+`number`<br>
+
+####damagelib.calc_magical_damage(source, target, rawDamage)
+Calc the real damage after shields, etc.
+Parameters<br>
+`obj` source<br>
+`obj` target<br>
+`number` rawDamage<br>
+Return Value<br>
+`number`<br>
+
+
 ###TS
 ####TS.get_result(func, filter, ign_sel, hard)
 Parameters<br>
@@ -4481,6 +4738,38 @@ end
 cb.add(cb.cast_spell, on_cast_spell)
 ```
 
+####cb.attack_cancel
+Fired when AA canceled
+
+``` lua
+local function on_cancel_attack(obj)
+	print(('%s, cancel attack'):format(obj.charName))
+end
+cb.add(cb.attack_cancel, on_cancel_attack)
+```
+
+####cb.cast_finish
+Fired when a spell cast is finished.
+
+``` lua
+local function on_cast_finish(spell)
+	if spell.owner==player then
+		print('on_cast_finish: ' .. spell.name)
+	end
+end
+cb.add(cb.cast_finish, on_cast_finish)
+```
+
+####cb.play_animation
+Fired when a animation (from network) is begin to play.
+
+``` lua
+local function on_play_animation(obj, animation)
+	print(('on_play_animation, %s, %s'):format(obj.charName, animation))
+end
+cb.add(cb.play_animation, on_play_animation)
+```
+
 ####cb.create_minion and cb.delete_minion
 Both have a single arg, minion.obj<br>
 ``` lua
@@ -4562,8 +4851,8 @@ return {
 Note that the sprite name added to the resource folder is the same as when using it ingame.<br>
 ``` lua
 cb.add(cb.sprite, function()
-  graphics.draw_sprite('SPRITE_NAME.png', vec3)
-  graphics.draw_sprite('SUB_FOLDER/SPRITE_NAME.png', vec3)
+  graphics.draw_sprite('SPRITE_NAME.png', vec2)
+  graphics.draw_sprite('SUB_FOLDER/SPRITE_NAME.png', vec2)
 end)
 ```
 Shard builder is displayed in hanbox64 client if you have a developer key.<br>
