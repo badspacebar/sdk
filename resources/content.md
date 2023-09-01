@@ -1608,20 +1608,34 @@ end
 
 ####objManager.minions.size[team]
 Parameters<br>
-`team` can be any of these: `TEAM_ALLY`/`TEAM_ENEMY`/`TEAM_NEUTRAL` / "plants" / "others"<br>
+`team` can be any of these: `TEAM_ALLY`/`TEAM_ENEMY`/`TEAM_NEUTRAL` / "plants" / "others" / "farm" / "farm" / "lane_ally" / "lane_enemy" / "pets_ally" / "pets_enemy" / "barrels"<br>
 Return Value<br>
 `number` returns minion count of respective team<br>
 
+``` lua
+local enemyMinionCount = objManager.minions.size[TEAM_ENEMY]
+```
+
 ####objManager.minions[team][i]
 Parameters<br>
-`team` can be any of these: `TEAM_ALLY`/`TEAM_ENEMY`/`TEAM_NEUTRAL` / "plants" / "others"<br>
+`team` can be any of these: `TEAM_ALLY`/`TEAM_ENEMY`/`TEAM_NEUTRAL` / "plants" / "others" / "farm" / "lane_ally" / "lane_enemy" / "pets_ally" / "pets_enemy" / "barrels"<br>
 Return Value<br>
 `minion.obj` returns minion object<br>
 ``` lua
-for i=0, objManager.minions.size[TEAM_ENEMY]-1 do
-	local obj = objManager.minions[TEAM_ENEMY][i]
+
+local enemyMinions = objManager.minions[TEAM_ENEMY]
+for i=0, enemyMinions.size-1 do
+	local obj = enemyMinions[i]
 	print(obj.charName)
 end
+
+-- spell farm minions
+local spellFarmMinions = objManager.minions['farm']
+for i=0, spellFarmMinions.size-1 do
+	local obj = spellFarmMinions[i]
+	print(obj.charName)
+end
+
 ```
 
 ####objManager.turrets.size[team]
@@ -2395,6 +2409,7 @@ Properties:<br>
  * `number` hero.combatType
  * `number` hero.critDamageMultiplier
  * `number` hero.baseMoveSpeed
+ * `number` hero.baseAttackRange
  * `bool` hero.isMelee
  * `bool` hero.isRanged
  * `bool` hero.isBot
@@ -2504,10 +2519,10 @@ Parameters<br>
 `number` slot<br>
 Return Value<br>
 `inventory_slot.obj`<br>
-####hero:basicAttack(slot)
+####hero:basicAttack(index)
 Parameters<br>
 `hero.obj` hero<br>
-`number` slot<br>
+`number` index, -1 to get the default AA spell<br>
 Return Value<br>
 `spell.obj`<br>
 ####hero:itemID(slot)
@@ -2768,11 +2783,29 @@ Properties:<br>
  * `bool` minion.isEliteMinion
  * `bool` minion.isEpicMinion
  * `bool` minion.isJungleMonster
+ * `bool` minion.isLaneMinion
+ * `bool` minion.isSiegeMinion
+ * `bool` minion.isSuperMinion
+ * `bool` minion.isCasterdMinion
+ * `bool` minion.isMeleeMinion
+ * `bool` minion.isBarrel
+ * `bool` minion.isPet
+ * `bool` minion.isCollidablePet
+ * `bool` minion.isTrap
+ * `bool` minion.isWard
+ * `bool` minion.isWardNoBlue
+ * `bool` minion.isPlant
+ * `bool` minion.isMonster
+ * `bool` minion.isLargeMonster
+ * `bool` minion.isBaron
+ * `bool` minion.isDragon
+ * `bool` minion.isEpicMonster
+ * `bool` minion.isSmiteMonster
  
-####m:basicAttack(i)
+####m:basicAttack(index)
 Parameters<br>
 `minion.obj` m<br>
-`number` i<br>
+`number` index, -1 to get the default AA spell<br>
 Return Value<br>
 `spell.obj` returns the minions basic attack<br>
 
@@ -3038,14 +3071,15 @@ Properties:<br>
  * `vec3` spell.endPosLine
  * `vec2` spell.endPosLine2D
 > `TargetEndPosition`
+ * `boolean` spell.useChargeChanneling
+ * `boolean` spell.channelingFinished
+ * `boolean` spell.spellCasted
  * `number` spell.windUpTime
-> `DesignerCastTime`
+> `DesignerCastTime` + `ExtraTimeForCast`
  * `number` spell.animationTime
 > `DesignerTotalTime`
  * `number` spell.clientWindUpTime
 > `CharacterAttackCastDelay`
- * `number` spell.animationWindUpTime
-> `DesignerTotalTime`
  * `spell_info.obj` spell.spell_info
 > The `SpellData` of current `SpellCastInfo`
  * `string` spell.name
@@ -3138,6 +3172,35 @@ local rawDamageQ3 = player:spellSlot(0):calculate(AatroxQ, QDamage) * 1.25 * 1.2
 
 ```
 
+####spell_slot:getDamage(target, spellHash, stage)
+Parameters<br>
+`spell_slot.obj` current spell<br>
+`int` spell name hash, could be 0 if using default spell name<br>
+`int` stage, 0 for default, 1/2/3 for custom usage<br>
+Return Value<br>
+`void`<br>
+
+```lua
+-- AatroxQ
+local spellHash_AatroxQ = game.spellhash('AatroxQ')
+local spellHash_AatroxQ2 = game.spellhash('AatroxQ2')
+local spell = player:spellSlot(_Q)
+print(spell:getDamage(target, spellHash_AatroxQ, 0)) -- Q damage
+print(spell:getDamage(target, spellHash_AatroxQ, 1)) -- Q edge damage
+print(spell:getDamage(target, spellHash_AatroxQ2, 0)) -- Q2 damage (need pass AatroxQ2 as arg1)
+
+-- AkaliP
+local spellHash_AkaliP = game.spellhash('AkaliP')
+local spell = player:spellSlot(63) -- 63 = Passive
+print(spell:getDamage(target, spellHash_AkaliP, 3)) -- Akali passive damage for stage 3
+
+-- AurelionSolR
+local spellHash_AurelionSolR = game.spellhash('AurelionSolR')
+local spell = player:spellSlot(_R)
+print(spell:getDamage(target, spellHash_AurelionSolR, 0)) -- AurelionSol R damage
+print(spell:getDamage(target, spellHash_AurelionSolR, 1)) -- AurelionSol R2 damage
+```
+
 
 ###spell_info.obj
 > known as `SpellData`
@@ -3206,8 +3269,8 @@ Properties:<br>
 
  * `obj` path.owner
  * `boolean` path.isActive
- * `boolean` path.active
-> same as isActive
+ * `boolean` path.isMoving
+> Sometimes player is moving but `path.isActive` will be `false` (eg: no path for short move).
  * `boolean` path.isDashing
  * `number` path.dashSpeed
  * `boolean` path.unstoppable
@@ -3390,7 +3453,7 @@ Parameters<br>
 `number` t1<br>
 `number` t2<br>
 Return Value<br>
-`boolean` returns true if obj path has updated <t1 seconds ago or >t1 seconds ago<br>
+`boolean` returns true if obj path has updated <t1 seconds ago or >t2 seconds ago<br>
 ``` lua
 
 ```
@@ -3920,6 +3983,7 @@ end
 orb.combat.register_f_after_attack(after_attack)
 ```
 ####orb.farm.clear_target
+>> deprecated
 Return Value<br>
 `obj` returns the orbs current lane clear target<br>
 ``` lua
@@ -4319,7 +4383,7 @@ end
 ###damagelib
 
 ####damagelib.handlers
-Insert your own handlers if internal damagelib is not ok.
+Insert your own handlers if internal damagelib is not ok.<br>
 
 ``` lua
 local damagelib = module.internal('damagelib')
@@ -4364,16 +4428,17 @@ print('Q1', damagelib.get_spell_damage('AatroxQ', 0, player, g_target, true, 1))
 print('Q2', damagelib.get_spell_damage('AatroxQ', 0, player, g_target, true, 2))
 ```
 
-####damagelib.calc_aa_damage(source, target)
-Calc the real damage after shields, etc.
+####damagelib.calc_aa_damage(source, target, includeOnHit)
+Calc the real damage after shields, etc.<br>
 Parameters<br>
 `obj` source<br>
 `obj` target<br>
+`boolean` include `calc_on_hit_damage` or not<br>
 Return Value<br>
 `number`<br>
 
 ####damagelib.calc_physical_damage(source, target, rawDamage)
-Calc the real damage after shields, etc.
+Calc the real damage after shields, etc.<br>
 Parameters<br>
 `obj` source<br>
 `obj` target<br>
@@ -4382,13 +4447,26 @@ Return Value<br>
 `number`<br>
 
 ####damagelib.calc_magical_damage(source, target, rawDamage)
-Calc the real damage after shields, etc.
+Calc the real damage after shields, etc.<br>
 Parameters<br>
 `obj` source<br>
 `obj` target<br>
 `number` rawDamage<br>
 Return Value<br>
 `number`<br>
+
+####damagelib.calc_on_hit_damage(source, target, isAutoAttack)
+Calc the extra on hit damage by passive/buffs/items/perks.<br>
+Parameters<br>
+`obj` source<br>
+`obj` target<br>
+`boolean` isAutoAttack<br>
+Return Value<br>
+`number`,`number`,`number`<br>
+
+```lua
+local ad,ap,true = damagelib.calc_on_hit_damage(player, target, true)
+```
 
 
 ###TS
@@ -4552,6 +4630,8 @@ end
  * _W
  * _E
  * _R
+ * SUMMONER_1
+ * SUMMONER_2
  * COLOR_RED
  * COLOR_GREEN
  * COLOR_BLUE
@@ -4560,6 +4640,7 @@ end
  * COLOR_PURPLE
  * COLOR_BLACK
  * COLOR_WHITE
+ * BUFF_INTERNAL
  * BUFF_AURA
  * BUFF_COMBATENCHANCER
  * BUFF_COMBATDEHANCER
@@ -4568,6 +4649,7 @@ end
  * BUFF_INVISIBILITY
  * BUFF_SILENCE
  * BUFF_TAUNT
+ * BUFF_BERSERK
  * BUFF_POLYMORPH
  * BUFF_SLOW
  * BUFF_SNARE
@@ -4579,14 +4661,14 @@ end
  * BUFF_INVULNERABILITY
  * BUFF_ATTACKSPEEDSLOW
  * BUFF_NEARSIGHT
+ * BUFF_CURRENCY
  * BUFF_FEAR
- * BUFF_SHRED
  * BUFF_CHARM
  * BUFF_POISON
  * BUFF_SUPPRESSION
  * BUFF_BLIND
  * BUFF_COUNTER
- * BUFF_CURRENCY
+ * BUFF_SHRED
  * BUFF_FLEE
  * BUFF_KNOCKUP
  * BUFF_KNOCKBACK
@@ -4862,6 +4944,7 @@ There is no error handling for the shard builder. <br>
 Make sure your script is working ingame, has a valid header and the folder name is being input correctly.<br>
 Do not build shards out of scripts that already use the crypt module.<br><br>
 To load shards ingame, both script (.obj) and libshards (.lib) have to be put directly into lol-nd/shards/<br>
+
 ###Avoiding Bugsplats
 Variables must be properly purged, attempting to access certain obj properties after the obj has been deleted by the LoL client will result in LoL bugsplatting<br>
 ``` lua
@@ -4965,6 +5048,26 @@ cb.add(cb.create_particle, on_delete_particle)
 cb.add(cb.create_missile, on_delete_missile)
 ```
 Do not use the buffManager, use obj.buff instead.<br>
+
+###Performance Tips
+
+* The `cb.on_draw` will cause lots performance, Dont loop objManager or do lots calulation in it.
+* Use objManager.minions['xxx'] to get the type of minions needed.
+* Some other tips for lua: using local variable
+
+```lua
+-- bad
+for i=0, objManager.minions[TEAM_ENEMY].size-1 do
+	local obj = objManager.minions[TEAM_ENEMY][i]
+end
+
+-- good
+local enemyMinions = objManager.minions[TEAM_ENEMY]
+local enemyMinionsSize = enemyMinions.size
+for i=0, enemyMinionsSize-1 do
+	local obj = enemyMinions[i]
+end
+```
 
 #Paid Script Conditions
 In an effort to reward the community developers for all their hard work and dedication we will now allow the sales of third-party scripts.
