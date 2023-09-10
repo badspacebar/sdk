@@ -104,6 +104,32 @@ Return Value<br>
 local a = mousePos2D:distSqr(player.pos2D)
 print(a)
 ```
+####v1:distLine(A, B)
+Parameters<br>
+`vec2` v1<br>
+`vec2` A<br>
+`vec2` B<br>
+Return Value<br>
+`number` returns distance between v1 and line: A to B<br>
+####v1:inRange(v2, range)
+Parameters<br>
+`vec2` v1<br>
+`vec2` v2<br>
+`number` range<br>
+Return Value<br>
+`number` returns whether v2 in area from v1 to range<br>
+####v1:angle(v2)
+Parameters<br>
+`vec2` v1<br>
+`vec2` v2<br>
+Return Value<br>
+`number` returns angle (radians) between v1 and v2<br>
+####v1:angleDeg(v2)
+Parameters<br>
+`vec2` v1<br>
+`vec2` v2<br>
+Return Value<br>
+`number` returns angle (degrees) between v1 and v2<br>
 ####v1:perp1()
 Parameters<br>
 `vec2` v1<br>
@@ -169,6 +195,12 @@ local b = a:norm()
 local c = b:rotate(0.785398)
 c:print()
 ```
+####v1:rotateDeg(angle)
+Parameters<br>
+`vec2` v1<br>
+`number` angle<br>
+Return Value<br>
+`vec2` returns vec2 rotated by s degrees<br>
 ####v1:print()
 Parameters<br>
 `vec2` v1<br>
@@ -268,6 +300,19 @@ Return Value<br>
 local a = mousePos:distSqr(player.pos)
 print(a)
 ```
+####v1:inRange(v2, range)
+Parameters<br>
+`vec3` v1<br>
+`vec3` v2<br>
+`number` range<br>
+Return Value<br>
+`number` returns whether v2 in area from v1 to range<br>
+####v1:angle(v2)
+Parameters<br>
+`vec3` v1<br>
+`vec3` v2<br>
+Return Value<br>
+`number` returns angle (deg) between v1 and v2<br>
 ####v1:perp1()
 Parameters<br>
 `vec3` v1<br>
@@ -1112,11 +1157,17 @@ Return Value<br>
 `boolean` returns true if v1 is in fog of war<br>
 
 ####navmesh.getNearstPassable(v1)
+deprecated, please use `player:getPassablePos` instead<br>
 Parameters<br>
 `vec2\vec3` v1<br>
 Return Value<br>
-`vec2` returns the nearst passable position to v1<br>
+`vec2` returns the nearst passable position (the cell start) vec2(x,z) to v1(x, z)<br>
+`bool` returns the nearst passable is grass or not<br>
 
+```lua
+local drop_pos = navmesh.getNearstPassable(mousePos) -- return type is vec2
+graphics.draw_circle(vec3(drop_pos.x + 25, 0, drop_pos.y + 25), 4, 2, 0xFFFFFF00, 3)
+```
 ###game
 ####game.mousePos
 Return Value<br>
@@ -1168,17 +1219,33 @@ Parameters<br>
 `int` mouse Y<br>
 Return Value<br>
 `obj` returns the current hovered game object by position<br><br>
-####game.sendRadialEmote(int)
+####game.sendEmote(emoteId)
 Parameters<br>
 `int` emoteId <br>
+Return Value<br>
+`void` <br>
+```c
+EMOTE_DANCE = 0,
+EMOTE_TAUNT = 1,
+EMOTE_LAUGH = 2,
+EMOTE_JOKE = 3,
+EMOTE_TOGGLE = 4,
+EMOTE_NUMBER_OF_EMOTES = 5,
 ```
-    EMOTE_DANCE = 0x0,
-    EMOTE_TAUNT = 0x1,
-    EMOTE_LAUGH = 0x2,
-    EMOTE_JOKE = 0x3,
-    EMOTE_TOGGLE = 0x4,
-    EMOTE_NUMBER_OF_EMOTES = 0x5,
+```lua
+game.sendEmote(0) -- dance
 ```
+####game.sendRadialEmote(index)
+Parameters<br>
+`int` index <br>
+Return Value<br>
+`void` <br>
+
+```lua
+game.sendRadialEmote(8) -- centre emote
+```
+####game.displayMasteryBadge()
+Parameters<br>
 Return Value<br>
 `void` <br>
 ####game.fnvhash(str)
@@ -1441,6 +1508,49 @@ end
 
 cb.add(cb.draw, on_draw)
 ```
+####graphics.create_effect(type)
+Create a shadereffect instance by type<br>
+Parameters<br>
+`number` type<br>
+Return Value<br>
+`shadereffect.obj`<br>
+``` lua
+-- create once, show always, with best performance
+local circle_unchanged = graphics.create_effect(graphics.CIRCLE_RAINBOW)
+circle_unchanged:update_circle(player.pos, 1200, 2, 0xFFFF0000)
+circle_unchanged:attach(player)
+circle_unchanged:show()
+```
+``` lua
+-- update effect in on_draw
+local circle_aa = graphics.create_effect(graphics.CIRCLE_RAINBOW)
+local function on_draw()
+	circle_aa:update_circle(player.pos, player.attackRange, 2, 0xff123456)
+end
+cb.add(cb.draw, on_draw)
+```
+####graphics.CIRCLE_GLOW
+Return Value<br>
+`number` simple glow circle<br>
+####graphics.CIRCLE_GLOW_RAINBOW
+Return Value<br>
+`number` glow circle with rainbow<br>
+####graphics.CIRCLE_GLOW_LIGHT
+Return Value<br>
+`number` another glow circle<br>
+####graphics.CIRCLE_GLOW_BOLD
+Return Value<br>
+`number` another glow circle 2<br>
+####graphics.CIRCLE_FIRE
+Return Value<br>
+`number` fire circle<br>
+####graphics.CIRCLE_RAINBOW
+Return Value<br>
+`number` colorful rainbow circle<br>
+####graphics.CIRCLE_RAINBOW_BOLD
+Return Value<br>
+`number` colorful another rainbow circle<br>
+
 ####graphics.draw_sprite(name, v1, scale, color)
 Parameters<br>
 `string` name<br>
@@ -1457,6 +1567,8 @@ end
 
 cb.add(cb.sprite, on_draw_sprite)
 ```
+
+
 ####graphics.spawn_fake_click(color, v1)
 Parameters<br>
 `string` color: "red" or "green"<br>
@@ -1770,6 +1882,7 @@ Parameters<br>
 `number` slot<br>
 Return Value<br>
 `boolean` <br>
+
 ###keyboard
 ####keyboard.isKeyDown(key_code)
 Parameters<br>
@@ -1810,6 +1923,50 @@ Return Value<br>
 ``` lua
 print(keyboard.stringToKeyCode('Space'))
 ```
+
+###permashow
+####permashow.enable(v1)
+Parameters<br>
+`boolean` enabled<br>
+####permashow.set_pos(x, y)
+Parameters<br>
+`number` x<br>
+`number` y<br>
+####permashow.set_alpha(alpha)
+Parameters<br>
+`number` alpha<br>
+####permashow.set_theme(theme)
+Parameters<br>
+`table` theme<br>
+
+```lua
+-- simple, set the alpha
+permashow.set_alpha(100)
+
+-- advanced usage, set custom theme (alpha will be ignored)
+permashow.set_theme({
+	itemHeight = 20,
+	textSize = 14,
+	textColor = 0xFFFFF799,
+	textColorDisabled = 0xFFA8A8A8,
+
+	shadowColor = 0x90000000,
+	backgroundUpLeft = 0x90797145,
+	backgroundUpRight = 0x904a3f23,
+	backgroundBottomLeft = 0x90797145,
+	backgroundBottomRight = 0x904a3f23,
+	areaUpLeft = 0x90091e18,
+	areaUpRight = 0x90091e18,
+	areaBottomLeft = 0x9005120c,
+	areaBottomRight = 0x9005120c,
+	
+	itemBorder1 = 0x33f4f499,
+	itemBorder2 = 0x11f4f499,
+	itemBorder3 = 0x33f4f499,
+})
+permashow.enable(true)
+```
+
 ###network
 ####network.latency
 Return Value<br>
@@ -2118,6 +2275,8 @@ myMenu:keybind('example_keybind_a', 'Example Keybind A', 'A', nil)
 myMenu:keybind('example_keybind_b', 'Example Keybind B', nil, 'A')
 --this creates an on key down keybind for 'A' or toggle for 'B'
 myMenu:keybind('example_keybind_c', 'Example Keybind C', 'A', 'B')
+--this disable the permashow for Keybind C
+myMenu.example_keybind_c:permashow(false)
 
 local function on_tick()
 	if myMenu.example_keybind_a:get() then
@@ -2299,6 +2458,17 @@ Properties:<br>
  * `path.obj` hero.path
  * `spell.obj` hero.activeSpell
  * `table` hero.buff
+```lua
+-- use BUFF_XXX for buff type
+if hero.buff[BUFF_BLIND] then
+	print('player blind')
+end
+
+-- Use the name(in lowercase) to get the the specified name
+if hero.buff['kaisaeevolved'] then
+	print('has buff KaisaEEvolved')
+end
+```
  * `runemanager.obj` hero.rune
  * `number` hero.type
  * `number` hero.index
@@ -2410,6 +2580,7 @@ Properties:<br>
  * `number` hero.critDamageMultiplier
  * `number` hero.baseMoveSpeed
  * `number` hero.baseAttackRange
+ * `bool` hero.isZombie
  * `bool` hero.isMelee
  * `bool` hero.isRanged
  * `bool` hero.isBot
@@ -2551,6 +2722,13 @@ Parameters<br>
 `number` spellSlot<br>
 Return Value<br>
 `number`<br>
+
+####hero:getPassablePos(to)
+Parameters<br>
+`hero.obj` hero<br>
+`vec3` to pos<br>
+Return Value<br>
+`vec3` The NearstPassable position (the cell center, and include hero collsion state)<br>
 
 ####hero:baseHealthForLevel(level)
 Parameters<br>
@@ -3280,9 +3458,12 @@ Properties:<br>
  * `vec2` path.serverPos2D
  * `vec3` path.serverVelocity
  * `vec2` path.serverVelocity2D
+ * `vec3` path.startPoint
+ * `vec3` path.endPoint
  * `vec3[]` path.point
+> `WaypointList` array
  * `vec2[]` path.point2D
-> `WaypointList`
+> `WaypointList` array
  * `number` path.index
 > The index of next point
  * `number` path.count
@@ -3290,6 +3471,30 @@ Properties:<br>
  * `number` path.update
 > `UpdateNumber`
 
+```lua
+cb.add(cb.path, function (obj)
+  if obj.ptr == player.ptr then
+    print("--------newpath")
+    print("isActive: " .. tostring(obj.path.isActive))
+    print("index: " .. obj.path.index)
+    print("count: " .. obj.path.count)
+
+    local pos = obj.path.serverPos
+    print("serverPos: " .. pos.x .. "," .. pos.y .. "," .. pos.z)
+    print("isDashing: " .. tostring(obj.path.isDashing))
+
+    if obj.path.isDashing then
+      print("dashSpeed: " .. obj.path.dashSpeed)
+    end
+  end
+end)
+
+cb.add(cb.draw, function()
+	if player.path.active then
+		graphics.draw_line_strip(player.path.point, 2, 0xFFFFFFFF, player.path.count+1)
+	end
+end)
+```
 
  
 ####p:calcPos(v1)
@@ -3404,6 +3609,34 @@ end
 
 ```
 
+
+###shadereffect.obj
+####effect:show()
+Parameters<br>
+`shadereffect.obj` effect<br>
+Return Value<br>
+`void`
+####effect:hide()
+Parameters<br>
+`shadereffect.obj` effect<br>
+Return Value<br>
+`void`
+####effect:attach(obj)
+Parameters<br>
+`shadereffect.obj` effect<br>
+`base.obj` game object: hero.obj/minion.obj/turret.obj<br>
+Return Value<br>
+`void`
+####effect:update_circle(pos, radius, width, color)
+Update the circle info of current shadereffect.<br>
+Parameters<br>
+`shadereffect.obj` effect<br>
+`vec3` effect center pos<br>
+`number` radius<br>
+`number` width<br>
+`number` color, argb (rgb is ignored when effect type is CIRCLE_RAINBOW)<br>
+Return Value<br>
+`void`
 
 #Modules
 ###pred
@@ -4253,11 +4486,6 @@ Parameters<br>
 `obj` target<br>
 Return Value<br>
 `number` returns time in seconds for an attack from source to hit target<br>
-####orb.utility.get_bar_width(obj)
-Parameters<br>
-`minion.obj` obj<br>
-Return Value<br>
-`number` returns the obj hp bar width<br>
 ####orb.ts
 Return Value<br>
 `TS` returns the orbs target selector instance<br>
