@@ -4293,8 +4293,9 @@ end
 
 orb.combat.register_f_after_attack(after_attack)
 ```
+
 ####orb.farm.clear_target
->> deprecated
+deprecated please dont use<br>
 Return Value<br>
 `obj` returns the orbs current lane clear target<br>
 ``` lua
