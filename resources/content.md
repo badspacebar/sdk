@@ -183,6 +183,11 @@ local a = vec2(player.x, player.z)
 local b = a:to3D(mousePos.y)
 b:print()
 ```
+####v1:toGame3D()
+Parameters<br>
+`vec2` v1<br>
+Return Value<br>
+`vec3` returns vec3, y is set to world height for exact position<br>
 ####v1:rotate(s)
 Parameters<br>
 `vec2` v1<br>
@@ -201,6 +206,40 @@ Parameters<br>
 `number` angle<br>
 Return Value<br>
 `vec2` returns vec2 rotated by s degrees<br>
+####v1:countAllies(range)
+Parameters<br>
+`vec2` v1<br>
+`number` range<br>
+Return Value<br>
+`number`<br>
+####v1:countEnemies(range)
+Parameters<br>
+`vec2` v1<br>
+`number` range<br>
+Return Value<br>
+`number`<br>
+####v1:countAllyLaneMinions(range)
+Parameters<br>
+`vec2` v1<br>
+`number` range<br>
+Return Value<br>
+`number`<br>
+####v1:countEnemyLaneMinions(range)
+Parameters<br>
+`vec2` v1<br>
+`number` range<br>
+Return Value<br>
+`number`<br>
+####v1:isUnderEnemyTurret()
+Parameters<br>
+`vec2` v1<br>
+Return Value<br>
+`boolean`<br>
+####v1:isUnderAllyTurret()
+Parameters<br>
+`vec2` v1<br>
+Return Value<br>
+`boolean`<br>
 ####v1:print()
 Parameters<br>
 `vec2` v1<br>
@@ -377,6 +416,40 @@ local b = a:norm()
 local c = b:rotate(0.785398)
 c:print()
 ```
+####v1:countAllies(range)
+Parameters<br>
+`vec3` v1<br>
+`number` range<br>
+Return Value<br>
+`number`<br>
+####v1:countEnemies(range)
+Parameters<br>
+`vec3` v1<br>
+`number` range<br>
+Return Value<br>
+`number`<br>
+####v1:countAllyLaneMinions(range)
+Parameters<br>
+`vec3` v1<br>
+`number` range<br>
+Return Value<br>
+`number`<br>
+####v1:countEnemyLaneMinions(range)
+Parameters<br>
+`vec3` v1<br>
+`number` range<br>
+Return Value<br>
+`number`<br>
+####v1:isUnderEnemyTurret()
+Parameters<br>
+`vec3` v1<br>
+Return Value<br>
+`boolean`<br>
+####v1:isUnderAllyTurret()
+Parameters<br>
+`vec3` v1<br>
+Return Value<br>
+`boolean`<br>
 ####v1:print()
 Parameters<br>
 `vec3` v1<br>
@@ -1550,6 +1623,9 @@ Return Value<br>
 ####graphics.CIRCLE_RAINBOW_BOLD
 Return Value<br>
 `number` colorful another rainbow circle<br>
+####graphics.CIRCLE_FILL
+Return Value<br>
+`number` filled circle<br>
 
 ####graphics.draw_sprite(name, v1, scale, color)
 Parameters<br>
@@ -1603,7 +1679,7 @@ Return Value<br>
 `void`<br>
 
 ###shadereffect
-####shadereffect.contruct(effect_description, is_3D)
+####shadereffect.construct(effect_description, is_3D)
 Parameters<br>
 `string` effect_description<br>
 `boolean` is_3D<br>
@@ -2458,6 +2534,7 @@ Properties:<br>
  * `path.obj` hero.path
  * `spell.obj` hero.activeSpell
  * `table` hero.buff
+
 ```lua
 -- use BUFF_XXX for buff type
 if hero.buff[BUFF_BLIND] then
@@ -2469,6 +2546,7 @@ if hero.buff['kaisaeevolved'] then
 	print('has buff KaisaEEvolved')
 end
 ```
+
  * `runemanager.obj` hero.rune
  * `number` hero.type
  * `number` hero.index
@@ -4652,8 +4730,16 @@ Return Value<br>
 
 ``` lua
 local damagelib = module.internal('damagelib')
-print('Q1', damagelib.get_spell_damage('AatroxQ', 0, player, g_target, true, 1))
-print('Q2', damagelib.get_spell_damage('AatroxQ', 0, player, g_target, true, 2))
+
+-- Briar
+print('Passive min', damagelib.get_spell_damage('BriarP', 63, player, g_target, true, 0))
+print('Passive max', damagelib.get_spell_damage('BriarP', 63, player, g_target, true, 1))
+print('Q', damagelib.get_spell_damage('BriarQ', 0, player, g_target, true, 0))
+print('W', damagelib.get_spell_damage('BriarW', 1, player, g_target, true, 0))
+print('W2', damagelib.get_spell_damage('BriarWAttackSpell', 1, player, g_target, true, 0)) -- available when W2 ready
+print('E', damagelib.get_spell_damage('BriarE', 2, player, g_target, true, 0))
+print('R', damagelib.get_spell_damage('BriarR', 3, player, g_target, true, 0))
+
 ```
 
 ####damagelib.calc_aa_damage(source, target, includeOnHit)
