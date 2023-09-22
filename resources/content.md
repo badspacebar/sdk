@@ -118,6 +118,30 @@ Parameters<br>
 `number` range<br>
 Return Value<br>
 `number` returns whether v2 in area from v1 to range<br>
+####v1:isOnLineSegment(a, b)
+Parameters<br>
+`vec2` v1<br>
+`vec2` a<br>
+`vec2` b<br>
+`number` range<br>
+Return Value<br>
+`number` returns whether v1 in line segment<br>
+####v1:projectOnLine(a, b)
+Parameters<br>
+`vec2` v1<br>
+`vec2` a<br>
+`vec2` b<br>
+`number` range<br>
+Return Value<br>
+`number` returns project result in line<br>
+####v1:projectOnLineSegment(a, b)
+Parameters<br>
+`vec2` v1<br>
+`vec2` a<br>
+`vec2` b<br>
+`number` range<br>
+Return Value<br>
+`number` returns project result in line segment<br>
 ####v1:angle(v2)
 Parameters<br>
 `vec2` v1<br>
@@ -2521,6 +2545,7 @@ Properties:<br>
  * `boolean` hero.isOnScreen
  * `boolean` hero.inShopRange
  * `boolean` hero.isDead
+ * `boolean` hero.isAlive
  * `boolean` hero.isVisible
  * `boolean` hero.isRecalling
  * `boolean` hero.isTargetable
@@ -2662,6 +2687,7 @@ end
  * `bool` hero.isMelee
  * `bool` hero.isRanged
  * `bool` hero.isBot
+ * `bool` hero.isMe
  
  
 __The following functions are limited to player only:__<br>
@@ -2949,7 +2975,47 @@ The available stats (Some of them are deprecated by riot and always zero):
  * WAS_SURRENDER_DUE_TO_AFK	
  * WAS_LEAVER	
  * PLAYERS_I_MUTED	
+ 
+####hero:isValidTarget(range)
+Parameters<br>
+`hero.obj` hero<br>
+`number` range, optional <br>
+Return Value<br>
+`bool` Returns whether this is valid target to self or not<br>
+ 
+####hero:findBuff(hash)
+Using player.buff may cause bad FPS, so we added a higher performance API, <br>Equal to `player.buff["some_name"] and player.buff["some_name"] or nil` <br>
+Parameters<br>
+`hero.obj` hero<br>
+`int` fnv hash of buff name<br>
+Return Value<br>
+`buff.obj` <br>
+ 
+####hero:getBuffStacks(hash)
+Using player.buff may cause bad FPS, so we added a higher performance API, <br>Equal to `player.buff["some_name"] and player.buff["some_name"].stacks or 0` <br>
+Parameters<br>
+`hero.obj` hero<br>
+`int` fnv hash of buff name<br>
+Return Value<br>
+`int` <br>
+ 
+####hero:getBuffCount(hash)
+Using player.buff may cause bad FPS, so we added a higher performance API, <br>Equal to `player.buff["some_name"] and player.buff["some_name"].stacks2 or 0` <br>
+Parameters<br>
+`hero.obj` hero<br>
+`int` fnv hash of buff name<br>
+Return Value<br>
+`int` <br>
 
+```lua
+local ezrealpassivestacks = game.fnvhash("ezrealpassivestacks")
+cb.add(cb.tick, function()
+	local stacks = player:getBuffStacks(ezrealpassivestacks)
+	if stacks > 0 then
+		-- do somethings
+	end
+end)
+```
 
 ###minion.obj
 Properties:<br>
@@ -2958,6 +3024,7 @@ Properties:<br>
  * `string` minion.charName
  * `boolean` minion.isOnScreen
  * `boolean` minion.isDead
+ * `boolean` minion.isAlive
  * `boolean` minion.isVisible
  * `boolean` minion.isTargetable
  * `vec3` minion.pos
@@ -3085,6 +3152,13 @@ Parameters<br>
 Return Value<br>
 `number`<br>
 
+####m:isValidTarget(range)
+Parameters<br>
+`m.obj` m<br>
+`number` range, optional <br>
+Return Value<br>
+`bool` Returns whether this is valid target to self or not<br>
+
 ###turret.obj
 Properties:<br>
 
@@ -3092,6 +3166,7 @@ Properties:<br>
  * `string` turret.charName
  * `boolean` turret.isOnScreen
  * `boolean` turret.isDead
+ * `boolean` turret.isAlive
  * `boolean` turret.isVisible
  * `boolean` turret.isTargetable
  * `vec3` turret.pos
@@ -3198,6 +3273,13 @@ Parameters<br>
 Return Value<br>
 `number`<br>
 
+####t:isValidTarget(range)
+Parameters<br>
+`turret.obj` t<br>
+`number` range, optional <br>
+Return Value<br>
+`bool` Returns whether this is valid target to self or not<br>
+
 ###inhib.obj
 Properties:<br>
 
@@ -3221,6 +3303,7 @@ Properties:<br>
  * `vec3` inhib.minBoundingBox
  * `vec3` inhib.maxBoundingBox
  * `boolean` inhib.isDead
+ * `boolean` inhib.isAlive
  * `boolean` inhib.isVisible
  * `number` inhib.deathTime
  * `number` inhib.health
@@ -3229,12 +3312,20 @@ Properties:<br>
  * `boolean` inhib.isTargetable
  * `number` inhib.isTargetableToTeamFlags
 
+####inhib:isValidTarget(range)
+Parameters<br>
+`inhib.obj` inhib<br>
+`number` range, optional <br>
+Return Value<br>
+`bool` Returns whether this is valid target to self or not<br>
+
 ###nexus.obj
 Properties:<br>
 
  * `string` nexus.name
  * `boolean` nexus.isOnScreen
  * `boolean` nexus.isDead
+ * `boolean` nexus.isAlive
  * `boolean` nexus.isVisible
  * `boolean` nexus.isTargetable
  * `vec3` nexus.pos
@@ -3249,6 +3340,13 @@ Properties:<br>
  * `number` nexus.allShield
  * `number` nexus.isTargetableToTeamFlags
  
+####nexus:isValidTarget(range)
+Parameters<br>
+`nexus.obj` nexus<br>
+`number` range, optional <br>
+Return Value<br>
+`bool` Returns whether this is valid target to self or not<br>
+
 ###missile.obj
 Properties:<br>
 
@@ -3340,6 +3438,8 @@ Properties:<br>
 > The `SpellData` of current `SpellCastInfo`
  * `string` spell.name
 > equal to `spell.spell_info.name`
+ * `string` spell.hash
+> equal to `spell.spell_info.hash`
  * `spell_static.obj` spell.static
 > equal to `spell.spell_info.static`
 
@@ -3352,12 +3452,14 @@ Properties:<br>
  * `boolean` spell_slot.isBasicSpellSlot
  * `boolean` spell_slot.isSummonerSpellSlot
  * `string` spell_slot.name
+ * `number` spell_slot.hash
  * `texture.obj` spell_slot.icon
  * `number` spell_slot.targetingType
  * `number` spell_slot.level
  * `number` spell_slot.cooldown
  * `number` spell_slot.totalCooldown
  * `number` spell_slot.startTimeForCurrentCast
+ * `number` spell_slot.displayRange
  * `number` spell_slot.stacks
 > `CurrentAmmo`
  * `number` spell_slot.stacksCooldown
@@ -3464,6 +3566,8 @@ print(spell:getDamage(target, spellHash_AurelionSolR, 1)) -- AurelionSol R2 dama
 Properties:<br>
 
  * `string` spell_info.name
+ * `number` spell_info.hash
+> the fnvhash of name
  * `spell_static.obj` spell_info.static
 
 ###spell_static.obj
