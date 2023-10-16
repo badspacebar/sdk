@@ -254,14 +254,16 @@ Parameters<br>
 `number` range<br>
 Return Value<br>
 `number`<br>
-####v1:isUnderEnemyTurret()
+####v1:isUnderEnemyTurret(range)
 Parameters<br>
 `vec2` v1<br>
+`number` range, extra range, optional<br>
 Return Value<br>
 `boolean`<br>
-####v1:isUnderAllyTurret()
+####v1:isUnderAllyTurret(range)
 Parameters<br>
 `vec2` v1<br>
+`number` range, extra range, optional<br>
 Return Value<br>
 `boolean`<br>
 ####v1:print()
@@ -464,14 +466,16 @@ Parameters<br>
 `number` range<br>
 Return Value<br>
 `number`<br>
-####v1:isUnderEnemyTurret()
+####v1:isUnderEnemyTurret(range)
 Parameters<br>
 `vec3` v1<br>
+`number` range, extra range, optional<br>
 Return Value<br>
 `boolean`<br>
-####v1:isUnderAllyTurret()
+####v1:isUnderAllyTurret(range)
 Parameters<br>
 `vec3` v1<br>
+`number` range, extra range, optional<br>
 Return Value<br>
 `boolean`<br>
 ####v1:print()
@@ -1061,6 +1065,8 @@ Enums:<br>
  * cb.create_particle
  * cb.delete_missile
  * cb.create_missile
+ * cb.buff_gain
+ * cb.buff_lose
  * cb.path
  * cb.draw2
  * cb.sprite
@@ -4760,7 +4766,11 @@ for i=evade.core.skillshots.n, 1, -1 do
   --spell.danger_level
   --spell.start_pos
   --spell.end_pos
+  --spell.damage
   --spell.data -- assorted static data
+  --spell:contains(pos2D)
+  --spell:get_hit_time(pos2D)
+  --spell:get_hit_remaining_time(pos2D)
   
   if spell:contains(game.mousePos2D) then
     --mouse is inside of 'spell'
@@ -5169,8 +5179,10 @@ args: `IssueOrderArgs`:<br>
  * `boolean` args.isShiftPressed
  * `boolean` args.isAltPressed
  * `boolean` args.shouldPlayOrderAcknowledgementSound
+ * `boolean` args.isFromUser
 
-Note that `cb.issue_order` will only work for hanbot internal request, user's manual movement/attack will not trigger this event.
+<del>Note that `cb.issue_order` will only work for hanbot internal request, user's manual movement/attack will not trigger this event.</del><br>
+Now `cb.issue_order` will be triggered for all requests (include manual click).
 
 Warning: If you want to change the target or pos of `issue_order`, please use `orb.combat.register_f_pre_tick` and `TS.filter`, use `cb.issue_order` is not recommended, it will cause lots logic problems.
 
@@ -5319,6 +5331,20 @@ cb.add(cb.create_particle, on_create_particle)
 cb.add(cb.delete_particle, on_delete_particle)
 ```
 
+####cb.buff_gain and cb.buff_lose
+<br>
+``` lua
+local function on_buff_gain(obj, buff)
+	print('on_buff_gain', obj.name, obj.name)
+end
+
+local function on_buff_lose(obj, buff)
+	print('on_buff_lose', obj.name, obj.name)
+end
+
+cb.add(cb.buff_gain, on_buff_gain)
+cb.add(cb.buff_lose, on_buff_lose)
+```
 ###Creating Shards
 Introducing shards, a new way of binding and encrypting your folder into a single file.<br><br>
 To build shards, you have to add a shard table to your header.lua, which contains all the names of your files you would use in module.load(id, name).<br>
