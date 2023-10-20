@@ -4705,8 +4705,10 @@ Return Value<br>
 `void`<br><br>
 pauses evade from issuing movement orders (will still update orbs path)<br>
 ``` lua
-local evade = module.internal('evade')
-evade.core.set_pause(3) --pauses the evade from taking action for 3 seconds
+local evade = module.seek('evade')
+if evade then
+	evade.core.set_pause(3) --pauses the evade from taking action for 3 seconds
+end
 ```
 ####evade.core.is_paused()
 Return Value<br>
@@ -4724,13 +4726,13 @@ Return Value<br>
 `boolean` returns true if action is safe<br>
 ``` lua
 --this example is based on vayne q
-local evade = module.internal('evade')
+local evade = module.seek('evade')
 
 local function on_tick()
 	if player:spellSlot(0).state~=0 then return end
 	
 	local pos = player.path.serverPos2D + (mousePos2D - player.path.serverPos2D):norm()*300
-	if evade.core.is_action_safe(pos, 500 + player.moveSpeed, 0) then
+	if evade and evade.core.is_action_safe(pos, 500 + player.moveSpeed, 0) then
 		player:castSpell('pos', 0, vec3(pos.x, mousePos.y, pos.y))
 	end
 end
