@@ -5516,6 +5516,17 @@ for i=0, enemyMinionsSize-1 do
 end
 ```
 
+####Internal Profiler Tools
+* Put following code to `config.ini` to enable the profiler
+```
+[profiler]
+enable=1
+```
+* Start game and click "start" on profiler console.
+* Download this [profiler_tool](https://github.com/yse/easy_profiler/releases/download/v2.1.0/easy_profiler-v2.1.0-msvc15-win64.zip) and start profiler_gui
+* In profiler_gui, click "Connect", then you can "Capture" data at any time and analyze performance (It is recommended to display the "Stats" window as "Aggregate Stats")
+
+
 #Paid Script Conditions
 In an effort to reward the community developers for all their hard work and dedication we will now allow the sales of third-party scripts.
 
