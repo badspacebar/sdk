@@ -3723,6 +3723,8 @@ Properties:<br>
 
  * `number` buff.type
  * `string` buff.name
+ * `number` buff.hash
+> The fnvhash of buff.name
  * `boolean` buff.valid
  * `obj` buff.owner
  * `obj` buff.source
@@ -4768,11 +4770,14 @@ for i=evade.core.skillshots.n, 1, -1 do
   --spell.danger_level
   --spell.start_pos
   --spell.end_pos
-  --spell.damage
+  --spell.damage -- totalDamage
   --spell.data -- assorted static data
   --spell:contains(pos2D)
   --spell:get_hit_time(pos2D)
   --spell:get_hit_remaining_time(pos2D)
+  --spell:get_damage(target)
+  
+  local ad_damage,ap_damage,true_damage,buff_list = spell:get_damage(player)
   
   if spell:contains(game.mousePos2D) then
     --mouse is inside of 'spell'
@@ -4801,6 +4806,11 @@ for i=evade.core.targeted.n, 1, -1 do
   --spell.missile
   --spell.data -- assorted static data
 end
+```
+
+####evade.damage.count
+``` lua
+local ad_damage, ap_damage, true_damage, buff_list = evade.damage.count(player)
 ```
 
 ###damagelib
@@ -4843,7 +4853,7 @@ Parameters<br>
 `boolean` isRawDamage<br>
 `number` stage<br>
 Return Value<br>
-`number`<br>
+`number`,`number`,`number`,`number` total,ad,ap,true<br>
 
 ``` lua
 local damagelib = module.internal('damagelib')
@@ -4893,10 +4903,10 @@ Parameters<br>
 `obj` target<br>
 `boolean` isAutoAttack<br>
 Return Value<br>
-`number`,`number`,`number`<br>
+`number`,`number`,`number`,`number`  total,ad,ap,true<br>
 
 ```lua
-local ad,ap,true = damagelib.calc_on_hit_damage(player, target, true)
+local total_damage,ad_damage,ap_damage,true_damage = damagelib.calc_on_hit_damage(player, target, true)
 ```
 
 
