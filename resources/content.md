@@ -3828,6 +3828,114 @@ Parameters<br>
 Return Value<br>
 `void`
 
+
+###skillshot.obj (Evade3)
+
+Properties:<br>
+
+ * `obj` skillshot.Caster
+ * `string` skillshot.SpellName
+ * `spelldata.obj` skillshot.SpellData
+ * `number` skillshot.DetectionType
+ * `cast_info_saved.obj` skillshot.SpellCastInfoData
+ * `number` skillshot.InitTick
+ * `number` skillshot.StartTick
+ * `number` skillshot.EndTick
+ * `number` skillshot.TargetHandle
+> target ObjID
+ * `boolean` skillshot.IsDummy
+ * `boolean` skillshot.IsGlobal
+ * `boolean` skillshot.IsFoW
+ * `boolean` skillshot.IsRenderEnabled
+ * `boolean` skillshot.IsVisible
+ * `table` skillshot.LuaData
+ * `vec2` skillshot.StartPosition
+ * `vec2` skillshot.OriginalStartPosition
+ * `vec2` skillshot.DirectionVector
+ * `vec2` skillshot.NormalVector
+ * `vec2` skillshot.EndPosition
+ * `vec2` skillshot.OriginalEndPosition
+ * `vec2` skillshot.CastPosition
+ * `number` skillshot.StartObjectHandle
+ * `number` skillshot.EndObjectHandle
+> the ObjID
+ * `boolean` skillshot.IsIgnoredFromInside
+
+Member Functions:<br>
+
+ * skillshot:IsValid()
+ * skillshot:Invalidate()
+ * skillshot:IsActive()
+ * skillshot:Activate()
+ * skillshot:Deactivate()
+ * skillshot:IsEnabledInMenu()
+ * skillshot:IsFoWEnabledInMenu()
+ * skillshot:GetDangerLevelFromMenu()
+ * skillshot:GetDangerLevel()
+ * skillshot:CalculateTicks()
+ * skillshot:IsIgnored()
+ * skillshot:IsIgnoredTemporarily()
+ * skillshot:IgnoreTemporarily(bool)
+ * skillshot:IsValid()
+ * skillshot:Contains(vec2/vec3/obj)
+ * skillshot:ContainsPlayer()
+ * skillshot:GetHitTime()
+ * skillshot:GetHitRemainingTime()
+
+
+###spelldata.obj (Evade3)
+
+Properties:<br>
+
+ * `string` spelldata.Name
+ * `number` spelldata.NameHash
+ * `table` spelldata.SpellNames
+ * `table` spelldata.MissileNames
+ * `number` spelldata.Slot
+ * `number` spelldata.CastDuration
+ * `number` spelldata.StayDuration
+ * `number` spelldata.Range
+ * `number` spelldata.HitArea
+ * `number` spelldata.ExtraHitArea
+ * `boolean` spelldata.IsDynamicHitArea
+ * `boolean` spelldata.IsGlobal
+ * `boolean` spelldata.IsFixedRange
+ * `boolean` spelldata.IsAreaIgnoringHitBox
+ * `boolean` spelldata.IsRangeIgnoringHitBox
+
+###cast_info_saved.obj (Evade3)
+
+Properties:<br>
+
+ * `string` cast_info_saved.Name
+ * `number` cast_info_saved.Level
+ * `boolean` cast_info_saved.HasTarget
+ * `number` cast_info_saved.SenderHandle
+ * `number` cast_info_saved.TargetHandle
+ * `number` cast_info_saved.CastSpeed
+ * `number` cast_info_saved.Slot
+ * `number` cast_info_saved.MissileHash
+ * `number` cast_info_saved.MissileNetworkId
+ * `vec2` cast_info_saved.StartPos
+ * `vec2` cast_info_saved.EndPos
+ * `vec2` cast_info_saved.EndPos2
+ * `number` cast_info_saved.WindUpTime
+ * `number` cast_info_saved.AnimationTime
+ * `number` cast_info_saved.StartTime
+ * `number` cast_info_saved.CastEndTime
+ * `number` cast_info_saved.EndTime
+ * `number` cast_info_saved.Cooldown
+ * `boolean` cast_info_saved.IsBasicAttack
+ * `boolean` cast_info_saved.IsSpecialAttack
+ * `boolean` cast_info_saved.IsInstantCast
+ * `boolean` cast_info_saved.IsAutoAttack
+ * `boolean` cast_info_saved.IsChanneling
+ * `boolean` cast_info_saved.IsBasicAttackSlot
+ * `boolean` cast_info_saved.IsCharging
+ * `boolean` cast_info_saved.SpellWasCast
+ * `boolean` cast_info_saved.IsStopped
+ * `boolean` cast_info_saved.ChargeEndScheduled
+
 #Modules
 ###pred
 ####pred.trace.linear.hardlock(input, seg, obj)
@@ -3838,6 +3946,7 @@ Parameters<br>
 Return Value<br>
 `boolean` returns true if obj is hard crowd controlled<br>
 ``` lua
+
 
 ```
 ####pred.trace.linear.hardlockmove(input, seg, obj)
@@ -4806,6 +4915,30 @@ for i=evade.core.targeted.n, 1, -1 do
   --spell.missile
   --spell.data -- assorted static data
 end
+```
+
+####evade.core.register_on_create_spell
+<br>
+``` lua
+evade.core.register_on_create_spell(function (skillshot)
+
+  if not skillshot:contains(player) then
+    return
+  end
+
+  local ad_damage,ap_damage,true_damage,buff_list = skillshot:get_damage(player) -- show damage to self
+  print('create skillshot: ', 
+    skillshot.name, 
+    skillshot.owner and skillshot.owner.charName or "nil", 
+    "time: ",
+    string.format("%.2f", skillshot.start_time), 
+    string.format("%.2f", skillshot.end_time), -- This is only an approximate time
+    "target: ",
+    skillshot.target and skillshot.target.charName or "nil",
+    "damage: ",
+    ad_damage,ap_damage,true_damage,#buff_list
+  )
+end)
 ```
 
 ####evade.damage.count
