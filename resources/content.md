@@ -84,6 +84,16 @@ local a = mousePos2D - player.pos2D
 local b = a:norm()
 b:print()
 ```
+####v1:extend(to, range)
+Parameters<br>
+`vec2` to<br>
+`number` range<br>
+Return Value<br>
+`vec2` returns extended vec<br>
+``` lua
+local a = player.pos2D:extend(mousePos2D, 100)
+a:print()
+```
 ####v1:dist(v2)
 Parameters<br>
 `vec2` v1<br>
@@ -344,6 +354,16 @@ Return Value<br>
 local a = mousePos - player.pos
 local b = a:norm()
 b:print()
+```
+####v1:extend(to, range)
+Parameters<br>
+`vec3` to<br>
+`number` range<br>
+Return Value<br>
+`vec3` returns extended vec<br>
+``` lua
+local a = player.pos:extend(mousePos, 100)
+a:print()
 ```
 ####v1:dist(v2)
 Parameters<br>
@@ -3498,7 +3518,7 @@ Return Value<br>
 Return the fixed class value of the target skill<br>
 Parameters<br>
 `spell_slot.obj`<br>
-`int` index <br>
+`int` index: [1,11]<br>
 `int` level: [0,6]<br>
 Return Value<br>
 `number`<br>
@@ -3841,8 +3861,9 @@ Properties:<br>
  * `number` skillshot.InitTick
  * `number` skillshot.StartTick
  * `number` skillshot.EndTick
+> Ticks are based on game.time
  * `number` skillshot.TargetHandle
-> target ObjID
+> The ObjID
  * `boolean` skillshot.IsDummy
  * `boolean` skillshot.IsGlobal
  * `boolean` skillshot.IsFoW
@@ -3858,7 +3879,7 @@ Properties:<br>
  * `vec2` skillshot.CastPosition
  * `number` skillshot.StartObjectHandle
  * `number` skillshot.EndObjectHandle
-> the ObjID
+> The ObjID
  * `boolean` skillshot.IsIgnoredFromInside
 
 Member Functions:<br>
@@ -3894,6 +3915,7 @@ Properties:<br>
  * `number` spelldata.Slot
  * `number` spelldata.CastDuration
  * `number` spelldata.StayDuration
+ * `number` spelldata.Speed
  * `number` spelldata.Range
  * `number` spelldata.HitArea
  * `number` spelldata.ExtraHitArea
@@ -3902,6 +3924,7 @@ Properties:<br>
  * `boolean` spelldata.IsFixedRange
  * `boolean` spelldata.IsAreaIgnoringHitBox
  * `boolean` spelldata.IsRangeIgnoringHitBox
+ * `boolean` spelldata.IsCrowdControl
 
 ###cast_info_saved.obj (Evade3)
 
@@ -4873,8 +4896,8 @@ local ad_damage, ap_damage, true_damage, buff_list = evade.damage.count(player)
 for i=evade.core.skillshots.n, 1, -1 do
   local spell = evade.core.skillshots[i]
   --spell.name
-  --spell.start_time
-  --spell.end_time
+  --spell.start_time -- based on os.clock()
+  --spell.end_time -- based on os.clock()
   --spell.owner
   --spell.danger_level
   --spell.start_pos
