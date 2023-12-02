@@ -1631,6 +1631,43 @@ end
 
 cb.add(cb.draw, on_draw)
 ```
+####graphics.draw_arc(v1, radius, width, color, pts_n, r1, r2)
+Parameters<br>
+`vec3` v1<br>
+`number` radius<br>
+`number` width<br>
+`number` color<br>
+`number` pts_n<br>
+`number` r1<br>
+`number` r2<br>
+Return Value<br>
+`void`<br>
+``` lua
+local function on_draw()
+	graphics.draw_arc(player.pos, player.attackRange, 2, 0xFFFFFFFF, 32, 0, math.pi/2)
+end
+
+cb.add(cb.draw, on_draw)
+```
+####graphics.draw_arc_2d(x, y, radius, width, color, pts_n, r1, r2)
+Parameters<br>
+`number` x<br>
+`number` y<br>
+`number` radius<br>
+`number` width<br>
+`number` color<br>
+`number` pts_n<br>
+`number` r1<br>
+`number` r2<br>
+Return Value<br>
+`void`<br>
+``` lua
+local function on_draw()
+	graphics.draw_arc(player.pos, player.attackRange, 2, 0xFFFFFFFF, 32, 0, math.pi/2)
+end
+
+cb.add(cb.draw, on_draw)
+```
 ####graphics.create_effect(type)
 Create a shadereffect instance by type<br>
 Parameters<br>
@@ -4983,20 +5020,22 @@ local TotalPassthroughDamage = game.fnvhash('TotalPassthroughDamage')
 local TotalExplosionDamage = game.fnvhash('TotalExplosionDamage')
 
 handlers[FlashFrost] = function (source, target, is_raw_damage, stage)
+	print('FlashFrost: lua handlers called')
 	local spell_slot = source:spellSlot(0)
 	if not spell_slot then
-		return 0
+		return damage_result(0, 0, 0)
 	end
 	local raw_damage = spell_slot:calculate(0, TotalPassthroughDamage) + spell_slot:calculate(0, TotalExplosionDamage)
 	if is_raw_damage or not target or not target.valid then
-		return raw_damage
+		return damage_result(0, raw_damage, 0)
 	end
-	return damagelib.calc_magical_damage(source, target, raw_damage)
+	return damage_result(0, damagelib.calc_magical_damage(source, target, raw_damage), 0)    -- return damage: ad,ap,true
 end
 
 
 -- print damage
-print(damagelib.get_spell_damage('FlashFrost', 0, player, g_target, true, 0))
+local total_damage, ad_damage, ap_damage, true_damage = damagelib.get_spell_damage('FlashFrost', 0, player, g_target, true, 0)
+print(total_damage, ad_damage, ap_damage, true_damage)
 
 ```
 
