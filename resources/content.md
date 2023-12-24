@@ -1333,6 +1333,12 @@ Return Value<br>
 ####game.mode
 Return Value<br>
 `string` returns the current game mode<br>
+####game.type
+Return Value<br>
+`string` returns the current game type<br>
+####game.shopOpen
+Return Value<br>
+`string` check if shop available<br>
 ####game.isWindowFocused
 Return Value<br>
 `boolean` returns true if LoL is focused<br>
@@ -1409,6 +1415,16 @@ end
 
 cb.add(cb.draw, on_draw)
 ```
+####graphics.draw_outlined_text_2D(str, size, x, y, color, outline_color)
+Parameters<br>
+`string` str<br>
+`number` size<br>
+`number` x<br>
+`number` y<br>
+`number` color<br>
+`number` outline_color<br>
+Return Value<br>
+`void`<br>
 ####graphics.text_area(str, size, n)
 Parameters<br>
 `string` str<br>
@@ -1984,6 +2000,51 @@ cb.add(cb.issueorder, on_issue_order)
 ####core.reload()
 Return Value<br>
 `void`<br>
+
+
+
+
+###sound
+####sound.play(name)
+Parameters<br>
+`string` name<br>
+
+``` lua
+-- while resource is shared between all plugins, it is better to have a unique name (path)
+sound.play('demo_aio_resources/load.wav')
+```
+
+####sound.play_from_file(file_path)
+Parameters<br>
+`string` file_path<br>
+
+####sound.disable(is_disabled)
+Parameters<br>
+`boolean` is_disabled<br>
+
+####sound.play_from_file(file_path)
+Parameters<br>
+`string` file_path<br>
+
+####sound.disable(is_disabled)
+Parameters<br>
+`boolean` is_disabled<br>
+
+
+
+
+###shop
+
+####shop.buyItem(itemID, preferredSlotID)
+
+####shop.sellItem(inventorySlotId)
+
+####shop.undo()
+
+####shop.swapItem(source, dest)
+
+
+
 
 ###memory
 Valid types:<br>
@@ -2605,6 +2666,9 @@ Properties:<br>
  * `string` hero.name
  * `string` hero.charName
  * `string` hero.recallName
+ * `texture.obj` hero.iconCircle
+ * `texture.obj` hero.iconSquare
+ * `string` hero.recallName
  * `boolean` hero.isOnScreen
  * `boolean` hero.inShopRange
  * `boolean` hero.isDead
@@ -2818,6 +2882,8 @@ player:castSpell('line', 3, player.pos, mousePos)
 player:castSpell('release', 0, player.pos, mousePos)
 --type 'move', aurelion sol q
 player:castSpell('move', 0, mousePos, nil, true)
+--type 'switch', Hwei Q
+player:castSpell('switch', 0)
 ```
 ####player:levelSpell(slot)
 Parameters<br>
@@ -3465,6 +3531,7 @@ Properties:<br>
  * `vec3` particle.maxBoundingBox
  * `obj` particle.attachmentObject
  * `obj` particle.targetAttachmentObject
+ * `vec3` particle.direction
 
 
 ###spell.obj
@@ -4366,6 +4433,49 @@ end
 cb.add(cb.tick, on_tick)
 ```
 ###orb
+
+####orb.core.akshan_should_double_attack
+Return Value<br>
+`boolean`<br>
+``` lua
+local orb = module.internal('orb')
+if xxx then
+    orb.core.akshan_should_double_attack = true  -- set it in your AIO logic
+end
+```
+
+####orb.core.cur_attack_target
+Return Value<br>
+`obj` readonly, the current attack target<br>
+
+####orb.core.cur_attack_name
+Return Value<br>
+`string` readonly, the current AA spell name<br>
+
+####orb.core.cur_attack_start_client
+Return Value<br>
+`number` readonly, the time when current attack started, based on os.clock()<br>
+
+####orb.core.cur_attack_start_server
+Return Value<br>
+`number` readonly, the server time when current attack started, based on os.clock()<br>
+
+####orb.core.cur_attack_speed_mod
+Return Value<br>
+`number` readonly, the attack speed mod for current attack<br>
+
+####orb.core.next_attack
+Return Value<br>
+`number` readonly, time for next attack <br>
+
+####orb.core.next_action
+Return Value<br>
+`number` readonly, time for next action <br>
+
+####orb.core.next_action
+Return Value<br>
+`number` readonly, time for next action <br>
+
 ####orb.core.reset()
 Return Value<br>
 `void`<br>
@@ -4436,7 +4546,11 @@ cb.add(cb.tick, on_tick)
 
 ####orb.core.is_spell_locked()
 Return Value<br>
-`void` returns true if spells are paused <br>
+`boolean` returns true if spells are paused <br>
+
+####orb.core.is_winding_up_attack()
+Return Value<br>
+`boolean` returns true if winding up <br>
 
 ####orb.core.set_pause(t)
 Parameters<br>
@@ -4503,6 +4617,43 @@ Return Value<br>
 Return Value<br>
 `void`<br>
 
+####orb.core.on_after_attack(callback)
+Parameters<br>
+`function` callabck<br>
+Register a callback, which will be triggered when a attack is sent
+####orb.core.on_player_attack(callback)
+Parameters<br>
+`function` callabck<br>
+Register a callback, which will be triggered when a attack is responsed by server
+####orb.core.on_advanced_after_attack(callback)
+Parameters<br>
+`function` callabck<br>
+Register a callback, which will be triggered when last attack is finished and could attack now.
+####orb.core.time_to_next_attack()
+Return Value<br>
+`number` the left seconds to issue next attack<br>
+####orb.core.is_waiting_for_server_response(spellSlot)
+Return Value<br>
+`boolean`<br>
+####orb.core.is_waitting_for_cooldown(spellSlot)
+Return Value<br>
+`boolean`<br>
+####orb.core.is_waitting_for_cooldown(spellSlot)
+Return Value<br>
+`boolean`<br>
+####orb.core.can_move()
+Return Value<br>
+`boolean`<br>
+####orb.core.can_action()
+Return Value<br>
+`boolean` same as can_move<br>
+####orb.core.can_attack()
+Return Value<br>
+`boolean`<br>
+####orb.core.can_cast_spell(spellSlot, ignore_can_action_check)
+Return Value<br>
+`boolean`<br>
+
 ####orb.combat.is_active()
 Return Value<br>
 `boolean` returns true if combat mode is active<br>
@@ -4517,6 +4668,36 @@ end
 
 cb.add(cb.tick, on_tick)
 ```
+####orb.combat.target
+Return Value<br>
+`hero.obj` the current attack hero (valid only for current tick)<br>
+``` lua
+local orb = module.internal('orb')
+
+local function on_tick()
+  if orb.combat.is_active() and your_logic() then
+    orb.combat.target = your_logic_target()
+  end
+end
+
+cb.add(cb.tick, on_tick)
+```
+####orb.combat.pos
+Return Value<br>
+`hero.obj` the prefer position (valid only for current tick) will orbwalker to<br>
+
+####orb.combat.get_target()
+
+####orb.combat.set_target(t)
+
+####orb.combat.get_pos()
+
+####orb.combat.set_pos(t)
+
+####orb.combat.get_active()
+
+####orb.combat.set_active(t)
+
 ####orb.combat.register_f_after_attack(func)
 Parameters<br>
 `function` func<br>
@@ -4527,6 +4708,8 @@ local orb = module.internal('orb')
 
 local function after_attack()
   print('attack is on cooldown')
+  -- you can return true to block other callbacks
+  -- return true 
 end
 
 orb.combat.register_f_after_attack(after_attack)
@@ -4540,7 +4723,9 @@ Return Value<br>
 local orb = module.internal('orb')
 
 local function out_of_range()
-	print('there is no target in aa range')
+  print('there is no target in aa range')
+  -- you can return true to block other callbacks
+  -- return true 
 end
 
 orb.combat.register_f_out_of_range(out_of_range)
@@ -4554,7 +4739,8 @@ Return Value<br>
 local orb = module.internal('orb')
 
 local function on_tick() --this fucntion is triggered prior to the orbs tick
-	
+  -- you can return true to block other callbacks
+  -- return true 
 end
 
 orb.combat.register_f_pre_tick(on_tick)
@@ -4564,21 +4750,25 @@ Parameters<br>
 `boolean` val<br>
 Return Value<br>
 `void`<br>
+
+set to false, then orb will stop triggering \[register_f_after_attack\] events
+
 ``` lua
 local orb = module.internal('orb')
 
 local function after_attack()
   print('attack is on cooldown')
-	orb.combat.set_invoke_after_attack(false)
+  orb.combat.set_invoke_after_attack(false)
+  -- you can return true to block other callbacks
+  -- return true 
 end
 
 orb.combat.register_f_after_attack(after_attack)
 ```
 
 ####orb.farm.clear_target
-deprecated please dont use<br>
 Return Value<br>
-`obj` returns the orbs current lane clear target<br>
+`obj` the orbs current lane clear target<br>
 ``` lua
 local orb = module.internal('orb')
 
@@ -4861,6 +5051,8 @@ Return Value<br>
 ####orb.menu.hybrid.key:get()
 Return Value<br>
 `boolean` returns true if hybrid mode is active<br>
+
+
 ###evade
 use os.clock()<br>
 ####evade.core.set_server_pause()
@@ -5029,7 +5221,9 @@ handlers[FlashFrost] = function (source, target, is_raw_damage, stage)
 	if is_raw_damage or not target or not target.valid then
 		return damage_result(0, raw_damage, 0)
 	end
-	return damage_result(0, damagelib.calc_magical_damage(source, target, raw_damage), 0)    -- return damage: ad,ap,true
+	
+	-- return damage: ad,ap,true
+	return damage_result(0, damagelib.calc_magical_damage(source, target, raw_damage), 0)
 end
 
 
@@ -5244,6 +5438,10 @@ for Nebelwolfi=1, #ts.filter_set do
 	print(ts.filter_set[Nebelwolfi].name)
 end
 ```
+####TS.selected
+Return Value<br>
+`obj` current selected obj<br>
+
 #Globals
 
  * player
