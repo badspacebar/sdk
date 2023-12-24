@@ -1291,6 +1291,56 @@ Return Value<br>
 local drop_pos = navmesh.getNearstPassable(mousePos) -- return type is vec2
 graphics.draw_circle(vec3(drop_pos.x + 25, 0, drop_pos.y + 25), 4, 2, 0xFFFFFF00, 3)
 ```
+
+####navmesh.calcPos(obj, targetPos, strips)
+Parameters<br>
+`obj` hero/minion <br>
+`vec3` destination <br>
+`table` strips (shape of obstacle area) <br>
+Return Value<br>
+`vec3[]` returns array of paths<br>
+`number` returns array length<br>
+
+```lua
+
+local g_strips = {}
+
+function check_spell_area()
+	local collision_size = 4
+	local collision_array = vec3.array(collision_size)
+	
+	-- push areas, and please note that the minimum unit for collision checking is cell.
+	-- You need to round up points to cell boundings in real situations.
+	collision_array[0] = vec3(1000, 0, 1000)
+	collision_array[1] = vec3(1000, 0, 2000)
+	collision_array[2] = vec3(2000, 0, 2000)
+	collision_array[3] = vec3(2000, 0, 1000)
+	
+	table.insert(g_strips, {vec = collision_array, n = collision_size})
+end
+
+cb.add(cb.draw, function()
+
+  g_strips = {}
+  check_spell_area()
+
+  -- draw a opening shape
+  for i = 1, #g_strips do
+    local strip = g_strips[i]
+    local vec = strip.vec
+    for j = 0, strip.n - 2 do
+      graphics.draw_line(vec[j], vec[j + 1], 2, 0xffff0000)
+    end
+  end
+  
+  -- draw the path finding
+  local paths,size = navmesh.calcPos(player, mousePos, g_strips)
+  graphics.draw_line_strip(paths, 2, 0xFF00FF00, size)
+end)
+
+```
+
+
 ###game
 ####game.mousePos
 Return Value<br>
