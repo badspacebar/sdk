@@ -2055,6 +2055,7 @@ Return Value<br>
 
 
 ###sound
+
 ####sound.play(name)
 Parameters<br>
 `string` name<br>
@@ -2071,15 +2072,6 @@ Parameters<br>
 ####sound.disable(is_disabled)
 Parameters<br>
 `boolean` is_disabled<br>
-
-####sound.play_from_file(file_path)
-Parameters<br>
-`string` file_path<br>
-
-####sound.disable(is_disabled)
-Parameters<br>
-`boolean` is_disabled<br>
-
 
 
 
@@ -4683,9 +4675,6 @@ Register a callback, which will be triggered when last attack is finished and co
 Return Value<br>
 `number` the left seconds to issue next attack<br>
 ####orb.core.is_waiting_for_server_response(spellSlot)
-Return Value<br>
-`boolean`<br>
-####orb.core.is_waitting_for_cooldown(spellSlot)
 Return Value<br>
 `boolean`<br>
 ####orb.core.is_waitting_for_cooldown(spellSlot)
