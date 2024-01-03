@@ -1964,16 +1964,19 @@ Return Value<br>
 `minion.obj` returns minion object<br>
 ``` lua
 
-local enemyMinions = objManager.minions[TEAM_ENEMY]
-for i=0, enemyMinions.size-1 do
-	local obj = enemyMinions[i]
+local enemy_minion_size = objManager.minions.size[TEAM_ENEMY]
+local enemy_minion_arr = objManager.minions[TEAM_ENEMY]
+for i=0, enemy_minion_size-1 do
+	local obj = enemy_minion_arr[i]
 	print(obj.charName)
 end
 
 -- spell farm minions
-local spellFarmMinions = objManager.minions['farm']
-for i=0, spellFarmMinions.size-1 do
-	local obj = spellFarmMinions[i]
+local farm_minion_size = objManager.minions.size['farm']
+local farm_minion_size = objManager.minions.size['farm']
+local farm_minion_arr = objManager.minions['farm']
+for i=0, farm_minion_size-1 do
+	local obj = farm_minion_arr[i]
 	print(obj.charName)
 end
 
@@ -2013,6 +2016,62 @@ Return Value<br>
 ``` lua
 print(objManager.nexus[TEAM_ENEMY].health)
 ```
+
+####objManager.allHeros[i]
+Return Value<br>
+`hero.obj` returns hero object<br>
+
+``` lua
+for i=0, objManager.allHeros.size do
+	local obj = objManager.allHeros[i]
+	print(obj.handle)
+end
+```
+
+####objManager.allMinions[i]
+Return Value<br>
+`minion.obj` returns minion object<br>
+
+####objManager.minionsAlly[i]
+Return Value<br>
+`minion.obj` returns minion object<br>
+
+####objManager.minionsEnemy[i]
+Return Value<br>
+`minion.obj` returns minion object<br>
+
+####objManager.minionsNeutral[i]
+Return Value<br>
+`minion.obj` returns minion object<br>
+
+####objManager.minionsOther[i]
+Return Value<br>
+`minion.obj` returns minion object<br>
+
+####objManager.petsAlly[i]
+Return Value<br>
+`minion.obj` returns minion object<br>
+
+####objManager.petsEnemy[i]
+Return Value<br>
+`minion.obj` returns minion object<br>
+
+####objManager.barrels[i]
+Return Value<br>
+`minion.obj` returns minion object<br>
+
+####objManager.missiles[i]
+Return Value<br>
+`missile.obj` returns missile object<br>
+
+####objManager.particles[i]
+Return Value<br>
+`particle.obj` returns particle object<br>
+
+####objManager.wardsAlly[i]
+Return Value<br>
+`minion.obj` returns minion object<br>
+
 
 ####objManager.loop(f)
 Parameters<br>
@@ -3564,16 +3623,29 @@ Properties:<br>
  * `number` particle.x
  * `number` particle.y
  * `number` particle.z
+ * `number` particle.effectKey
+> The hash of effect resource name, only valid for effects from spell (invalid for missile/sound/etc)
  * `vec3` particle.pos
  * `vec2` particle.pos2D
+ * `vec3` particle.initPos
+> The initial position when effect created, only valid for effects from spell
+ * `vec3` particle.initTargetPos
+> The initial target position when effect created, only valid for effects from spell
+ * `vec3` particle.initOrientation
+> The initial orientation when effect created, only valid for effects from spell
+ * `vec3` particle.direction
+> The effect drection when rendering.
  * `boolean` particle.isOnScreen
  * `number` particle.selectionHeight
  * `number` particle.selectionRadius
  * `vec3` particle.minBoundingBox
  * `vec3` particle.maxBoundingBox
+ * `obj` particle.caster
+> The initial caster/emitter when effect created, only valid for effects from spell, could be nil
+ * `obj` particle.target
+> The initial target when effect created, only valid for effects from spell, could be nil
  * `obj` particle.attachmentObject
  * `obj` particle.targetAttachmentObject
- * `vec3` particle.direction
 
 
 ###spell.obj
@@ -5278,22 +5350,23 @@ Parameters<br>
 `number` spellSlot<br>
 `obj` source<br>
 `obj` target<br>
-`boolean` isRawDamage<br>
+`boolean` isRawDamage, true = only spell damage, false = include runes/items/buffs/armors/shieds<br>
 `number` stage<br>
 Return Value<br>
 `number`,`number`,`number`,`number` total,ad,ap,true<br>
+
 
 ``` lua
 local damagelib = module.internal('damagelib')
 
 -- Briar
-print('Passive min', damagelib.get_spell_damage('BriarP', 63, player, g_target, true, 0))
-print('Passive max', damagelib.get_spell_damage('BriarP', 63, player, g_target, true, 1))
-print('Q', damagelib.get_spell_damage('BriarQ', 0, player, g_target, true, 0))
-print('W', damagelib.get_spell_damage('BriarW', 1, player, g_target, true, 0))
-print('W2', damagelib.get_spell_damage('BriarWAttackSpell', 1, player, g_target, true, 0)) -- available when W2 ready
-print('E', damagelib.get_spell_damage('BriarE', 2, player, g_target, true, 0))
-print('R', damagelib.get_spell_damage('BriarR', 3, player, g_target, true, 0))
+print('Passive min', damagelib.get_spell_damage('BriarP', 63, player, g_target, false, 0))
+print('Passive max', damagelib.get_spell_damage('BriarP', 63, player, g_target, false, 1))
+print('Q', damagelib.get_spell_damage('BriarQ', 0, player, g_target, false, 0))
+print('W', damagelib.get_spell_damage('BriarW', 1, player, g_target, false, 0))
+print('W2', damagelib.get_spell_damage('BriarWAttackSpell', 1, player, g_target, false, 0)) -- available when W2 ready
+print('E', damagelib.get_spell_damage('BriarE', 2, player, g_target, false, 0))
+print('R', damagelib.get_spell_damage('BriarR', 3, player, g_target, false, 0))
 
 ```
 
@@ -5718,7 +5791,7 @@ cb.add(cb.cast_finish, on_cast_finish)
 ```
 
 ####cb.play_animation
-Fired when a animation (from network) is begin to play.
+Fired when a animation (from network only) is begin to play.
 
 ``` lua
 local function on_play_animation(obj, animation)
@@ -5789,6 +5862,7 @@ end
 cb.add(cb.buff_gain, on_buff_gain)
 cb.add(cb.buff_lose, on_buff_lose)
 ```
+
 ###Creating Shards
 Introducing shards, a new way of binding and encrypting your folder into a single file.<br><br>
 To build shards, you have to add a shard table to your header.lua, which contains all the names of your files you would use in module.load(id, name).<br>
@@ -5800,7 +5874,9 @@ return {
   shard = {
     'main', 'spells/q',
   },
-  lib = true,
+  
+  -- menu will be loaded by this order: "Champion" / "Orbwalker" / "Evade" / "Utility" / "Other"
+  type = "Champion",  -- if this shard is a champion plugin
 }
 ```
 Additionally you can bind sprites into a shard by adding it's names to a resource table.<br>
