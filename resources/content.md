@@ -604,6 +604,21 @@ Parameters<br>
 `number` n<br>
 Return Value<br>
 `vec4[?]` returns vec4 array of length n<br>
+
+###seg2
+`vec2` seg2.startPos<br>
+`vec2` seg2.endPos
+####v1:len()
+Parameters<br>
+`seg2` v1<br>
+Return Value<br>
+`number` returns length of v1<br>
+####v1:lenSqr()
+Parameters<br>
+`seg2` v1<br>
+Return Value<br>
+`number` returns squared length of v1<br>
+
 ###mathf
 A library of commonly used 2D math functions.<br>
 ####mathf.PI
@@ -1715,7 +1730,7 @@ end
 
 cb.add(cb.draw, on_draw)
 ```
-####graphics.draw_arc_2d(x, y, radius, width, color, pts_n, r1, r2)
+####graphics.draw_arc_2D(x, y, radius, width, color, pts_n, r1, r2)
 Parameters<br>
 `number` x<br>
 `number` y<br>
@@ -4116,7 +4131,7 @@ Member Functions:<br>
  * skillshot:IsIgnoredTemporarily()
  * skillshot:IgnoreTemporarily(bool)
  * skillshot:IsValid()
- * skillshot:Contains(vec2/vec3/obj)
+ * skillshot:Contains(vec2)
  * skillshot:ContainsPlayer()
  * skillshot:GetHitTime()
  * skillshot:GetHitRemainingTime()
@@ -5244,7 +5259,7 @@ for i=evade.core.skillshots.n, 1, -1 do
   --spell.end_pos
   --spell.damage -- totalDamage
   --spell.data -- assorted static data
-  --spell:contains(pos2D)
+  --spell:contains(pos2D/obj)
   --spell:get_hit_time(pos2D)
   --spell:get_hit_remaining_time(pos2D)
   --spell:get_damage(target)
