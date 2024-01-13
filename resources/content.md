@@ -4624,6 +4624,9 @@ end
 
 cb.add(cb.tick, on_tick)
 ```
+####orb.core.can_move()
+Return Value<br>
+`boolean` returns true if player can move<br>
 ####orb.core.can_attack()
 Return Value<br>
 `boolean` returns true if player can attack<br>
@@ -4636,6 +4639,9 @@ end
 
 cb.add(cb.tick, on_tick)
 ```
+####orb.core.can_cast_spell(spellSlot, ignore_can_action_check)
+Return Value<br>
+`boolean` returns true if player can cast spell<br>
 ####orb.core.is_paused()
 Return Value<br>
 `boolean` returns true if the orb is paused (will not issue any orders)<br>
@@ -4765,18 +4771,6 @@ Return Value<br>
 Return Value<br>
 `boolean`<br>
 ####orb.core.is_waitting_for_cooldown(spellSlot)
-Return Value<br>
-`boolean`<br>
-####orb.core.can_move()
-Return Value<br>
-`boolean`<br>
-####orb.core.can_action()
-Return Value<br>
-`boolean` same as can_move<br>
-####orb.core.can_attack()
-Return Value<br>
-`boolean`<br>
-####orb.core.can_cast_spell(spellSlot, ignore_can_action_check)
 Return Value<br>
 `boolean`<br>
 
