@@ -5877,19 +5877,35 @@ Introducing shards, a new way of binding and encrypting your folder into a singl
 To build shards, you have to add a shard table to your header.lua, which contains all the names of your files you would use in module.load(id, name).<br>
 If you build a libshard, lib = true has to be added additionally.<br>
 ``` lua
+
+local isCN = hanbot and hanbot.language == 1
+local supported = {
+  Ashe = true,
+  Lux = true,
+}
+
 return {
-  ...
-  ...
+  id = "some_unique_name",
+  name = isCN and "你好" or "Hello",
+  author = "aaa",
+  description = [[]],
   shard = {
-    'main', 'spells/q',
+    'main', 
+    'spells/q',
   },
   
   -- menu will be loaded by this order: "Champion" / "Orbwalker" / "Evade" / "Utility" / "Other"
   type = "Champion",  -- if this shard is a champion plugin
+  
+  -- current shard will not be loaded when "load" return failed.
+  load = function ()
+    return supported[player.charName]
+  end
 }
 ```
 Additionally you can bind sprites into a shard by adding it's names to a resource table.<br>
-When building the shard, the sprites have to be in hanbot/sprites.<br>
+The resource is shared between ALL plugins, it is better to have a unique name.<br>
+
 ``` lua
 return {
   ...
@@ -5901,7 +5917,7 @@ return {
     'SPRITE_NAME.png', —developer/SHARD_NAME/SPRITE_NAME.png
     'SUB_FOLDER/SPRITE_NAME.png', —developer/SHARD_NAME/SUB_FOLDER/SPRITE_NAME.png
   },
-  lib = true,
+  -- lib = true, -- build a libshard
 }
 ```
 Note that the sprite name added to the resource folder is the same as when using it ingame.<br>
@@ -5911,13 +5927,11 @@ cb.add(cb.sprite, function()
   graphics.draw_sprite('SUB_FOLDER/SPRITE_NAME.png', vec2)
 end)
 ```
-Shard builder is displayed in hanbox64 client if you have a developer key.<br>
-Enter the name of your script or lib folder and press the corresponding button.<br><br>
+Shard builder is available in developer group.<br>
 Warning: <br>
 There is no error handling for the shard builder. <br>
 Make sure your script is working ingame, has a valid header and the folder name is being input correctly.<br>
 Do not build shards out of scripts that already use the crypt module.<br><br>
-To load shards ingame, both script (.obj) and libshards (.lib) have to be put directly into lol-nd/shards/<br>
 
 ###Avoiding Bugsplats
 Variables must be properly purged, attempting to access certain obj properties after the obj has been deleted by the LoL client will result in LoL bugsplatting<br>
