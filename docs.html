@@ -9,16 +9,32 @@
 
   <!-- Flatdoc -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script src='https://cdn.rawgit.com/rstacruz/flatdoc/v0.9.0/legacy.js'></script>
-  <script src='https://cdn.rawgit.com/rstacruz/flatdoc/v0.9.0/flatdoc.js'></script>
+  <script src='resources/flatdoc/legacy.js'></script>
+  <script src='resources/flatdoc/flatdoc.js'></script>
+  
+  <script>
+    function loadCSS(href) {
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = href;
+      document.getElementsByTagName('head')[0].appendChild(link);
+    }
 
-  <!-- Flatdoc theme -->
-  <link  href='https://cdn.rawgit.com/rstacruz/flatdoc/v0.9.0/theme-white/style.css' rel='stylesheet'>
+    var hasTheme = localStorage.getItem("theme");
+    if (hasTheme) {
+        loadCSS('resources/flatdoc/theme-dark.css');
+    } else {
+        loadCSS('resources/flatdoc/theme-white.css');
+    }
+  </script>
+
   <script src='https://cdn.rawgit.com/rstacruz/flatdoc/v0.9.0/theme-white/script.js'></script>
 
   <!-- Meta -->
   <meta content="HanbotND SDK Documentation" property="og:title">
   <meta content="HanbotND SDK Documentation" name="description">
+
 
   <!-- Initializer -->
   <script>
@@ -36,8 +52,9 @@
         <li><a href='https://github.com/badspacebar/sdk'>View on GitHub</a></li>
       </ul>
     </div>
+    <div class="theme" onclick="switch_theme()" id="theme-button">
+    </div>
     <div class='right'>
-      <!-- GitHub buttons: see https://ghbtns.com -->
       <iframe src="https://ghbtns.com/github-btn.html?user=USER&amp;repo=REPO&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
     </div>
   </div>
@@ -48,6 +65,20 @@
     </div>
     <div role='flatdoc-content' class='content'></div>
   </div>
+
+  
+<script>
+  function switch_theme() {
+    var hasTheme = localStorage.getItem("theme");
+    if (hasTheme) {
+      localStorage.removeItem("theme");
+      window.location.reload();
+    } else {
+      localStorage.setItem("theme", true);
+      window.location.reload();
+    }
+  }
+</script>
 
 </body>
 </html>

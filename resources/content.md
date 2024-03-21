@@ -1366,7 +1366,7 @@ Return Value<br>
 ####game.cameraPos
 Return Value<br>
 `vec3` returns the current position of the camera<br>
-####game.cameraLock
+####game.cameraLocked
 Return Value<br>
 `boolean` returns true if the camera is locked<br>
 ####game.setCameraLock(bool)
@@ -1403,7 +1403,7 @@ Return Value<br>
 `string` returns the current game type<br>
 ####game.shopOpen
 Return Value<br>
-`string` check if shop available<br>
+`boolean` check if shop available<br>
 ####game.isWindowFocused
 Return Value<br>
 `boolean` returns true if LoL is focused<br>
@@ -1419,12 +1419,11 @@ Parameters<br>
 Return Value<br>
 `void` <br>
 ```c
-EMOTE_DANCE = 0,
-EMOTE_TAUNT = 1,
-EMOTE_LAUGH = 2,
-EMOTE_JOKE = 3,
-EMOTE_TOGGLE = 4,
-EMOTE_NUMBER_OF_EMOTES = 5,
+EMOTE_DANCE = 0
+EMOTE_TAUNT = 1
+EMOTE_LAUGH = 2
+EMOTE_JOKE = 3
+EMOTE_TOGGLE = 4
 ```
 ```lua
 game.sendEmote(0) -- dance
@@ -1611,6 +1610,7 @@ Parameters<br>
 `number` width<br>
 `number` color<br>
 `boolean` is_filled: default: false<br>
+`number` rounding: default: 0<br>
 Return Value<br>
 `void`<br>
 ``` lua
@@ -2311,37 +2311,7 @@ permashow.enable(true)
 ####network.latency
 Return Value<br>
 `number` returns game network latency in seconds<br>
-####network.send(url, args)
-Parameters<br>
-`string` url<br>
-`table` args<br>
-Return Value<br>
-`table`<br>
-``` lua
-Use the 'args' parameter to optionally configure the request:
-	- method: HTTP method to use. Defaults to "GET", but can be any HTTP verb like "POST" or "PUT"
-	- headers: Dictionary of additional HTTP headers to send with request
-	- data: Dictionary or string to send as request body
-	- cookies: Dictionary table of cookies to send
-	- timeout: How long to wait for the connection to be made before giving up
-	- allow_redirects: Whether or not to allow redirection. Defaults to true
-	- body_stream_callback: A method to call with each piece of the response body.
-	- header_stream_callback: A method to call with each piece of the resulting header.
-	- transfer_info_callback: A method to call with transfer progress data.
-	- auth_type: Authentication method to use. Defaults to "none", but can also be "basic", "digest" or "negotiate"
-	- username: A username to use with authentication. 'auth_type' must also be specified.
-	- password: A password to use with authentication. 'auth_type' must also be specified.
-	- files: A dictionary of file names to their paths on disk to upload via stream.
 
-If both body_stream_callback and header_stream_callback are defined, a boolean true will be returned instead of the following object.
-
-The return object is a dictionary with the following members:
-	- code: The HTTP status code the response gave. Will not exist if header_stream_callback is defined above.
-	- body: The body of the response. Will not exist if body_stream_callback is defined above.
-	- headers: A dictionary of headers and their values. Will not exist if header_stream_callback is defined above.
-	- headers_raw: A raw string containing the actual headers the server sent back. Will not exist if header_stream_callback is defined above.
-	- set_cookies: A dictionary of cookies given by the "Set-Cookie" header from the server. Will not exist if the server did not set any cookies.
-```
 ####network.download_file(url, dest)
 Parameters<br>
 `string` url<br>
@@ -2864,6 +2834,7 @@ end
  * `number` hero.flatBubbleRadiusMod
  * `number` hero.percentBubbleRadiusMod
  * `number` hero.moveSpeed
+ * `number` hero.moveSpeedBaseIncrease
  * `number` hero.scaleSkinCoef
  * `number` hero.gold
  * `number` hero.goldTotal
@@ -2893,6 +2864,8 @@ end
  * `number` hero.percentMagicPenetration
  * `number` hero.percentLifeStealMod
  * `number` hero.percentSpellVampMod
+ * `number` hero.percentOmnivamp
+ * `number` hero.percentPhysicalVamp
  * `number` hero.percentBonusArmorPenetration
  * `number` hero.percentCritBonusArmorPenetration
  * `number` hero.percentCritTotalArmorPenetration
@@ -2924,6 +2897,7 @@ end
  * `number` hero.baseManaPerLevel
  * `number` hero.combatType
  * `number` hero.critDamageMultiplier
+ * `number` hero.abilityHasteMod
  * `number` hero.baseMoveSpeed
  * `number` hero.baseAttackRange
  * `bool` hero.isZombie
@@ -3325,6 +3299,7 @@ Properties:<br>
  * `number` minion.bonusArmor
  * `number` minion.bonusSpellBlock
  * `number` minion.moveSpeed
+ * `number` minion.moveSpeedBaseIncrease
  * `number` minion.baseAbilityDamage
  * `number` minion.attackRange
  * `number` minion.flatMagicReduction
@@ -3614,6 +3589,8 @@ Properties:<br>
  * `vec2` missile.pos2D
 > The `x`/`y`/`z`/`pos`/`pos2D` now means `minBoundingBox` of `GameObject`
  * `spell.obj` missile.spell
+ * `base.obj` missile.caster
+ * `base.obj` missile.target
  * `number` missile.width
  * `number` missile.velocity
  * `missile_info.obj` missile.missile_info
@@ -4763,7 +4740,7 @@ Register a callback, which will be triggered when a attack is responsed by serve
 ####orb.core.on_advanced_after_attack(callback)
 Parameters<br>
 `function` callabck<br>
-Register a callback, which will be triggered when last attack is finished and could attack now.
+Register a callback, which will be triggered when last attack is finished and could action now.
 ####orb.core.time_to_next_attack()
 Return Value<br>
 `number` the left seconds to issue next attack<br>
@@ -5241,6 +5218,7 @@ local ad_damage, ap_damage, true_damage, buff_list = evade.damage.count(player)
 
 ####evade.core.skillshots
 <br>
+Not recommended, prefer `evade.core.register_on_create_spell`
 ``` lua
 for i=evade.core.skillshots.n, 1, -1 do
   local spell = evade.core.skillshots[i]
@@ -5276,6 +5254,7 @@ end
 
 ####evade.core.targeted
 <br>
+Not recommended, prefer `evade.core.register_on_create_spell`
 ``` lua
 for i=evade.core.targeted.n, 1, -1 do
   local spell = evade.core.targeted[i]
@@ -5310,6 +5289,12 @@ evade.core.register_on_create_spell(function (skillshot)
     "damage: ",
     ad_damage,ap_damage,true_damage,#buff_list
   )
+  
+  -- example for anti ViR:
+  if skillshot.name == "ViR" then
+    delay_action(skillshot.end_time - os.clock() - 0.1, function() use_zhonya() end)
+  end
+  
 end)
 ```
 
@@ -6058,18 +6043,20 @@ end
 ```
 
 ####Internal Profiler Tools
-* Put following code to `config.ini` to enable the profiler
-```
-[profiler]
-enable=1
-```
-* Start game and click "start" on profiler console.
+* Start game and click "Open Performance Monitor" in "Hanbot Settings"
+* In "Settings" tab, Check "Enable LuaJIT Profiler"
+* Press [-] to start record performance data and press [+] to stop
 * Download this [profiler_tool](https://github.com/yse/easy_profiler/releases/download/v2.1.0/easy_profiler-v2.1.0-msvc15-win64.zip) and start profiler_gui
-* In profiler_gui, click "Connect", then you can "Capture" data at any time and analyze performance (It is recommended to display the "Stats" window as "Aggregate Stats")
+* Open "profile.prof" (in the same directory with core.dll) and analyze performance (It is recommended to display the "Stats" window as "Aggregate Stats")
 
 
 #Paid Script Conditions
-In an effort to reward the community developers for all their hard work and dedication we will now allow the sales of third-party scripts.
+
+
+No paid script allowed anymore, we will pay all plugin developers.
+
+
+<del>In an effort to reward the community developers for all their hard work and dedication we will now allow the sales of third-party scripts.</del>
 
 * 1a. Only "Community Developers" qualify to sell third party scripts
 * 1b. To obtain the "Community Developers" status:
@@ -6081,4 +6068,4 @@ In an effort to reward the community developers for all their hard work and dedi
 * 3b. 1-time payments may be offered by the author as an alternative payment method (condition 3a must still be offered)
 * 4a. Conditions are subject to change at anytime without notice
 * 4b. Third party scripts are not affiliated with HanBOT nor any staff of HanBOT
-* 4c. Arbitration will not be offered by the HanBOT staff in cases of dispute
+* 4c. Arbitration will not be offered by the HanBOT staff in cases of dispute 
