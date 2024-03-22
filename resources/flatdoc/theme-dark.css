@@ -295,7 +295,7 @@ Instead, edit the stylus (.styl) files and compile it to CSS on your machine.
  }
  .content blockquote {
    color: #9090aa;
-   text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+   /* text-shadow: 0 1px 0 rgba(255,255,255,0.5); */
  }
  .content h1,
  .content h2,
@@ -521,7 +521,8 @@ Instead, edit the stylus (.styl) files and compile it to CSS on your machine.
    body:not(.no-literate) .content {
      padding-left: 0;
      padding-right: 0;
-     width: 970px;
+     /* width: 1090px; */
+     width: auto;
      max-width: none;
    }
    body:not(.no-literate) .content > p,
@@ -555,12 +556,15 @@ Instead, edit the stylus (.styl) files and compile it to CSS on your machine.
     border-radius: 8px;
     border-top: solid 1px #222;
     border-left: solid 1px #222;
-     width: 420px;
+     /* width: 540px; */
+     width: auto;
      padding-left: 20px;
      padding-right: 20px;
-     float: right;
+     /* float: right; */
+    float: left;
+    margin-left: 30px;
      clear: right;
-     overflow: auto;
+     /* white-space: break-spaces; 代码块换行 */
    }
    body:not(.no-literate) .content > pre + p,
    body:not(.no-literate) .content > blockquote + p,
@@ -859,10 +863,11 @@ Instead, edit the stylus (.styl) files and compile it to CSS on your machine.
    border-radius: 2px;
    background: #2badad;
  }
- /* code .string,
+
+ code .string,
  code .number {
-   color: #3ac; 
- } */
+   color: #dd660e; 
+ }
  /* 数字颜色 */
 
  /* code .des {
@@ -946,7 +951,6 @@ Instead, edit the stylus (.styl) files and compile it to CSS on your machine.
  }
 
  .theme {
-  /* text-align: right; */
   position: absolute;
   right: 12%;
   top: 50%;
@@ -963,23 +967,9 @@ Instead, edit the stylus (.styl) files and compile it to CSS on your machine.
 }
 
 .content h4 {
+  color: #596bcf;
   font-size: 1.1em;
   font-family: Inconsolata, Consolas, Menlo, Monaco, "Andale Mono WT", "Andale Mono", "Lucida Console", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
 }
 
-/* .themedark {
-  position: absolute;
-  right: 12%;
-  top: 50%;
-  display: inline-block;
-  background: #f3f6fb;
-  color: #505050;
-  background-image: url('dark.png');
-  background-size: 100%;
-  width: 32px;
-  height: 32px;
-  margin-top: -16px;
-  background-color: transparent;
-  cursor: pointer;
-} */
  
