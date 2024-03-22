@@ -864,9 +864,13 @@ Instead, edit the stylus (.styl) files and compile it to CSS on your machine.
    background: #2badad;
  }
 
- code .string,
+/*  code .string,
  code .number {
-   color: #dd660e; 
+   color: #2d8f28; 
+ } */
+
+code .string {
+   color: #2d8f28; 
  }
  /* 数字颜色 */
 
