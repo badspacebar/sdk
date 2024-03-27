@@ -558,6 +558,7 @@ Instead, edit the stylus (.styl) files and compile it to CSS on your machine.
     border-left: solid 1px #222;
      /* width: 540px; */
      width: auto;
+    min-width: 420px;
      padding-left: 20px;
      padding-right: 20px;
      /* float: right; */
