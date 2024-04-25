@@ -4496,16 +4496,16 @@ local pred_input = {
   speed = 1200,
   width = 70,
   boundingRadiusMod = 1,
-	range = 1100,
+  range = 1100,
   collision = {
     minion = true, --checks collision for minions
     hero = false, --no need to check for hero collision
-    
-	-- checks all collisions: YasuoWall/SamiraWall/BraumWall/PantheonWall
+
+    -- checks all collisions: YasuoWall/SamiraWall/BraumWall/PantheonWall
     wall = true, 
-	    
-	-- or checks specific collisions
-	-- wall = { yasuo = true, samira = true, braum = false, pantheon = false },
+
+    -- or checks specific collisions
+    -- wall = { yasuo = true, samira = true, braum = false, pantheon = false },
   },
 }
 
