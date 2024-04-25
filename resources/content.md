@@ -1276,6 +1276,12 @@ Parameters<br>
 Return Value<br>
 `boolean` returns true if v1 is in grass<br>
 
+####navmesh.isWater(v1)
+Parameters<br>
+`vec2\vec3` v1<br>
+Return Value<br>
+`boolean` returns true if v1 is in water<br>
+
 ####navmesh.isWall(v1)
 Parameters<br>
 `vec2\vec3` v1<br>
@@ -4493,8 +4499,13 @@ local pred_input = {
 	range = 1100,
   collision = {
     minion = true, --checks collision for minions
-    wall = true, --checks collision for yasuo wall or braum shield
     hero = false, --no need to check for hero collision
+    
+	-- checks all collisions: YasuoWall/SamiraWall/BraumWall/PantheonWall
+    wall = true, 
+	    
+	-- or checks specific collisions
+	-- wall = { yasuo = true, samira = true, braum = false, pantheon = false },
   },
 }
 
