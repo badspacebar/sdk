@@ -1055,6 +1055,67 @@ Parameters<br>
 `number` PolyFillType<br>
 Return Value<br>
 `polygons` returns polygon set<br>
+
+```lua
+-- Example to calc DariusQ Outer Ring
+
+local clip = module.internal('clipper')
+local polygon = clip.polygon
+local polygons = clip.polygons
+local clipper = clip.clipper
+local clipper_enum = clip.enum
+
+local function create_ring(center, outer_radius, inner_radius)
+    local outer_ring = polygon()
+    local inner_ring = polygon()
+    for i = 1, 64 do
+        local angle = (i - 1) * (2 * math.pi / 64)
+        local x_outer = center.pos.x + outer_radius * math.cos(angle)
+        local y_outer = center.pos.z + outer_radius * math.sin(angle)
+        local x_inner = center.pos.x + inner_radius * math.cos(angle)
+        local y_inner = center.pos.z + inner_radius * math.sin(angle)
+        outer_ring:Add(vec2(x_outer, y_outer))
+        inner_ring:Add(vec2(x_inner, y_inner))
+    end
+
+    local clpr = clipper()
+    clpr:AddPath(outer_ring, clipper_enum.PolyType.Subject, true)
+    clpr:AddPath(inner_ring, clipper_enum.PolyType.Clip, true)
+    local ring_area = clpr:Execute(clipper_enum.ClipType.Difference, clipper_enum.PolyFillType.NonZero, clipper_enum.PolyFillType.EvenOdd)
+    return ring_area
+end
+
+-- Darius Outer ring Q, Find hit areas
+local function on_draw()
+    local centers = {}
+    for i=0, objManager.enemies_n-1 do
+        local obj = objManager.enemies[i]
+        if obj and obj:isValidTarget(850) then
+            table.insert(centers, obj)
+        end
+    end
+
+    if #centers >= 2 then
+        local clpr = clipper()
+        local first_ring = create_ring(centers[1], 460, 250)
+        local second_ring = create_ring(centers[2], 460, 250)
+
+        clpr:AddPaths(first_ring, clipper_enum.PolyType.Subject, true)
+        clpr:AddPaths(second_ring, clipper_enum.PolyType.Clip, true)
+
+        local solution = clpr:Execute(clipper_enum.ClipType.Intersection, clipper_enum.PolyFillType.NonZero, clipper_enum.PolyFillType.EvenOdd)
+
+        for i = 0, solution:ChildCount() - 1 do
+            local poly = solution:Childs(i)
+            poly:Draw3D(player.y, 2, 0xFF00FF00)
+        end
+    end
+end
+
+cb.add(cb.draw, on_draw)
+```
+
+
 #Libraries
 ###hanbot
 ####hanbot.path
@@ -1458,6 +1519,12 @@ Parameters<br>
 `string` input string<br>
 Return Value<br>
 `unsigned int` returns the spell hash of input string<br>
+
+####game.hashSDBM(str)
+Parameters<br>
+`string` input string<br>
+Return Value<br>
+`unsigned int` returns the SDBM hash of input string<br>
 
 ###graphics
 ####graphics.width
@@ -4806,6 +4873,22 @@ Return Value<br>
 
 ####orb.combat.set_active(t)
 
+####orb.combat.register_f_pre_attack(func)
+Parameters<br>
+`function` func<br>
+Return Value<br>
+`void`<br>
+``` lua
+local orb = module.internal('orb')
+
+local function on_pre_attack()
+  print('will attack', orb.combat.target)
+  -- you can set to new target
+  -- orb.combat.target = xxxx
+end
+
+orb.combat.register_f_pre_attack(on_pre_attack)
+```
 ####orb.combat.register_f_after_attack(func)
 Parameters<br>
 `function` func<br>
@@ -4814,13 +4897,13 @@ Return Value<br>
 ``` lua
 local orb = module.internal('orb')
 
-local function after_attack()
+local function on_after_attack()
   print('attack is on cooldown')
   -- you can return true to block other callbacks
   -- return true 
 end
 
-orb.combat.register_f_after_attack(after_attack)
+orb.combat.register_f_after_attack(on_after_attack)
 ```
 ####orb.combat.register_f_out_of_range(func)
 Parameters<br>
