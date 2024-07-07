@@ -5976,11 +5976,11 @@ cb.add(cb.delete_particle, on_delete_particle)
 <br>
 ``` lua
 local function on_buff_gain(obj, buff)
-	print('on_buff_gain', obj.name, obj.name)
+	print('[Buff gain]: ', obj.charName, buff.name)
 end
 
 local function on_buff_lose(obj, buff)
-	print('on_buff_lose', obj.name, obj.name)
+	print('[Buff lose]: ', obj.charName, buff.name)
 end
 
 cb.add(cb.buff_gain, on_buff_gain)
@@ -6147,8 +6147,8 @@ local function on_delete_missile(obj)
 end
 
 cb.add(cb.create_minion, on_create_minion)
-cb.add(cb.create_particle, on_delete_particle)
-cb.add(cb.create_missile, on_delete_missile)
+cb.add(cb.delete_particlee, on_delete_particle)
+cb.add(cb.delete_missile, on_delete_missile)
 ```
 Do not use the buffManager, use obj.buff instead.<br>
 
