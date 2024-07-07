@@ -1453,6 +1453,7 @@ Return Value<br>
 ####game.version
 Return Value<br>
 `string` returns the current game version<br>
+*You cant lock your shard to specific game version, this is a forbidden.*<br>
 ####game.selectedTarget
 Return Value<br>
 `obj` returns the current selected game object<br>
@@ -1868,9 +1869,35 @@ Return Value<br>
 Return Value<br>
 `number` filled circle<br>
 
-####graphics.draw_sprite(name, v1, scale, color)
+####graphics.sprite(name)
 Parameters<br>
 `string` name<br>
+`vec2` the screen position<br>
+`number` scale<br>
+`number` color<br>
+Return Value<br>
+`texture.obj`<br>
+``` lua
+local myIcon = graphics.sprite('XXX/menu_icon.png')
+myMenu:set('icon', myIcon)
+```
+
+####graphics.game_sprite(name)
+Parameters<br>
+`string` name<br>
+`vec2` the screen position<br>
+`number` scale<br>
+`number` color<br>
+Return Value<br>
+`texture.obj`<br>
+``` lua
+-- example: https://raw.communitydragon.org/14.1/game/assets/characters/sru_blue/hud/bluesentinel_circle.png
+local icon = graphics.sprite('ASSETS/Characters/SRU_Blue/HUD/BlueSentinel_Circle.dds')
+local icon_ashe = graphics.sprite('ASSETS/Characters/Ashe/HUD/Ashe_Circle.dds')
+```
+####graphics.draw_sprite(name, v1, scale, color)
+Parameters<br>
+`string|texture.obj` name<br>
 `vec2` the screen position<br>
 `number` scale<br>
 `number` color<br>
@@ -2110,7 +2137,7 @@ Return Value<br>
 `hero.obj` returns hero object<br>
 
 ``` lua
-for i=0, objManager.allHeros.size do
+for i=0, objManager.allHeros.size-1 do
 	local obj = objManager.allHeros[i]
 	print(obj.handle)
 end
@@ -3276,7 +3303,7 @@ Return Value<br>
 `bool` Returns whether this is valid target to self or not<br>
  
 ####hero:findBuff(hash)
-Using player.buff may cause bad FPS, so we added a higher performance API, <br>Equal to `player.buff["some_name"] and player.buff["some_name"] or nil` <br>
+Equal to `player.buff["some_name"] and player.buff["some_name"] or nil` <br>
 Parameters<br>
 `hero.obj` hero<br>
 `int` fnv hash of buff name<br>
@@ -3284,7 +3311,7 @@ Return Value<br>
 `buff.obj` <br>
  
 ####hero:getBuffStacks(hash)
-Using player.buff may cause bad FPS, so we added a higher performance API, <br>Equal to `player.buff["some_name"] and player.buff["some_name"].stacks or 0` <br>
+Equal to `player.buff["some_name"] and player.buff["some_name"].stacks or 0` <br>
 Parameters<br>
 `hero.obj` hero<br>
 `int` fnv hash of buff name<br>
@@ -3292,7 +3319,7 @@ Return Value<br>
 `int` <br>
  
 ####hero:getBuffCount(hash)
-Using player.buff may cause bad FPS, so we added a higher performance API, <br>Equal to `player.buff["some_name"] and player.buff["some_name"].stacks2 or 0` <br>
+Equal to `player.buff["some_name"] and player.buff["some_name"].stacks2 or 0` <br>
 Parameters<br>
 `hero.obj` hero<br>
 `int` fnv hash of buff name<br>
@@ -3767,6 +3794,8 @@ Properties:<br>
  * `number` spell_slot.level
  * `number` spell_slot.cooldown
  * `number` spell_slot.totalCooldown
+ * `number` spell_slot.iconUsed
+> For champion like Bel'Veth, the index of spell icon (Q Spell)
  * `number` spell_slot.startTimeForCurrentCast
  * `number` spell_slot.displayRange
  * `number` spell_slot.stacks
@@ -4022,6 +4051,9 @@ end
 
 
 ###buff.obj
+Warning: <br>
+`buff.obj` are temporary objects, their memory may change or become invalid at any time, please do not save `buff.obj` anywhere<br>
+
 Properties:<br>
 
  * `number` buff.type
@@ -4810,7 +4842,7 @@ Return Value<br>
 ####orb.core.on_after_attack(callback)
 Parameters<br>
 `function` callabck<br>
-Register a callback, which will be triggered when a attack is sent
+Register a callback, which will be triggered once after a attack windup.
 ####orb.core.on_player_attack(callback)
 Parameters<br>
 `function` callabck<br>
@@ -4818,7 +4850,7 @@ Register a callback, which will be triggered when a attack is responsed by serve
 ####orb.core.on_advanced_after_attack(callback)
 Parameters<br>
 `function` callabck<br>
-Register a callback, which will be triggered when last attack is finished and could action now.
+Register a callback, which will be triggered when last attack is finished and could action now (called continuously after windup until attack ready again).
 ####orb.core.time_to_next_attack()
 Return Value<br>
 `number` the left seconds to issue next attack<br>
@@ -4899,8 +4931,11 @@ local orb = module.internal('orb')
 
 local function on_after_attack()
   print('attack is on cooldown')
-  -- you can return true to block other callbacks
+  -- you can return true to block other callbacks (Like callbacks registered by other plugin/module)
   -- return true 
+  
+  -- [on_after_attack] is called continuously, set bool to false can stop subsequent calls for the current attack.
+  -- orb.combat.set_invoke_after_attack(bool) 
 end
 
 orb.combat.register_f_after_attack(on_after_attack)
@@ -5789,7 +5824,8 @@ args: `IssueOrderArgs`:<br>
 <del>Note that `cb.issue_order` will only work for hanbot internal request, user's manual movement/attack will not trigger this event.</del><br>
 Now `cb.issue_order` will be triggered for all requests (include manual click).
 
-Warning: If you want to change the target or pos of `issue_order`, please use `orb.combat.register_f_pre_tick` and `TS.filter`, use `cb.issue_order` is not recommended, it will cause lots logic problems.
+Warning: <br>
+If you want to change the target or pos of `issue_order`, please use `orb.combat.register_f_pre_tick` and `TS.filter`, use `cb.issue_order` is not recommended, it will cause lots logic problems.
 
 ``` lua
 local function on_issue_order(args)
@@ -6121,14 +6157,15 @@ Do not use the buffManager, use obj.buff instead.<br>
 * The `cb.on_draw` will cause lots performance, Dont loop objManager or do lots calulation in it.
 * Use objManager.minions['xxx'] to get the type of minions needed.
 * Some other tips for lua: using local variable
+* DONT use any NYI: [The JIT Compiler's Drawback: Why Avoid NYI?](https://api7.ai/learning-center/openresty/avoid-lua-not-yet-implemented-features)
 
 ```lua
--- bad
+-- normal
 for i=0, objManager.minions[TEAM_ENEMY].size-1 do
 	local obj = objManager.minions[TEAM_ENEMY][i]
 end
 
--- good
+-- use, local variable, better
 local enemyMinions = objManager.minions[TEAM_ENEMY]
 local enemyMinionsSize = enemyMinions.size
 for i=0, enemyMinionsSize-1 do
