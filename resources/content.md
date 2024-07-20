@@ -3798,6 +3798,7 @@ Properties:<br>
 > For champion like Bel'Veth, the index of spell icon (Q Spell)
  * `number` spell_slot.startTimeForCurrentCast
  * `number` spell_slot.displayRange
+ * `number` spell_slot.currentNumericalDisplay
  * `number` spell_slot.stacks
 > `CurrentAmmo`
  * `number` spell_slot.stacksCooldown
