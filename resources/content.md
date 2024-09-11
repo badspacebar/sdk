@@ -2132,6 +2132,14 @@ Return Value<br>
 print(objManager.nexus[TEAM_ENEMY].health)
 ```
 
+####objManager.allObjects[i]
+Return Value<br>
+`base.obj` returns GameObject<br>
+
+####objManager.allAttackableUnits[i]
+Return Value<br>
+`base.obj` returns AttackableUnit<br>
+
 ####objManager.allHeros[i]
 Return Value<br>
 `hero.obj` returns hero object<br>
@@ -2185,7 +2193,7 @@ Return Value<br>
 
 ####objManager.wardsAlly[i]
 Return Value<br>
-`minion.obj` returns minion object<br>
+`minion.obj` returns ally ward object<br>
 
 
 ####objManager.loop(f)
@@ -2250,6 +2258,173 @@ Parameters<br>
 
 
 ###shop
+
+####shop.canShop
+Return Value<br>
+`bool` <br>
+
+####shop.isOpened
+Return Value<br>
+`bool` <br>
+
+####shop.augmentSelectionOpen
+Return Value<br>
+`bool` <br>
+
+####shop.augmentSelectionIds
+Return Value<br>
+`table` See AugmentId<br>
+```
+enum class AugmentId: std::uint32_t
+{
+	Oathsworn = 0x1F273AC,// buff_hash( "Oathsworn" )
+	ShrinkRay = 0x302DB74,// buff_hash( "ShrinkRay" )
+	UltimateRevolution = 0x4A9BDC5,// buff_hash( "UltimateRevolution" )
+	StackosaurusRex = 0x55E5BD2,// buff_hash( "StackosaurusRex" )
+	OrbitalLaser = 0x5E9FD41,// buff_hash( "OrbitalLaser" )
+	ApexInventor = 0x93D7848,// buff_hash( "ApexInventor" )
+	escAPADe = 0xB24AB25,// buff_hash( "escAPADe" )
+	WarmupRoutine = 0xB731243,// buff_hash( "WarmupRoutine" )
+	HeavyHitter = 0x109C1530,// buff_hash( "HeavyHitter" )
+	SummonersRoulette = 0x13BDA632,// buff_hash( "SummonersRoulette" )
+	EtherealWeapon = 0x13E8C4A7,// buff_hash( "EtherealWeapon" )
+	TheBrutalizer = 0x16EA7954,// buff_hash( "TheBrutalizer" )
+	ItsKillingTime = 0x17A308CA,// buff_hash( "ItsKillingTime" )
+	GiantSlayer = 0x1950C668,// buff_hash( "GiantSlayer" )
+	SearingDawn = 0x199AA2C8,// buff_hash( "SearingDawn" )
+	CannonFodder = 0x1A9B0060,// buff_hash( "CannonFodder" )
+	Quest_WoogletsWitchcap = 0x1BC0CAC1,// buff_hash( "Quest_WoogletsWitchcap" )
+	SpinToWin = 0x209762E6,// buff_hash( "SpinToWin" )
+	Executioner = 0x23F1EBC6,// buff_hash( "Executioner" )
+	NowYouSeeMe = 0x26433BAB,// buff_hash( "NowYouSeeMe" )
+	FeeltheBurn = 0x2D24DA51,// buff_hash( "FeeltheBurn" )
+	ItsCritical = 0x2E4815CC,// buff_hash( "ItsCritical" )
+	GambaAnvil = 0x2EFA5F6D,// buff_hash( "GambaAnvil" )
+	MadScientist = 0x301C4AB9,// buff_hash( "MadScientist" )
+	DontBlink = 0x361E81B4,// buff_hash( "DontBlink" )
+	GuiltyPleasure = 0x38A48C10,// buff_hash( "GuiltyPleasure" )
+	SkilledSniper = 0x3A3FB8AC,// buff_hash( "SkilledSniper" )
+	OutlawsGrit = 0x3AFCE102,// buff_hash( "OutlawsGrit" )
+	Clothesline = 0x3D187ED1,// buff_hash( "Clothesline" )
+	BannerofCommand = 0x3F13BB13,// buff_hash( "BannerofCommand" )
+	TwiceThrice = 0x42346B02,// buff_hash( "TwiceThrice" )
+	SoulSiphon = 0x4293CD3B,// buff_hash( "SoulSiphon" )
+	OmniSoul = 0x44031317,// buff_hash( "OmniSoul" )
+	Chauffeur = 0x4474F5D0,// buff_hash( "Chauffeur" )
+	ServeBeyondDeath = 0x4589990F,// buff_hash( "ServeBeyondDeath" )
+	Quest_UrfsChampion = 0x4716448D,// buff_hash( "Quest_UrfsChampion" )
+	CelestialBody = 0x47330DB1,// buff_hash( "CelestialBody" )
+	IceCold = 0x48B5BDCA,// buff_hash( "IceCold" )
+	FromBeginningToEnd = 0x48DC2006,// buff_hash( "FromBeginningToEnd" )
+	DawnbringersResolve = 0x4B303285,// buff_hash( "DawnbringersResolve" )
+	WillingSacrifice = 0x4B43BF6C,// buff_hash( "WillingSacrifice" )
+	JuiceBox = 0x4D27E960,// buff_hash( "JuiceBox" )
+	DontChase = 0x4DBF5E70,// buff_hash( "DontChase" )
+	BreadAndCheese = 0x4E28F2C3,// buff_hash( "BreadAndCheese" )
+	FrostWraith = 0x4F7D128E,// buff_hash( "FrostWraith" )
+	FeyMagic = 0x52022D72,// buff_hash( "FeyMagic" )
+	DrawYourSword = 0x522572E9,// buff_hash( "DrawYourSword" )
+	InfernalSoul = 0x55780831,// buff_hash( "InfernalSoul" )
+	QuantumComputing = 0x55EF3A40,// buff_hash( "QuantumComputing" )
+	OkBoomerang = 0x58FEA611,// buff_hash( "OkBoomerang" )
+	Eureka = 0x59B3AFC2,// buff_hash( "Eureka" )
+	Dematerialize = 0x5C8D739F,// buff_hash( "Dematerialize" )
+	BigBrain = 0x5F479857,// buff_hash( "BigBrain" )
+	MysticPunch = 0x610EB7B4,// buff_hash( "MysticPunch" )
+	HolyFire = 0x61BEDC9B,// buff_hash( "HolyFire" )
+	SymphonyofWar = 0x64EB2265,// buff_hash( "SymphonyofWar" )
+	Marksmage = 0x65A8CBEF,// buff_hash( "Marksmage" )
+	ScopierWeapons = 0x662429D1,// buff_hash( "ScopierWeapons" )
+	BluntForce = 0x6951004B,// buff_hash( "BluntForce" )
+	MindtoMatter = 0x6AD13E9D,// buff_hash( "MindtoMatter" )
+	Homeguard = 0x6CA0F337,// buff_hash( "Homeguard" )
+	Earthwake = 0x6E25F1F7,// buff_hash( "Earthwake" )
+	Quest_AngelofRetribution = 0x6F79D727,// buff_hash( "Quest_AngelofRetribution" )
+	BuffBuddies = 0x71E56AB8,// buff_hash( "BuffBuddies" )
+	NestingDoll = 0x73016C04,// buff_hash( "NestingDoll" )
+	BreadAndJam = 0x75565D16,// buff_hash( "BreadAndJam" )
+	Recursion = 0x76B60E67,// buff_hash( "Recursion" )
+	TankItOrLeaveIt = 0x80B86F89,// buff_hash( "TankItOrLeaveIt" )
+	FrozenFoundations = 0x819259C7,// buff_hash( "FrozenFoundations" )
+	Vengeance = 0x886F1F8D,// buff_hash( "Vengeance" )
+	WithHaste = 0x894E5EBC,// buff_hash( "WithHaste" )
+	Erosion = 0x8C2F16FE,// buff_hash( "Erosion" )
+	Perseverance = 0x8D3AE60E,// buff_hash( "Perseverance" )
+	ChainLightning = 0x8E40C3DC,// buff_hash( "ChainLightning" )
+	TrueshotProdigy = 0x93AB024B,// buff_hash( "TrueshotProdigy" )
+	PhenomenalEvil = 0x94D656DE,// buff_hash( "PhenomenalEvil" )
+	ContractKiller = 0x97C4EFA0,// buff_hash( "ContractKiller" )
+	BacktoBasics = 0x984667B4,// buff_hash( "BacktoBasics" )
+	CircleofDeath = 0x9A1D093E,// buff_hash( "CircleofDeath" )
+	Castle = 0x9AC2A459,// buff_hash( "Castle" )
+	JeweledGauntlet = 0x9CAAE31B,// buff_hash( "JeweledGauntlet" )
+	SlapAround = 0x9DFB15EE,// buff_hash( "SlapAround" )
+	RestlessRestoration = 0x9E1A180E,// buff_hash( "RestlessRestoration" )
+	CriticalHealing = 0x9F40039E,// buff_hash( "CriticalHealing" )
+	Flashy = 0x9F6FD4F0,// buff_hash( "Flashy" )
+	MasterofDuality = 0x9F9005F8,// buff_hash( "MasterofDuality" )
+	Quest_SteelYourHeart = 0xA173E08E,// buff_hash( "Quest_SteelYourHeart" )
+	Impassable = 0xA1A3AF22,// buff_hash( "Impassable" )
+	ScopiestWeapons = 0xA1D75DC2,// buff_hash( "ScopiestWeapons" )
+	LightemUp = 0xA26FF4EC,// buff_hash( "LightemUp" )
+	OceanSoul = 0xA3670B02,// buff_hash( "OceanSoul" )
+	Deft = 0xA3E2E068,// buff_hash( "Deft" )
+	LaserEyes = 0xA748902E,// buff_hash( "LaserEyes" )
+	WisdomofAges = 0xA83CA207,// buff_hash( "WisdomofAges" )
+	DemonsDance = 0xA8B08058,// buff_hash( "DemonsDance" )
+	BloodBrother = 0xAB06A043,// buff_hash( "BloodBrother" )
+	Minionmancer = 0xAB4CDD4D,// buff_hash( "Minionmancer" )
+	Firebrand = 0xABA0CD52,// buff_hash( "Firebrand" )
+	SpiritLink = 0xAC744FB8,// buff_hash( "SpiritLink" )
+	MountainSoul = 0xAE76811D,// buff_hash( "MountainSoul" )
+	Vulnerability = 0xAFE4CF71,// buff_hash( "Vulnerability" )
+	RaidBoss = 0xB2EDEF40,// buff_hash( "RaidBoss" )
+	MagicMissile = 0xB4545A74,// buff_hash( "MagicMissile" )
+	WitchfulThinking = 0xB503AEA3,// buff_hash( "WitchfulThinking" )
+	CantTouchThis = 0xB5D9645A,// buff_hash( "CantTouchThis" )
+	ComboMaster = 0xBA23DC87,// buff_hash( "ComboMaster" )
+	KeystoneConjurer = 0xBBE31DDB,// buff_hash( "KeystoneConjurer" )
+	BreadAndButter = 0xBD47D568,// buff_hash( "BreadAndButter" )
+	ThreadtheNeedle = 0xBE4AA497,// buff_hash( "ThreadtheNeedle" )
+	SnowballFight = 0xBF2B1A73,// buff_hash( "SnowballFight" )
+	Typhoon = 0xBF771C16,// buff_hash( "Typhoon" )
+	MirrorImage = 0xC390B2C7,// buff_hash( "MirrorImage" )
+	RabbleRousing = 0xC3A6E3C0,// buff_hash( "RabbleRousing" )
+	SelfDestruct = 0xC451D495,// buff_hash( "SelfDestruct" )
+	DefensiveManeuvers = 0xC488607E,// buff_hash( "DefensiveManeuvers" )
+	SlowCooker = 0xCB705AEB,// buff_hash( "SlowCooker" )
+	UltimateUnstoppable = 0xCDF2651B,// buff_hash( "UltimateUnstoppable" )
+	ADAPt = 0xD18FEA7F,// buff_hash( "ADAPt" )
+	TapDancer = 0xD1F84AA5,// buff_hash( "TapDancer" )
+	Spellwake = 0xD3CBE301,// buff_hash( "Spellwake" )
+	Flashbang = 0xD4DA8047,// buff_hash( "Flashbang" )
+	ShadowRunner = 0xD5F12997,// buff_hash( "ShadowRunner" )
+	CourageoftheColossus = 0xD68F7D08,// buff_hash( "CourageoftheColossus" )
+	InfernalConduit = 0xD79FD9B0,// buff_hash( "InfernalConduit" )
+	AcceleratingSorcery = 0xDA054EE4,// buff_hash( "AcceleratingSorcery" )
+	Repulsor = 0xDABCBBC3,// buff_hash( "Repulsor" )
+	ExtendoArm = 0xDE9A77E4,// buff_hash( "ExtendoArm" )
+	ScopedWeapons = 0xE3E3DBBE,// buff_hash( "ScopedWeapons" )
+	LightningStrikes = 0xE48980B4,// buff_hash( "LightningStrikes" )
+	FallenAegis = 0xE67E996E,// buff_hash( "FallenAegis" )
+	BladeWaltz = 0xE8A9A9F1,// buff_hash( "BladeWaltz" )
+	FirstAidKit = 0xE9AFCCDF,// buff_hash( "FirstAidKit" )
+	Dashing = 0xED80A0CB,// buff_hash( "Dashing" )
+	FullyAutomated = 0xEDFA6D47,// buff_hash( "FullyAutomated" )
+	HoldVeryStill = 0xF0544646,// buff_hash( "HoldVeryStill" )
+	DieAnotherDay = 0xF0DBEF32,// buff_hash( "DieAnotherDay" )
+	Goredrink = 0xF4EBEFD4,// buff_hash( "Goredrink" )
+	Vanish = 0xF6A6FFEA,// buff_hash( "Vanish" )
+	AllForYou = 0xFC06EEFA,// buff_hash( "AllForYou" )
+	Goliath = 0xFCB87F9B,// buff_hash( "Goliath" )
+	CenterOfTheUniverse = 0xFCCE03A7,// buff_hash( "CenterOfTheUniverse" )
+	DiveBomber = 0xFD0ED9E4,// buff_hash( "DiveBomber" )
+	ParasiticRelationship = 0xFE635A5B,// buff_hash( "ParasiticRelationship" )
+	Restart = 0xFE9C11EC,// buff_hash( "Restart" )
+	Tormentor = 0xFEFBCC4F,// buff_hash( "Tormentor" )
+	SonicBoom = 0xFF509218,// buff_hash( "SonicBoom" )
+};
+```
 
 ####shop.buyItem(itemID, preferredSlotID)
 
@@ -3158,6 +3333,19 @@ Parameters<br>
 `number` level<br>
 Return Value<br>
 `number` returns base health for level i<br>
+
+####hero:abilityResourceBase(slot)
+Parameters<br>
+`number` slot, usually the slot is 0 for mana<br>
+Return Value<br>
+`number` returns ability resource value (with level factor calculated)<br>
+
+####hero:abilityResourceForLevel(slot, level)
+Parameters<br>
+`number` slot, usually the slot is 0 for mana<br>
+`number` level<br>
+Return Value<br>
+`number` returns ability resource value for level<br>
 
 ####hero:statForLevel(type, level)
 Parameters<br>
@@ -4135,6 +4323,11 @@ end
 
 ```
 
+###texture.obj
+Properties:<br>
+ * `number` texture.width
+ * `number` texture.height
+ * `string` texture.name
 
 ###shadereffect.obj
 ####effect:show()
