@@ -1142,7 +1142,11 @@ Return Value<br>
 ###cb
 Enums:<br>
 
+ * cb.draw_first  (cb.draw2)
+ * cb.sprite      (cb.draw_sprite)
  * cb.draw
+ * cb.draw_world
+ * cb.draw_under_hud
  * cb.tick
  * cb.pre_tick
  * cb.spell
@@ -1164,9 +1168,19 @@ Enums:<br>
  * cb.buff_gain
  * cb.buff_lose
  * cb.path
- * cb.draw2
- * cb.sprite
  * cb.error
+
+
+#### drawing order:
+cb.draw_world (game pipeline) -> <br>
+cb.draw_mouse_overs (game pipeline) -> <br>
+cb.draw_under_hud (game pipeline) -> <br>
+cb.draw_first (hanbot pipeline) -> <br>
+cb.draw_sprite (hanbot pipeline) -> <br>
+cb.draw (hanbot pipeline)
+
+* ALWAYS prepare your drawings in cb.tick, DONT do too much calculations in drawing callback
+* The `draw_world`/`draw_mouse_overs`/`draw_under_hud` pipelines will be combined to hanbot pipeline if `obs_bypass` is enabled in core menu.
  
 ####cb.add(t, f)
 Parameters<br>
@@ -3958,6 +3972,12 @@ Properties:<br>
 > `DesignerTotalTime`
  * `number` spell.clientWindUpTime
 > `CharacterAttackCastDelay`
+ * `number` spell.startTime
+> `TimeTillPlayAnimation`
+ * `number` spell.castEndTime
+> `TimeCast`
+ * `number` spell.endTime
+> `TimeSpellEnd`
  * `spell_info.obj` spell.spell_info
 > The `SpellData` of current `SpellCastInfo`
  * `string` spell.name
@@ -5949,11 +5969,11 @@ The following callbacks have no arguments:<br>
 
  * cb.pre_tick
  * cb.tick
+ * cb.draw_first
  * cb.draw
- * cb.draw2
  * cb.sprite
  
-cb.draw2 is triggered before cb.sprite, while cb.draw is triggered after cb.sprite.
+cb.draw_first is triggered before cb.sprite, while cb.draw is triggered after cb.sprite.
 
 ####cb.keydown and cb.keyup
 Both have a single arg, key_code:<br>
