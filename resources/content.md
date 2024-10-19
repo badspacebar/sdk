@@ -23,6 +23,17 @@ The os library has been restricted to the following functions: clock, time, date
 * [setmetatable](https://www.lua.org/manual/5.1/manual.html#pdf-setmetatable)
 * [loadfile](https://www.lua.org/manual/5.1/manual.html#pdf-loadfile)
 * [loadstring](https://www.lua.org/manual/5.1/manual.html#pdf-loadstring)
+* delayaction(fn, delay_ms, params)
+
+```lua
+delayaction(
+	function(a1, a2, a3)
+		print(a1, a2, a3)
+	end, 
+	500, 
+	{ 1, 2, 3 }
+)
+```
 
 #Math
 ###vec2
@@ -2858,7 +2869,7 @@ end
 
 cb.add(cb.tick, on_tick)
 ```
-####menu:keybind(var, text, key, toggle)
+####menu:keybind(var, text, key, toggle, defaultToggleValue)
 Parameters<br>
 `string` var<br>
 `string` text<br>
