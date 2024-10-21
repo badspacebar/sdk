@@ -2875,6 +2875,7 @@ Parameters<br>
 `string` text<br>
 `string` key<br>
 `string` toggle<br>
+`bool` defaultToggleValue<br>
 Return Value<br>
 `void`<br>
 ``` lua
@@ -6267,7 +6268,7 @@ cb.add(cb.sprite, function()
   graphics.draw_sprite('SUB_FOLDER/SPRITE_NAME.png', vec2)
 end)
 ```
-Shard builder is available in developer group.<br>
+Shard builder is available in the developer group.<br>
 Warning: <br>
 There is no error handling for the shard builder. <br>
 Make sure your script is working ingame, has a valid header and the folder name is being input correctly.<br>
@@ -6408,20 +6409,19 @@ end
 
 #Paid Script Conditions
 
+To reward developers, we pay all community developers starting from 2023.
 
-No paid script allowed anymore, we will pay all plugin developers.
 
-
-<del>In an effort to reward the community developers for all their hard work and dedication we will now allow the sales of third-party scripts.</del>
-
-* 1a. Only "Community Developers" qualify to sell third party scripts
+* 1a. Only "Community Developers" qualify to get payment from their plugins.
 * 1b. To obtain the "Community Developers" status:
-*    -User must display proficiency with the lua language 
-*    -Communication with administration and users must be professional
-* 2a. Trial time must be offered for all paid scripts
-* 2b. Trial time must be a minimum of 3 days
-* 3a. Scripts are limited in cost to 5.00USD/30 days
-* 3b. 1-time payments may be offered by the author as an alternative payment method (condition 3a must still be offered)
-* 4a. Conditions are subject to change at anytime without notice
-* 4b. Third party scripts are not affiliated with HanBOT nor any staff of HanBOT
-* 4c. Arbitration will not be offered by the HanBOT staff in cases of dispute 
+    - User must display proficiency with the lua language 
+    - Communication with administration and users must be professional
+* 2a. The plugin must remain free, and any form of authentication or login is not allowed.
+* 2b. Any form of date verification, network verification, or version check is not allowed.
+* 3a. It is prohibited to add QQ group information in the plugin.
+* 3b. If you want to get feedback from users, Email, Telegram and Discord are allowed.
+* 4a. The payment amount contains many parts (base+bonus+usage+win_rate).
+    - The usage part contains win_count * champion_weight
+    - Champions with lower usage (T0-T5) will get more weight
+* 4b. Developers who have switched to other platforms or inactive will only get the win_rate part.
+* 5a. Conditions are subject to change at anytime without notice
