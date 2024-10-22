@@ -1179,6 +1179,7 @@ Enums:<br>
  * cb.buff_gain
  * cb.buff_lose
  * cb.path
+ * cb.set_cursorpos
  * cb.error
 
 
@@ -2572,6 +2573,9 @@ Parameters<br>
 Parameters<br>
 `number` x<br>
 `number` y<br>
+####permashow.set_drag_enabled(option)
+Parameters<br>
+`number` option, 1 = enabled always, 2 = enabled when menu show<br>
 ####permashow.set_alpha(alpha)
 Parameters<br>
 `number` alpha<br>
@@ -6211,6 +6215,23 @@ end
 
 cb.add(cb.buff_gain, on_buff_gain)
 cb.add(cb.buff_lose, on_buff_lose)
+```
+
+####cb.set_cursorpos
+<br>
+``` lua
+
+-- Only works for VelkozR / AurelionSolQ / YuumiQ / NunuW / SionR
+local function on_cursorpos_change(point)
+	print('[on_cursorpos_change]: ', point[0], point[1])
+    
+    -- set x and y
+    local v = graphics.world_to_screen(g_target.pos)
+    point[0] = v.x
+    point[1] = v.y
+end
+
+cb.add(cb.set_cursorpos, on_cursorpos_change)
 ```
 
 ###Creating Shards
