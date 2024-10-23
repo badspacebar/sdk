@@ -6218,7 +6218,8 @@ cb.add(cb.buff_lose, on_buff_lose)
 ```
 
 ####cb.set_cursorpos
-<br>
+Don't use this callback, please use `player:castSpell('move')`
+<br> 
 ``` lua
 
 -- Only works for VelkozR / AurelionSolQ / YuumiQ / NunuW / SionR
@@ -6279,6 +6280,7 @@ return {
     'SPRITE_NAME.png', —developer/SHARD_NAME/SPRITE_NAME.png
     'SUB_FOLDER/SPRITE_NAME.png', —developer/SHARD_NAME/SUB_FOLDER/SPRITE_NAME.png
   },
+  hprotect = true, -- enable the enhanced protection to protect your source code
   -- lib = true, -- build a libshard
 }
 ```
@@ -6437,6 +6439,7 @@ To reward developers, we pay all community developers starting from 2023.
 * 1b. To obtain the "Community Developers" status:
     - User must display proficiency with the lua language 
     - Communication with administration and users must be professional
+    - Your plugin needs to have enough users
 * 2a. The plugin must remain free, and any form of authentication or login is not allowed.
 * 2b. Any form of date verification, network verification, or version check is not allowed.
 * 3a. It is prohibited to add QQ group information in the plugin.
