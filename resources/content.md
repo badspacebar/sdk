@@ -1232,16 +1232,54 @@ cb.add(cb.tick, on_tick)
 ####chat.isOpened
 Return Value<br>
 `boolean` returns true if chat is open
+####chat.size
+Return Value<br>
+`number` returns number in chat history
+####chat.clear()
+Clear the send buffer<br>
+Parameters<br>
+Return Value<br>
+`void`<br>
+####chat.add(str, style)
+Parameters<br>
+`string` str in UTF8<br>
+`table` style <br>
+Return Value<br>
+`void`<br>
 ####chat.send(str)
 Parameters<br>
-`string` str<br>
+`string` str in UTF8<br>
 Return Value<br>
 `void`<br>
+
+```lua
+chat.clear()
+chat.add("hello", {bold = false, italic = false, color = 'ffffffff'})
+chat.add("world", {bold = true, italic = true, color = '99999999'})
+chat.print()
+```
+
 ####chat.print(str)
 Parameters<br>
-`string` str<br>
+`string` str in UTF8<br>
 Return Value<br>
 `void`<br>
+
+```lua
+chat.print("hello world")
+```
+
+####chat.message(index)
+Parameters<br>
+`number` index<br>
+Return Value<br>
+`string`<br>
+
+```lua
+for i=0,chat.size-1 do
+    print(chat.message(i))
+end
+```
 ###console
 ####console.set_color(c)
 Parameters<br>
@@ -1683,14 +1721,15 @@ end
 cb.add(cb.draw, on_draw)
 ```
 
-####graphics.draw_triangle_2D(p1, p2, p3, width, color, is_filled)
+####graphics.draw_triangle_2D(p1, p2, p3, width, color, is_filled, rounding)
 Parameters<br>
 `vec2` p1<br>
 `vec2` p2<br>
 `vec2` p3<br>
 `number` width<br>
 `number` color<br>
-`boolean` is_filled: default: false<br>
+`boolean` is_filled, default: false<br>
+`number` rounding, default: 0<br>
 Return Value<br>
 `void`<br>
 ``` lua
@@ -1918,8 +1957,8 @@ Return Value<br>
 `texture.obj`<br>
 ``` lua
 -- example: https://raw.communitydragon.org/14.1/game/assets/characters/sru_blue/hud/bluesentinel_circle.png
-local icon = graphics.sprite('ASSETS/Characters/SRU_Blue/HUD/BlueSentinel_Circle.dds')
-local icon_ashe = graphics.sprite('ASSETS/Characters/Ashe/HUD/Ashe_Circle.dds')
+local icon = graphics.game_sprite('ASSETS/Characters/SRU_Blue/HUD/BlueSentinel_Circle.dds')
+local icon_ashe = graphics.game_sprite('ASSETS/Characters/Ashe/HUD/Ashe_Circle.dds')
 ```
 ####graphics.draw_sprite(name, v1, scale, color)
 Parameters<br>
@@ -4297,6 +4336,21 @@ Properties:<br>
  * `number` buff.count
 > same to stacks2
 
+####buff:hasSource(src)
+Parameters<br>
+`buff.obj`<br>
+`base.obj` game object: hero.obj/minion.obj/turret.obj<br>
+Return Value<br>
+`bool`<br>
+
+####buff:getTooltipVar(index)
+Return the numerical variable when mouseover the skill icons<br>
+Parameters<br>
+`buff.obj`<br>
+`int` tooltip var index: [0,15]<br>
+Return Value<br>
+`number`<br>
+
 ###runemanager.obj
 Properties:<br>
 
@@ -5069,6 +5123,14 @@ Return Value<br>
 Return Value<br>
 `void`<br>
 
+####orb.core.set_pause_strict_limination(t)
+The Anti-Disconnect feature in CN region is based on facing direction, while during some special spell casting like MelQ, facing direction will be changed very quickly. So we add this API to pause the struct AntiDC feature<br> 
+But shits anti-cheat in CN will not fix this, you maybe got banned/kicked out from game, and which is also the reason why normal players are banned.
+Parameters<br>
+`number` t<br>
+Return Value<br>
+`void`<br>
+
 ####orb.core.on_after_attack(callback)
 Parameters<br>
 `function` callabck<br>
@@ -5238,7 +5300,7 @@ cb.add(cb.tick, on_tick)
 ```
 ####orb.farm.lane_clear_wait()
 Return Value<br>
-`boolean` returns true if the orb is currently waiting to attack a minion that is soon to die<br>
+`boolean` returns true if the orb is currently waiting to attack a minion that is soon to die (or waiting for siege)<br>
 ``` lua
 local orb = module.internal('orb')
 
@@ -5250,6 +5312,10 @@ end
 
 cb.add(cb.tick, on_tick)
 ```
+####orb.farm.lane_clear_wait_target
+Return Value<br>
+`obj` the orbs current lane clear wait target<br>
+
 ####orb.farm.predict_hp(obj, time)
 Parameters<br>
 `minion.obj` obj<br>
