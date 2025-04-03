@@ -23,14 +23,14 @@ The os library has been restricted to the following functions: clock, time, date
 * [setmetatable](https://www.lua.org/manual/5.1/manual.html#pdf-setmetatable)
 * [loadfile](https://www.lua.org/manual/5.1/manual.html#pdf-loadfile)
 * [loadstring](https://www.lua.org/manual/5.1/manual.html#pdf-loadstring)
-* delayaction(fn, delay_ms, params)
+* delayaction(fn, delay, params)
 
 ```lua
 delayaction(
 	function(a1, a2, a3)
 		print(a1, a2, a3)
 	end, 
-	500, 
+	0.5, 
 	{ 1, 2, 3 }
 )
 ```
@@ -3507,7 +3507,9 @@ The available stats (Some of them are deprecated by riot and always zero):
  * FRIENDLY_HQ_LOST	
  * BARON_KILLS	
  * DRAGON_KILLS	
- * RIFT_HERALD_KILLS	
+ * RIFT_HERALD_KILLS
+ * HORDE_KILLS
+ * ATAKHAN_KILLS
  * NODE_CAPTURE	
  * NODE_CAPTURE_ASSIST	
  * NODE_NEUTRALIZE	
@@ -3591,6 +3593,26 @@ cb.add(cb.tick, function()
 		-- do somethings
 	end
 end)
+```
+
+####hero:getTeamBuffCount(team, buffType)
+Parameters<br>
+`hero.obj` hero<br>
+`int` team<br>
+`int` buffType<br>
+Return Value<br>
+`int` <br>
+
+The available buffType:
+ * DragonFireStacks = 0x1,
+ * DragonAirStacks = 0x2,
+ * DragonWaterStacks = 0x3,
+ * DragonEarthStacks = 0x4,
+ * DragonElderStacks = 0x5,
+
+```lua
+print(player:getTeamBuffCount(TEAM_ALLY, 0))
+print(player:getTeamBuffCount(TEAM_ENEMY, 0))
 ```
 
 ###minion.obj
@@ -4372,6 +4394,13 @@ Properties:<br>
  * `string` rune.name
  * `texture.obj` rune.icon
 
+####rune:getTooltipVar(index)
+Return the numerical variable when mouseover the icons<br>
+Parameters<br>
+`rune.obj`<br>
+`int` tooltip var index: [0,15]<br>
+Return Value<br>
+`number`<br>
  
 ###camp.obj
 Properties:<br>
@@ -4884,11 +4913,11 @@ local pred_input = {
     minion = true, --checks collision for minions
     hero = false, --no need to check for hero collision
 
-    -- checks all collisions: YasuoWall/SamiraWall/BraumWall/PantheonWall
+    -- checks all collisions: YasuoWall/SamiraWall/BraumWall/PantheonWall/MelWall
     wall = true, 
 
     -- or checks specific collisions
-    -- wall = { yasuo = true, samira = true, braum = false, pantheon = false },
+    -- wall = { yasuo = true, samira = true, braum = false, pantheon = false, mel = false },
   },
 }
 
@@ -5123,9 +5152,10 @@ Return Value<br>
 Return Value<br>
 `void`<br>
 
-####orb.core.set_pause_strict_limination(t)
-The Anti-Disconnect feature in CN region is based on facing direction, while during some special spell casting like MelQ, facing direction will be changed very quickly. So we add this API to pause the struct AntiDC feature<br> 
-But shits anti-cheat in CN will not fix this, you maybe got banned/kicked out from game, and which is also the reason why normal players are banned.
+####orb.core.set_pause_strict_limitation(t)
+The anti-disconnect feature of orbwalker in CN region is based on facing direction, while during some special spell casting like MelQ, facing direction will be changed very quickly. So we add this API to pause the strict anti-disconnect feature<br> 
+But shits anti-cheat in CN will not fix this. <b>You maybe got banned/kicked out from game by pause this feature</b>, and which is also the reason why normal players are banned (like VarusQ).<br> 
+
 Parameters<br>
 `number` t<br>
 Return Value<br>
