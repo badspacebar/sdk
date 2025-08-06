@@ -1,32 +1,29 @@
---- Inhibitor object properties.
----@class inhib.obj
----@field public type number
----@field public index number
----@field public team number
----@field public networkID number
----@field public networkID32 number
+--- Spell object properties.
+---@class spell.obj
+---@field public identifier number
+---@field public slot number
+---@field public isBasicAttack boolean
+---@field public owner obj
+---@field public target obj
+---@field public startPos vec3
+---@field public startPos2D vec2
+---@field public endPos vec3
+---@field public endPos2D vec2
+---@field public endPosLine vec3
+---@field public endPosLine2D vec2
+---@field public useChargeChanneling boolean
+---@field public channelingFinished boolean
+---@field public spellCasted boolean
+---@field public windUpTime number
+---@field public animationTime number
+---@field public clientWindUpTime number
+---@field public startTime number
+---@field public castEndTime number
+---@field public endTime number
+---@field public spell_info spell_info.obj
 ---@field public name string
----@field public x number
----@field public y number
----@field public z number
----@field public pos vec3
----@field public pos2D vec2
----@field public isOnScreen boolean
----@field public selectionHeight number
----@field public selectionRadius number
----@field public boundingRadius number
----@field public overrideCollisionRadius number
----@field public pathfindingCollisionRadius number
----@field public minBoundingBox vec3
----@field public maxBoundingBox vec3
----@field public isDead boolean
----@field public isVisible boolean
----@field public deathTime number
----@field public health number
----@field public maxHealth number
----@field public allShield number
----@field public isTargetable boolean
----@field public isTargetableToTeamFlags number
+---@field public hash string
+---@field public static spell_static.obj
 
----@type inhib.obj
-_G.inhib = {}
+---@type spell.obj
+_G.spell = {}
