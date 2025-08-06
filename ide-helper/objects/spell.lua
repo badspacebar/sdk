@@ -22,7 +22,7 @@
 ---@field public endTime number
 ---@field public spell_info spell_info.obj
 ---@field public name string
----@field public hash string
+---@field public hash number
 ---@field public static spell_static.obj
 
 ---@type spell.obj

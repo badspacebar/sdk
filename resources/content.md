@@ -4059,7 +4059,7 @@ Properties:<br>
 > The `SpellData` of current `SpellCastInfo`
  * `string` spell.name
 > equal to `spell.spell_info.name`
- * `string` spell.hash
+ * `number` spell.hash
 > equal to `spell.spell_info.hash`
  * `spell_static.obj` spell.static
 > equal to `spell.spell_info.static`
