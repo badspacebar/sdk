@@ -881,6 +881,7 @@ Return Value<br>
 ####mathf.mat4()
 Return Value<br>
 `double[4][4]` returns a 4x4 transformation matrix<br>
+
 ###clipper
 Unlike the other math libraries, clipper must first be loaded.<br>
 Further documentation can be found [here](http://www.angusj.com/delphi/clipper/documentation/Docs/_Body.htm).
@@ -1125,6 +1126,499 @@ end
 
 cb.add(cb.draw, on_draw)
 ```
+
+###clipper2
+Clipper2 is a high-performance polygon clipping and offsetting library that works with double precision coordinates.<br>
+Further documentation can be found [https://www.angusj.com/clipper2/Docs/Overview.htm](https://www.angusj.com/clipper2/Docs/Overview.htm).
+
+``` lua
+local clipper2 = require("clipper2")
+local PointD = clipper2.PointD
+local PathD = clipper2.PathD
+local PathsD = clipper2.PathsD
+local BooleanOpD = clipper2.BooleanOpD
+local Enum = clipper2.Enum
+```
+
+**Enums:**
+
+**ClipType:**
+
+- Enum.ClipType.None
+- Enum.ClipType.Intersection
+- Enum.ClipType.Union
+- Enum.ClipType.Difference
+- Enum.ClipType.Xor
+
+**FillRule:**
+
+- Enum.FillRule.EvenOdd
+- Enum.FillRule.NonZero
+- Enum.FillRule.Positive
+- Enum.FillRule.Negative
+
+**JoinType:**
+
+- Enum.JoinType.Square
+- Enum.JoinType.Bevel
+- Enum.JoinType.Round
+- Enum.JoinType.Miter
+
+**EndType:**
+
+- Enum.EndType.Polygon
+- Enum.EndType.Joined
+- Enum.EndType.Butt
+- Enum.EndType.Square
+- Enum.EndType.Round
+
+####PointD(x, y)
+Create a new double precision point.<br>
+Parameters<br>
+`number` x coordinate<br>
+`number` y coordinate<br>
+Return Value<br>
+`PointD` returns a new point object<br>
+``` lua
+local point = PointD(100.5, 200.7)
+```
+
+####PathD()
+Create a new double precision path (polygon).<br>
+Parameters<br>
+`...` optional points to initialize the path<br>
+Return Value<br>
+`PathD` returns a new path object<br>
+``` lua
+-- Create empty path
+local path = PathD()
+
+-- Create path with initial points
+local p1 = PointD(0, 0)
+local p2 = PointD(100, 0) 
+local p3 = PointD(50, 100)
+local path = PathD(p1, p2, p3)
+```
+
+####PathD:Add(x, y)
+Add a point to the path.<br>
+Parameters<br>
+`number` x coordinate<br>
+`number` y coordinate<br>
+Return Value<br>
+`void`<br>
+``` lua
+local path = PathD()
+path:Add(0, 0)
+path:Add(100, 0)
+path:Add(50, 100)
+```
+
+####PathD:ChildCount()
+Get the number of points in the path.<br>
+Return Value<br>
+`number` returns number of points<br>
+``` lua
+local path = PathD()
+path:Add(0, 0)
+path:Add(100, 0)
+print(path:ChildCount()) -- prints 2
+```
+
+####PathD:Childs(index)
+Get a point at the specified index.<br>
+Parameters<br>
+`number` index (0-based)<br>
+Return Value<br>
+`PointD` returns point at index<br>
+``` lua
+local path = PathD()
+path:Add(0, 0)
+path:Add(100, 0)
+local point = path:Childs(0)
+print(point.x, point.y) -- prints 0, 0
+```
+
+####PathD:Clear()
+Remove all points from the path.<br>
+Return Value<br>
+`void`<br>
+``` lua
+local path = PathD()
+path:Add(0, 0)
+path:Clear()
+print(path:ChildCount()) -- prints 0
+```
+
+####PathD:Area()
+Calculate the area of the polygon.<br>
+Return Value<br>
+`number` returns area (positive for clockwise, negative for counter-clockwise)<br>
+``` lua
+local path = PathD()
+path:Add(0, 0)
+path:Add(100, 0)
+path:Add(100, 100)
+path:Add(0, 100)
+print(path:Area()) -- prints 10000
+```
+
+####PathD:Orientation()
+Get the orientation of the polygon.<br>
+Return Value<br>
+`boolean` returns true if clockwise, false if counter-clockwise<br>
+``` lua
+local path = PathD()
+path:Add(0, 0)
+path:Add(100, 0)
+path:Add(100, 100)
+path:Add(0, 100)
+print(path:Orientation()) -- prints true (clockwise)
+```
+
+####PathD:Reverse()
+Reverse the order of points in the path.<br>
+Return Value<br>
+`void`<br>
+``` lua
+local path = PathD()
+path:Add(0, 0)
+path:Add(100, 0)
+path:Add(100, 100)
+path:Reverse()
+```
+
+####PathD:Simplify(epsilon, isClosedPath)
+Simplify the path by removing unnecessary points.<br>
+Parameters<br>
+`number` epsilon - simplification tolerance<br>
+`boolean` isClosedPath - whether the path is closed (default: true)<br>
+Return Value<br>
+`PathD` returns simplified path<br>
+``` lua
+local path = PathD()
+path:Add(0, 0)
+path:Add(50, 1)
+path:Add(100, 0)
+local simplified = path:Simplify(2.0, false)
+```
+
+####PathD:Contains(point)
+Check if a point is inside the polygon.<br>
+Parameters<br>
+`PointD` point to test<br>
+Return Value<br>
+`number` returns 1 if inside, 0 if outside<br>
+``` lua
+local path = PathD()
+path:Add(0, 0)
+path:Add(100, 0)
+path:Add(100, 100)
+path:Add(0, 100)
+
+local point = PointD(50, 50)
+print(path:Contains(point)) -- prints 1 (inside)
+```
+
+####PathD:OnScreen2D()
+Check if the path is visible on screen in 2D.<br>
+Return Value<br>
+`boolean` returns true if on screen<br>
+
+####PathD:OnScreen3D(y)
+Check if the path is visible on screen in 3D.<br>
+Parameters<br>
+`number` y coordinate (default: 0)<br>
+Return Value<br>
+`boolean` returns true if on screen<br>
+
+####PathD:Draw2D(width, color)
+Draw the path in 2D.<br>
+Parameters<br>
+`number` width - line width (default: 0)<br>
+`number` color - color in ARGB format (default: 0xffffffff)<br>
+Return Value<br>
+`void`<br>
+``` lua
+local path = PathD()
+path:Add(0, 0)
+path:Add(100, 0)
+path:Add(50, 100)
+path:Draw2D(2, 0xFF00FF00) -- green lines, 2 pixels wide
+```
+
+####PathD:Draw3D(y, width, color)
+Draw the path in 3D.<br>
+Parameters<br>
+`number` y coordinate<br>
+`number` width - line width (default: 0)<br>
+`number` color - color in ARGB format (default: 0xffffffff)<br>
+Return Value<br>
+`void`<br>
+``` lua
+local path = PathD()
+path:Add(0, 0)
+path:Add(100, 0)
+path:Add(50, 100)
+path:Draw3D(player.y, 2, 0xFF00FF00)
+```
+
+####PathD:Intersection(p0, p1) or PathD:Intersection(x0, y0, x1, y1)
+Test if the path intersects with a line segment.<br>
+Parameters<br>
+`PointD` p0, p1 - line segment endpoints<br>
+or<br>
+`number` x0, y0, x1, y1 - line segment coordinates<br>
+Return Value<br>
+`boolean` returns true if intersection exists<br>
+``` lua
+local path = PathD()
+path:Add(0, 0)
+path:Add(100, 0)
+path:Add(50, 100)
+
+local p0 = PointD(25, -10)
+local p1 = PointD(25, 110)
+print(path:Intersection(p0, p1)) -- prints true
+```
+
+####PathD:IntersectionPoint(p0, p1) or PathD:IntersectionPoint(x0, y0, x1, y1)
+Get intersection points between the path and a line segment.<br>
+Parameters<br>
+`PointD` p0, p1 - line segment endpoints<br>
+or<br>
+`number` x0, y0, x1, y1 - line segment coordinates<br>
+Return Value<br>
+`PathD` returns path containing intersection points<br>
+
+####PathsD()
+Create a new collection of paths.<br>
+Parameters<br>
+`...` optional PathD objects to initialize the collection<br>
+Return Value<br>
+`PathsD` returns a new paths collection<br>
+``` lua
+-- Create empty collection
+local paths = PathsD()
+
+-- Create with initial paths
+local path1 = PathD()
+local path2 = PathD()
+local paths = PathsD(path1, path2)
+```
+
+####PathsD:Add(path)
+Add a path to the collection.<br>
+Parameters<br>
+`PathD` path to add<br>
+Return Value<br>
+`void`<br>
+``` lua
+local paths = PathsD()
+local path = PathD()
+path:Add(0, 0)
+path:Add(100, 0)
+path:Add(50, 100)
+paths:Add(path)
+```
+
+####PathsD:ChildCount()
+Get the number of paths in the collection.<br>
+Return Value<br>
+`number` returns number of paths<br>
+
+####PathsD:Childs(index)
+Get a path at the specified index.<br>
+Parameters<br>
+`number` index (0-based)<br>
+Return Value<br>
+`PathD` returns path at index<br>
+
+####PathsD:Clear()
+Remove all paths from the collection.<br>
+Return Value<br>
+`void`<br>
+
+####PathsD:Simplify(epsilon, isClosedPath)
+Simplify all paths in the collection.<br>
+Parameters<br>
+`number` epsilon - simplification tolerance<br>
+`boolean` isClosedPath - whether paths are closed (default: true)<br>
+Return Value<br>
+`PathsD` returns simplified paths collection<br>
+
+####PathsD:Reverse()
+Reverse the order of points in all paths.<br>
+Return Value<br>
+`void`<br>
+
+####PathsD:Offset(delta, joinType, endType)
+Create offset paths from the collection.<br>
+Parameters<br>
+`number` delta - offset distance (positive for expansion, negative for shrinking)<br>
+`number` joinType - join type from Enum.JoinType<br>
+`number` endType - end type from Enum.EndType (default: 0)<br>
+Return Value<br>
+`PathsD` returns offset paths<br>
+``` lua
+local paths = PathsD()
+local path = PathD()
+path:Add(0, 0)
+path:Add(100, 0)
+path:Add(100, 100)
+path:Add(0, 100)
+paths:Add(path)
+
+local offset_paths = paths:Offset(10, Enum.JoinType.Round, Enum.EndType.Polygon)
+```
+
+####PathsD:Draw2D(width, color)
+Draw all paths in the collection in 2D.<br>
+Parameters<br>
+`number` width - line width (default: 0)<br>
+`number` color - color in ARGB format (default: 0xffffffff)<br>
+Return Value<br>
+`void`<br>
+
+####PathsD:Draw3D(y, width, color)
+Draw all paths in the collection in 3D.<br>
+Parameters<br>
+`number` y coordinate<br>
+`number` width - line width (default: 0)<br>
+`number` color - color in ARGB format (default: 0xffffffff)<br>
+Return Value<br>
+`void`<br>
+
+####BooleanOpD(clipType, fillRule, subjects, clips, solution, precision, reverse_solution)
+Perform boolean operations on path collections.<br>
+Parameters<br>
+`number` clipType - operation type from Enum.ClipType<br>
+`number` fillRule - fill rule from Enum.FillRule<br>
+`PathsD` subjects - subject paths<br>
+`PathsD` clips - clip paths<br>
+`PathsD` solution - result paths (output)<br>
+`number` precision - calculation precision<br>
+`boolean` reverse_solution - whether to reverse result orientation<br>
+Return Value<br>
+`number` returns operation result code<br>
+``` lua
+local subjects = PathsD()
+local clips = PathsD()
+local solution = PathsD()
+
+-- Create subject rectangle
+local subject = PathD()
+subject:Add(0, 0)
+subject:Add(100, 0)
+subject:Add(100, 100)
+subject:Add(0, 100)
+subjects:Add(subject)
+
+-- Create clip circle (approximated)
+local clip = PathD()
+for i = 0, 31 do
+    local angle = i * 2 * math.pi / 32
+    local x = 50 + 30 * math.cos(angle)
+    local y = 50 + 30 * math.sin(angle)
+    clip:Add(x, y)
+end
+clips:Add(clip)
+
+-- Perform intersection
+local result = BooleanOpD(
+    Enum.ClipType.Intersection,
+    Enum.FillRule.NonZero,
+    subjects,
+    clips,
+    solution,
+    2,
+    false
+)
+
+-- Draw result
+cb.add(cb.draw, function()
+    for i = 0, solution:ChildCount() - 1 do
+        local path = solution:Childs(i)
+        path:Draw2D(2, 0xFF00FF00)
+    end
+end)
+```
+
+####Eigen_PolynomialSolver(a, b, c, d, e)
+Solve polynomial equations using Eigen library.
+Parameters<br>
+`number` a, b, c, d, e - polynomial coefficients<br>
+Return Value<br>
+`PathD` returns path containing solutions<br>
+
+####Eigen_PolynomialSolver_realRoots(a, b, c, d, e)
+Solve polynomial equations and return only real roots.
+Parameters<br>
+`number` a, b, c, d, e - polynomial coefficients<br>
+Return Value<br>
+`PathD` returns path containing real solutions<br>
+
+**Example: Complex Boolean Operations**
+``` lua
+local clipper2 = require("clipper2")
+
+-- Create multiple overlapping circles
+local function create_circle(center_x, center_y, radius, segments)
+    local path = clipper2.PathD()
+    for i = 0, segments - 1 do
+        local angle = i * 2 * math.pi / segments
+        local x = center_x + radius * math.cos(angle)
+        local y = center_y + radius * math.sin(angle)
+        path:Add(x, y)
+    end
+    return path
+end
+
+local function on_draw()
+    local subjects = clipper2.PathsD()
+    local clips = clipper2.PathsD()
+    local solution = clipper2.PathsD()
+    
+    -- Create overlapping circles
+    local circle1 = create_circle(100, 100, 50, 32)
+    local circle2 = create_circle(150, 100, 50, 32)
+    local circle3 = create_circle(125, 150, 50, 32)
+    
+    subjects:Add(circle1)
+    clips:Add(circle2)
+    clips:Add(circle3)
+    
+    -- Perform union operation
+    local result = clipper2.BooleanOpD(
+        clipper2.Enum.ClipType.Union,
+        clipper2.Enum.FillRule.NonZero,
+        subjects,
+        clips,
+        solution,
+        2,
+        false
+    )
+    
+    if result == 1 then
+        -- Draw the unified shape
+        for i = 0, solution:ChildCount() - 1 do
+            local path = solution:Childs(i)
+            path:Draw2D(3, 0xFF00FFFF)
+        end
+        
+        -- Create offset version
+        local offset_solution = solution:Offset(10, clipper2.Enum.JoinType.Round)
+        for i = 0, offset_solution:ChildCount() - 1 do
+            local path = offset_solution:Childs(i)
+            path:Draw2D(1, 0xFFFF0000)
+        end
+    end
+end
+
+cb.add(cb.draw, on_draw)
+```
+
+
 
 
 #Libraries
@@ -1533,6 +2027,12 @@ Return Value<br>
 ####game.type
 Return Value<br>
 `string` returns the current game type<br>
+####game.modeRoundIndex
+Return Value<br>
+`string` returns the current round index (2v2v2v2v2) <br>
+####game.modePhaseIndex
+Return Value<br>
+`string` returns the current phase index (2v2v2v2v2) <br>
 ####game.shopOpen
 Return Value<br>
 `boolean` check if shop available<br>
@@ -1944,7 +2444,10 @@ Return Value<br>
 `texture.obj`<br>
 ``` lua
 local myIcon = graphics.sprite('XXX/menu_icon.png')
-myMenu:set('icon', myIcon)
+if myIcon then 
+	-- In some PC it will failed load PNG, so need check this
+	myMenu:set('icon', myIcon)
+end
 ```
 
 ####graphics.game_sprite(name)
@@ -2277,6 +2780,14 @@ objManager.loop(foo)
 ```
 
 ###core
+####core.tick
+Return Value<br>
+`number` returns current core_tick<br>
+
+####core.fps
+Return Value<br>
+`number` returns current fps<br>
+
 ####core.block_input()
 
 Only works in `cb.issueorder` and `cb.castspell`, will block current operation.
@@ -2297,8 +2808,6 @@ cb.add(cb.issueorder, on_issue_order)
 ####core.reload()
 Return Value<br>
 `void`<br>
-
-
 
 
 ###sound
@@ -4059,7 +4568,7 @@ Properties:<br>
 > The `SpellData` of current `SpellCastInfo`
  * `string` spell.name
 > equal to `spell.spell_info.name`
- * `number` spell.hash
+ * `string` spell.hash
 > equal to `spell.spell_info.hash`
  * `spell_static.obj` spell.static
 > equal to `spell.spell_info.static`
@@ -5707,6 +6216,36 @@ for i=evade.core.skillshots.n, 1, -1 do
 end
 ```
 
+####evade.core.skillshots[i].data
+Static metadata object (read-only). Available on `evade.core.skillshots[i].data` and `evade.core.targeted[i].data`.
+This attribute is updated to Evade3 [`spelldata.obj`](#objects-spelldataobj-evade3)
+``` lua
+local d = spell.data
+-- d.name : string
+-- d.menu_name : string
+-- d.slot : integer
+-- d.spell_type : string
+-- d.missile_names (removed)
+-- d.delay : number (seconds)
+-- d.length : number
+-- d.radius / d.width : number
+-- d.speed : number
+-- d.fixed_range : boolean
+-- d.is_cc : boolean
+-- d.update : boolean (can change postion or not, for example the Orianna R)
+-- d.applies_on_hit : boolean (is a missile)
+-- d.add_bbox_length : boolean (range/length)
+-- d.add_bbox_radius : boolean
+-- d.add_bbox_width : boolean
+-- d.collision : integer (bitmask)
+-- function d:damage(source, target) -> ad, ap, true, buff_or_nil
+```
+Notes:
+- `radius` and `width` are aliases for hit width/radius.
+- `add_bbox_length`/`add_bbox_radius`/`add_bbox_width` control whether target hitbox is included in distance/width calculations.
+- `collision` is a bitmask of collision types.
+- The 4th return of `d:damage(source, target)` is the first related buff or `nil`; for a full buff list, use `spell:get_damage`.
+
 ####evade.core.targeted
 <br>
 Not recommended, prefer `evade.core.register_on_create_spell`
@@ -6337,6 +6876,7 @@ To build shards, you have to add a shard table to your header.lua, which contain
 If you build a libshard, lib = true has to be added additionally.<br>
 ``` lua
 
+-- this file is also in gbk charset
 local isCN = hanbot and hanbot.language == 1
 local supported = {
   Ashe = true,
