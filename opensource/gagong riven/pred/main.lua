@@ -1,0 +1,15 @@
+return {
+  aa = module.load(header.id, 'pred/aa'),
+  q = module.load(header.id, 'pred/q'),
+  w = module.load(header.id, 'pred/w'),
+  e = module.load(header.id, 'pred/e'),
+  e_q = module.load(header.id, 'pred/e_q'),
+  e_w = module.load(header.id, 'pred/e_w'),
+  flash_w = module.load(header.id, 'pred/flash_w'),
+  flash_q = module.load(header.id, 'pred/flash_q'),
+  e_flash_w = module.load(header.id, 'pred/e_flash_w'),
+  e_flash_q = module.load(header.id, 'pred/e_flash_q'),
+  r1 = module.load(header.id, 'pred/r1'),
+  r2 = module.load(header.id, 'pred/r2'),
+  r2_dmg = module.load(header.id, 'pred/r2_dmg'),
+}

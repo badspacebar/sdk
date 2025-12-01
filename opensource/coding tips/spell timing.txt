@@ -1,0 +1,16 @@
+cb.add(cb.tick, function()
+  if w_ready then
+    castspell(w, pred)
+  end
+  if q_ready then
+    castspell(q, pred)
+  end 
+end)
+ 
+this is the casual scripters code. it will cast w and q at the same tick, buffering the q cast with the prediction pos at the time of calling castSpell. if w has a channel time of 0.25seconds, q will be buffered to be casted 0.25seconds later by league, but with a prediction pos of 0.25seconds in the past
+
+another thing that you should know is that slot.state will only be updated when you get a response from the server and not immediatelly after using castSpell
+
+if you dont want to code the timings yourself you can use this in your spell ready check
+
+orb.core.is_spell_locked()

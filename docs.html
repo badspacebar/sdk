@@ -1,84 +1,12 @@
-<!doctype html>
-<html>
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset='utf-8'>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width">
-
-  <title>Hanbot Documentation</title>
-
-  <!-- Flatdoc -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script src='resources/flatdoc/legacy.js'></script>
-  <script src='resources/flatdoc/flatdoc.js'></script>
-  
-  <script>
-    function loadCSS(href) {
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = href;
-      document.getElementsByTagName('head')[0].appendChild(link);
-    }
-
-    var hasTheme = localStorage.getItem("theme");
-    if (hasTheme) {
-        loadCSS('resources/flatdoc/theme-dark.css');
-    } else {
-        loadCSS('resources/flatdoc/theme-white.css');
-    }
-  </script>
-
-  <script src='https://cdn.rawgit.com/rstacruz/flatdoc/v0.9.0/theme-white/script.js'></script>
-
-  <!-- Meta -->
-  <meta content="HanbotND SDK Documentation" property="og:title">
-  <meta content="HanbotND SDK Documentation" name="description">
-
-
-  <!-- Initializer -->
-  <script>
-		Flatdoc.run({
-			fetcher: Flatdoc.file('resources/content.md')
-		});
-  </script>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0;url=docs/">
+    <title>Redirecting...</title>
+    <script>window.location.href = "docs/"</script>
 </head>
-<body role='flatdoc'>
-
-  <div class='header'>
-    <div class='left'>
-      <h1>SDK Documentation</h1>
-      <ul>
-        <li><a href='https://github.com/badspacebar/sdk'>View on GitHub</a></li>
-      </ul>
-    </div>
-    <div class="theme" onclick="switch_theme()" id="theme-button">
-    </div>
-    <div class='right'>
-      <iframe src="https://ghbtns.com/github-btn.html?user=USER&amp;repo=REPO&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-    </div>
-  </div>
-
-  <div class='content-root'>
-    <div class='menubar'>
-      <div class='menu section' role='flatdoc-menu'></div>
-    </div>
-    <div role='flatdoc-content' class='content'></div>
-  </div>
-
-  
-<script>
-  function switch_theme() {
-    var hasTheme = localStorage.getItem("theme");
-    if (hasTheme) {
-      localStorage.removeItem("theme");
-      window.location.reload();
-    } else {
-      localStorage.setItem("theme", true);
-      window.location.reload();
-    }
-  }
-</script>
-
+<body>
+    <p>If you are not redirected automatically, follow this <a href="docs/">link to docs</a>.</p>
 </body>
 </html>

@@ -9,6 +9,7 @@
 ---@field public level number
 ---@field public cooldown number
 ---@field public totalCooldown number
+---@field public startTimeForCurrentCast number
 ---@field public stacks number
 ---@field public stacksCooldown number
 ---@field public timeForNextAmmoRecharge number
