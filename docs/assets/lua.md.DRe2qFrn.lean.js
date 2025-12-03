@@ -1,1 +1,0 @@
-import{_ as l,c as i,o as r,ah as e}from"./chunks/framework.DptAZsX4.js";const d=JSON.parse('{"title":"Lua","description":"","frontmatter":{},"headers":[],"relativePath":"lua.md","filePath":"lua.md"}'),t={name:"lua.md"};function s(n,a,h,p,k,o){return r(),i("div",null,[...a[0]||(a[0]=[e("",7)])])}const g=l(t,[["render",s]]);export{d as __pageData,g as default};

@@ -1,1 +1,0 @@
-import{_ as i,c as a,o as n,ah as h}from"./chunks/framework.DptAZsX4.js";const g=JSON.parse('{"title":"Modules","description":"","frontmatter":{},"headers":[],"relativePath":"modules.md","filePath":"modules.md"}'),l={name:"modules.md"};function t(k,s,e,p,r,d){return n(),a("div",null,[...s[0]||(s[0]=[h("",538)])])}const y=i(l,[["render",t]]);export{g as __pageData,y as default};
