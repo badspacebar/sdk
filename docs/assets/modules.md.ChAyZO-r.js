@@ -528,8 +528,8 @@ import{_ as i,c as a,o as n,aj as h}from"./chunks/framework.qZdB8MUC.js";const g
 <span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">  --spell.damage -- totalDamage</span></span>
 <span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">  --spell.data -- assorted static data</span></span>
 <span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">  --spell:contains(pos2D/obj)</span></span>
-<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">  --spell:get_hit_time(pos2D)</span></span>
-<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">  --spell:get_hit_remaining_time(pos2D)</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">  --spell:get_hit_time(pos2D/obj)</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">  --spell:get_hit_remaining_time(pos2D/obj)</span></span>
 <span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">  --spell:get_damage(target)</span></span>
 <span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  </span></span>
 <span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">  local</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> ad_damage,ap_damage,true_damage,buff_list </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> spell</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">get_damage</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(player)</span></span>
