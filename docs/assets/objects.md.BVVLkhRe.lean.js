@@ -1,0 +1,1 @@
+import{_ as i,o as s,c as a,a6 as l}from"./chunks/framework.D0LxoZ_2.js";const k=JSON.parse('{"title":"Objects","description":"","frontmatter":{},"headers":[],"relativePath":"objects.md","filePath":"objects.md"}'),o={name:"objects.md"};function t(n,e,d,r,p,h){return s(),a("div",null,[...e[0]||(e[0]=[l("",702)])])}const b=i(o,[["render",t]]);export{k as __pageData,b as default};

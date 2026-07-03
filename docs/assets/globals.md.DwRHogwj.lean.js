@@ -1,0 +1,1 @@
+import{_ as i,o as _,c as F,a6 as E}from"./chunks/framework.D0LxoZ_2.js";const A=JSON.parse('{"title":"Globals","description":"","frontmatter":{},"headers":[],"relativePath":"globals.md","filePath":"globals.md"}'),U={name:"globals.md"};function B(a,l,O,R,T,L){return _(),F("div",null,[...l[0]||(l[0]=[E("",2)])])}const e=i(U,[["render",B]]);export{A as __pageData,e as default};

@@ -1,0 +1,1 @@
+import{_ as i,o as a,c as n,a6 as h}from"./chunks/framework.D0LxoZ_2.js";const g=JSON.parse('{"title":"Modules","description":"","frontmatter":{},"headers":[],"relativePath":"modules.md","filePath":"modules.md"}'),l={name:"modules.md"};function t(k,s,e,p,r,d){return a(),n("div",null,[...s[0]||(s[0]=[h("",558)])])}const o=i(l,[["render",t]]);export{g as __pageData,o as default};

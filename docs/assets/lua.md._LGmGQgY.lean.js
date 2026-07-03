@@ -1,0 +1,1 @@
+import{_ as l,o as i,c as r,a6 as e}from"./chunks/framework.D0LxoZ_2.js";const d=JSON.parse('{"title":"Lua","description":"","frontmatter":{},"headers":[],"relativePath":"lua.md","filePath":"lua.md"}'),t={name:"lua.md"};function s(n,a,h,p,k,o){return i(),r("div",null,[...a[0]||(a[0]=[e("",7)])])}const g=l(t,[["render",s]]);export{d as __pageData,g as default};
