@@ -233,3 +233,6 @@ Jade_Veigar
 Jade_Warwick
 Jade_Wukong
 Jade_Zilean
+Jade_Akali
+Jade_Shen
+Jade_Kennen
