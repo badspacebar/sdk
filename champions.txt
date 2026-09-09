@@ -236,3 +236,7 @@ Jade_Zilean
 Jade_Akali
 Jade_Shen
 Jade_Kennen
+Jade_Fiora
+Jade_Galio
+Jade_Poppy
+Jade_Shyvana
