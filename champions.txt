@@ -240,3 +240,4 @@ Jade_Fiora
 Jade_Galio
 Jade_Poppy
 Jade_Shyvana
+Jade_XinZhao
