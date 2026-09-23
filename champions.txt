@@ -241,3 +241,7 @@ Jade_Galio
 Jade_Poppy
 Jade_Shyvana
 Jade_XinZhao
+Jade_Graves
+Jade_Nami
+Jade_Fizz
+Jade_Nautilus
