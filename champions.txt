@@ -245,3 +245,7 @@ Jade_Graves
 Jade_Nami
 Jade_Fizz
 Jade_Nautilus
+Jade_Aatrox
+Jade_Caitlyn
+Jade_Irelia
+Jade_Karma
